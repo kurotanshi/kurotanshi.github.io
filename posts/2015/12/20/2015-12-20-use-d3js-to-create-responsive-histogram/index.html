@@ -1,0 +1,800 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="利用 d3.js 我們可以很輕易地產生我們想要的圖表，以最常見的長條圖為例，只要透過 scale (比例尺) 與 axis (軸線)，再加上一點 SVG 的基礎知識，像這樣的長條圖一下子就可以生成。
+
+[Code]
+但是，像這樣尺寸的圖表，往往都會因為太大而不適合在手機螢幕上呈現。還好 SVG 有著向量圖形的特性，可以自由縮放，這篇就來簡單介紹 d3.js 的長條圖如何也能做出 rwd 的效果。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用 d3.js 製作 responsive 的長條圖">
+<meta property="og:url" content="http://kuro.tw/posts/2015/12/20/2015-12-20-use-d3js-to-create-responsive-histogram/index.html">
+<meta property="og:site_name" content="Kuro's Blog">
+<meta property="og:description" content="利用 d3.js 我們可以很輕易地產生我們想要的圖表，以最常見的長條圖為例，只要透過 scale (比例尺) 與 axis (軸線)，再加上一點 SVG 的基礎知識，像這樣的長條圖一下子就可以生成。
+
+[Code]
+但是，像這樣尺寸的圖表，往往都會因為太大而不適合在手機螢幕上呈現。還好 SVG 有著向量圖形的特性，可以自由縮放，這篇就來簡單介紹 d3.js 的長條圖如何也能做出 rwd 的效果。">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/2V8wHgLUTEawU5iJstYS_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%8812.21.25.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/Jrbqo6EaTJswhfBQUF6g_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.23.36.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/eTI8r7EXSQWaH80HZuKH_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.39.54.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/NMpkG3LeTOWaYaNf9pYC_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.40.01.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/VA6ir3TRyutauy6ALqdH_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.42.43.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/Mz3vq9BKRZ2dkSd5SP6W_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.54.29.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/swZcbhnQPmhiWQBwTbDG_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.55.08.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/mM3agzeTGGGdM2p4YjZq_2015-12-20%2003.33.30.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/j4wccnAOTZWhLzubTUDw_2015-12-20%2003.33.43.png">
+<meta property="og:updated_time" content="2016-06-28T19:44:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用 d3.js 製作 responsive 的長條圖">
+<meta name="twitter:description" content="利用 d3.js 我們可以很輕易地產生我們想要的圖表，以最常見的長條圖為例，只要透過 scale (比例尺) 與 axis (軸線)，再加上一點 SVG 的基礎知識，像這樣的長條圖一下子就可以生成。
+
+[Code]
+但是，像這樣尺寸的圖表，往往都會因為太大而不適合在手機螢幕上呈現。還好 SVG 有著向量圖形的特性，可以自由縮放，這篇就來簡單介紹 d3.js 的長條圖如何也能做出 rwd 的效果。">
+<meta name="twitter:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/378297/2V8wHgLUTEawU5iJstYS_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%8812.21.25.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://kuro.tw/posts/2015/12/20/2015-12-20-use-d3js-to-create-responsive-histogram/"/>
+
+  <title> 利用 d3.js 製作 responsive 的長條圖 | Kuro's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Kuro's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Suche
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                利用 d3.js 製作 responsive 的長條圖
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-12-20T06:02:00+08:00" content="2015-12-20">
+              2015-12-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/D3-js/" itemprop="url" rel="index">
+                    <span itemprop="name">D3.js</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/D3-js/RWD/" itemprop="url" rel="index">
+                    <span itemprop="name">RWD</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>利用 d3.js 我們可以很輕易地產生我們想要的圖表，以最常見的長條圖為例，只要透過 scale (比例尺) 與 axis (軸線)，再加上一點 SVG 的基礎知識，像這樣的長條圖一下子就可以生成。</p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/2V8wHgLUTEawU5iJstYS_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%8812.21.25.png" alt="螢幕快照 2015-12-20 下午12.21.25.png">
+[<a href="http://kurotanshi.github.io/d3js-samples/rwd/rwd.html" title="長條圖範例" target="_blank" rel="external">Code</a>]</p>
+<p>但是，像這樣尺寸的圖表，往往都會因為太大而不適合在手機螢幕上呈現。還好 SVG 有著向量圖形的特性，可以自由縮放，這篇就來簡單介紹 d3.js 的長條圖如何也能做出 rwd 的效果。</p>
+<p>在上面的程式碼內，我們可以看到，原先設定的寬高是寫死的 960 與 500 (未扣除邊界)
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> margin = <span class="number">40</span>,</div><div class="line">    width = <span class="number">960</span> - margin*<span class="number">2</span>,</div><div class="line">    height = <span class="number">500</span> - margin*<span class="number">2</span>;</div></pre></td></tr></table></figure></p>
+<p>所以第一步，我們先將外層的 <code>.content</code> 元素設定成寬高 100%，然後把原先寫死的寬高改成由程式去抓取實際的寬高
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.content</span>&#123;</div><div class="line">  <span class="attribute">display</span>: block; <span class="attribute">width</span>: <span class="number">100%</span>; <span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">  <span class="attribute">min-width</span>: <span class="number">300px</span>; <span class="attribute">max-width</span>: <span class="number">960px</span>; <span class="attribute">max-height</span>: <span class="number">500px</span>; <span class="attribute">overflow</span>: hidden;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 將尺寸改成即時取得的寬高</span></div><div class="line">width = <span class="built_in">parseInt</span>(d3.select(<span class="string">".content"</span>).style(<span class="string">"width"</span>), <span class="number">10</span>) - margin*<span class="number">2</span>;</div><div class="line">height = <span class="built_in">parseInt</span>(d3.select(<span class="string">".content"</span>).style(<span class="string">"height"</span>), <span class="number">10</span>) - margin*<span class="number">2</span>;</div></pre></td></tr></table></figure>
+<p>然後我們將瀏覽器縮小之後重整，結果像這樣：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/Jrbqo6EaTJswhfBQUF6g_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.23.36.png" alt="螢幕快照 2015-12-20 下午1.23.36.png">
+[<a href="http://kurotanshi.github.io/d3js-samples/rwd/rwd2.html" title="長條圖範例2" target="_blank" rel="external">Code</a>]</p>
+<p>可以看到，這個時候因為畫面的寬高已經不是寫死的了，所以會依「繪製圖形當下」的寬高去做比例的修正。這時我們已經完成了長條圖 RWD 的第一步了。</p>
+<p>這時要是將行動裝置螢幕橫擺後，比例並不會依照橫擺之後有所不同，如果要使用者不斷地重整頁面，這就太不友善了。所以，我們要在瀏覽器上加上 <code>resize</code> 事件，並將繪製圖形的動作通通封裝至 rendering 這個 function 內。</p>
+<p>這個時候的程式架構會像這樣：
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> svg = d3.select(<span class="string">'.svg'</span>);</div><div class="line"></div><div class="line"><span class="comment">// 將繪製動作包裝至 function 內</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">rendering</span>(<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="comment">// 將繪製的程式碼通通搬到裡面</span></div><div class="line">   <span class="comment">// 內略</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 將 window 綁定 resize 事件，並重新繪製圖型</span></div><div class="line">d3.select(<span class="built_in">window</span>).on(<span class="string">'resize'</span>, rendering);</div><div class="line"></div><div class="line"><span class="comment">// 首次繪製</span></div><div class="line">rendering();</div></pre></td></tr></table></figure></p>
+<p>所以，這個時候，我們可以任意拉放瀏覽器的尺寸
+像這樣
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/eTI8r7EXSQWaH80HZuKH_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.39.54.png" alt="螢幕快照 2015-12-20 下午1.39.54.png"></p>
+<p>或是這樣
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/NMpkG3LeTOWaYaNf9pYC_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.40.01.png" alt="螢幕快照 2015-12-20 下午1.40.01.png"></p>
+<p>[<a href="http://kurotanshi.github.io/d3js-samples/rwd/rwd3.html" title="長條圖範例3" target="_blank" rel="external">Code</a>]
+都是沒有問題的。</p>
+<p>這份長條圖到目前為止已經可以說是好棒棒了。
+可是不曉得有沒有人發現，在最後那張橫擺的 y 軸刻度實在太過擁擠，其實是不容易閱讀的:
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/VA6ir3TRyutauy6ALqdH_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.42.43.png" alt="螢幕快照 2015-12-20 下午1.42.43.png"></p>
+<p>我們可以怎麼樣更優化呢？</p>
+<p>這時候就要利用 d3.js 提供的 <code>tick()</code> 功能，來為我們調整 y 軸上的刻度。
+只要在 y 軸上加上 tick ，像這樣: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// y 軸加上 ticks</span></div><div class="line"><span class="keyword">var</span> yAxis = d3.svg.axis()</div><div class="line">      .scale(yScale2)</div><div class="line">      .orient(<span class="string">"left"</span>)</div><div class="line">      .ticks(<span class="built_in">Math</span>.max(height/<span class="number">50</span>, <span class="number">2</span>));</div></pre></td></tr></table></figure>
+<p><code>Math.max</code> 會回傳兩個指定數字中較大的一個，而 <code>ticks()</code> 則是設定軸線上刻度的數量。</p>
+<p>所以經過剛剛的設定，當圖形的高度大於 100px 的時候，圖表每 50px 會有一個刻度，而圖形高度小於或等於 100px 時，則至少會有兩個刻度，像這樣：</p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/Mz3vq9BKRZ2dkSd5SP6W_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.54.29.png" alt="螢幕快照 2015-12-20 下午1.54.29.png"></p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/swZcbhnQPmhiWQBwTbDG_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%881.55.08.png" alt="螢幕快照 2015-12-20 下午1.55.08.png"></p>
+<p>[<a href="http://kurotanshi.github.io/d3js-samples/rwd/rwd4.html" title="長條圖範例4" target="_blank" rel="external">Code</a>]</p>
+<p>實際用手機試試：</p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/mM3agzeTGGGdM2p4YjZq_2015-12-20%2003.33.30.png" alt="2015-12-20 03.33.30.png">
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/j4wccnAOTZWhLzubTUDw_2015-12-20%2003.33.43.png" alt="2015-12-20 03.33.43.png"></p>
+<p>透過這樣的修正，就可以讓圖表變得更好閱讀了。</p>
+<p>以上，我們只要做簡單的小調整，就可以讓現有的 d3 長條圖做到有 RWD 的效果。</p>
+<p>但是要注意的是，不是所有圖表都合適在手機螢幕上呈現，在設計時也需要把這些考慮進去，是要為手機版本另外做一個新的圖表，或是做 RWD 的設計，就看使用的情境以及想表達的意義來決定囉。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015/10/15/2015-10-15-using-google-fusion-table-without-writing-code-or-topic-maps/" rel="next" title="利用 Google Fusion Table，不用寫 code 也可以產生主題地圖">
+                <i class="fa fa-chevron-left"></i> 利用 Google Fusion Table，不用寫 code 也可以產生主題地圖
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016/05/30/2016-05-30-vuejs-in-v-for-through-the-filter-in-the-list-complete-search-and-page-functions/" rel="prev" title="[Vue.js] 在 v-for 列表中透過 filter 完成搜尋與分頁的功能">
+                [Vue.js] 在 v-for 列表中透過 filter 完成搜尋與分頁的功能 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Kuro Hsu" />
+          <p class="site-author-name" itemprop="name">Kuro Hsu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kuro Hsu</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前陣子因為需求的關係，需要以經緯度來轉換地址，幸好 Google map API 有提供 Geocoder 可以轉換大略地址的服務。使用方式非常簡單，我們這裡以立法院的經緯度 (25.0439892, 121.5212213) 為例：
+123456789101112131415161718var geocoder = new google.maps.Geocoder();// google.map">
+<meta property="og:type" content="article">
+<meta property="og:title" content="透過 Google map Geocoder API 以經緯度轉換地址資訊">
+<meta property="og:url" content="http://kuro.tw/posts/2015/04/27/2015-04-27-address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/index.html">
+<meta property="og:site_name" content="Kuro's Blog">
+<meta property="og:description" content="前陣子因為需求的關係，需要以經緯度來轉換地址，幸好 Google map API 有提供 Geocoder 可以轉換大略地址的服務。使用方式非常簡單，我們這裡以立法院的經緯度 (25.0439892, 121.5212213) 為例：
+123456789101112131415161718var geocoder = new google.maps.Geocoder();// google.map">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/262289/0bIqy71dT8Sb3YwERlEs_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-27%20%E4%B8%8B%E5%8D%8810.42.56.png">
+<meta property="og:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/262289/boE1unBmQsCitdOxHG01_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-27%20%E4%B8%8B%E5%8D%8810.52.20.png">
+<meta property="og:updated_time" content="2016-06-28T19:44:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="透過 Google map Geocoder API 以經緯度轉換地址資訊">
+<meta name="twitter:description" content="前陣子因為需求的關係，需要以經緯度來轉換地址，幸好 Google map API 有提供 Geocoder 可以轉換大略地址的服務。使用方式非常簡單，我們這裡以立法院的經緯度 (25.0439892, 121.5212213) 為例：
+123456789101112131415161718var geocoder = new google.maps.Geocoder();// google.map">
+<meta name="twitter:image" content="http://user-image.logdown.io/user/3292/blog/3340/post/262289/0bIqy71dT8Sb3YwERlEs_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-27%20%E4%B8%8B%E5%8D%8810.42.56.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://kuro.tw/posts/2015/04/27/2015-04-27-address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/"/>
+
+  <title> 透過 Google map Geocoder API 以經緯度轉換地址資訊 | Kuro's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Kuro's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Suche
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                透過 Google map Geocoder API 以經緯度轉換地址資訊
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-04-27T14:34:00+08:00" content="2015-04-27">
+              2015-04-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Geocoder/" itemprop="url" rel="index">
+                    <span itemprop="name">Geocoder</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Geocoder/Google-Map/" itemprop="url" rel="index">
+                    <span itemprop="name">Google Map</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前陣子因為需求的關係，需要以經緯度來轉換地址，幸好 Google map API 有提供 Geocoder 可以轉換大略地址的服務。使用方式非常簡單，我們這裡以立法院的經緯度 (25.0439892, 121.5212213) 為例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> geocoder = <span class="keyword">new</span> google.maps.Geocoder();</div><div class="line"></div><div class="line"><span class="comment">// google.maps.LatLng 物件</span></div><div class="line"><span class="keyword">var</span> coord = <span class="keyword">new</span> google.maps.LatLng(<span class="number">25.0439892</span>, <span class="number">121.5212213</span>);</div><div class="line"></div><div class="line"><span class="comment">// 傳入 latLng 資訊至 geocoder.geocode</span></div><div class="line">geocoder.geocode(&#123;<span class="string">'latLng'</span>: coord &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">results, status</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (status === google.maps.GeocoderStatus.OK) &#123;</div><div class="line">    <span class="comment">// 如果有資料就會回傳</span></div><div class="line">    <span class="keyword">if</span> (results) &#123; </div><div class="line">      <span class="built_in">console</span>.log(results[<span class="number">0</span>]); </div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 經緯度資訊錯誤</span></div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    alert(<span class="string">"Reverse Geocoding failed because: "</span> + status);</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>我們傳入經緯度資訊 google.maps.LatLng 物件，透過 <code>geocoder.geocode</code> 轉換出來的結果會是這樣的：</p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/262289/0bIqy71dT8Sb3YwERlEs_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-27%20%E4%B8%8B%E5%8D%8810.42.56.png" alt="螢幕快照 2015-04-27 下午10.42.56.png"></p>
+<p>如上圖，Google map Geocoder API 會回傳一連串的地址資訊，如果你需要的是已經整合好格式的地址，那麼將上面範例中的<code>results[0]</code> 改為 <code>results[0].formatted_address</code> 就可以取得「<strong>100台灣台北市中正區青島東路1號</strong>」這樣的地址資訊了。</p>
+<p>下面提供一個完整的範例供各位參考：
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> map, geocoder, popup;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">initMap</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    geocoder = <span class="keyword">new</span> google.maps.Geocoder();</div><div class="line">    popup = <span class="keyword">new</span> google.maps.InfoWindow();</div><div class="line"></div><div class="line">    <span class="comment">// 地圖初始設定</span></div><div class="line">    <span class="keyword">var</span> mapOptions = &#123;</div><div class="line">        center: <span class="keyword">new</span> google.maps.LatLng(<span class="number">25.04674</span>, <span class="number">121.52168</span>),</div><div class="line">        zoom: <span class="number">16</span>,</div><div class="line">        mapTypeId: google.maps.MapTypeId.ROADMAP</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> mapElement = <span class="built_in">document</span>.getElementById(<span class="string">"mapDiv"</span>);</div><div class="line"></div><div class="line">    <span class="comment">// Google 地圖初始化</span></div><div class="line">    map = <span class="keyword">new</span> google.maps.Map(mapElement, mapOptions);</div><div class="line"></div><div class="line">    <span class="comment">// 設定 Google map 繪圖控制項</span></div><div class="line">    <span class="keyword">var</span> drawingManager = <span class="keyword">new</span> google.maps.drawing.DrawingManager(&#123;</div><div class="line">        drawingMode: <span class="literal">null</span>,</div><div class="line">        drawingControl: <span class="literal">true</span>,</div><div class="line">        drawingControlOptions: &#123;</div><div class="line">            position: google.maps.ControlPosition.TOP_CENTER,</div><div class="line">            drawingModes: [google.maps.drawing.OverlayType.MARKER]</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="comment">// 開啟 Google map 繪圖控制項</span></div><div class="line">    drawingManager.setMap(map);</div><div class="line"></div><div class="line">    <span class="comment">// 在地圖中加入 marker</span></div><div class="line">    google.maps.event.addListener(drawingManager, <span class="string">'markercomplete'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">marker</span>) </span>&#123;</div><div class="line">        <span class="comment">// 取得 marker 的經緯座標</span></div><div class="line">        <span class="keyword">var</span> markerPosition = marker.getPosition();</div><div class="line"></div><div class="line">        <span class="comment">// 將經緯度透過 Google map Geocoder API 反查地址</span></div><div class="line">        geocoder.geocode(&#123;</div><div class="line">          <span class="string">'latLng'</span>: markerPosition</div><div class="line">        &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">results, status</span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (status === google.maps.GeocoderStatus.OK) &#123;</div><div class="line">                <span class="keyword">if</span> (results) &#123;</div><div class="line">                    <span class="comment">// 將取得的資訊傳入 marker 訊息泡泡</span></div><div class="line">                    showAddress(results[<span class="number">0</span>], marker);</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                alert(<span class="string">"Reverse Geocoding failed because: "</span> + status);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="comment">// 設定 marker 的訊息泡泡</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">showAddress</span>(<span class="params">result, marker</span>) </span>&#123;</div><div class="line">        map.setCenter(marker.getPosition());</div><div class="line">        <span class="comment">// 顯示傳入的地址資訊</span></div><div class="line">        <span class="keyword">var</span> popupContent = <span class="string">'&lt;b&gt;地址: &lt;/b&gt; '</span> + result.formatted_address;</div><div class="line">        popup.setContent(popupContent);</div><div class="line">        popup.open(map, marker);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/262289/boE1unBmQsCitdOxHG01_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-27%20%E4%B8%8B%E5%8D%8810.52.20.png" alt="螢幕快照 2015-04-27 下午10.52.20.png"></p>
+<p>Demo: <a href="http://jsbin.com/penuqofabe/1/" target="_blank" rel="external">http://jsbin.com/penuqofabe/1/</a></p>
+<p>參考網址: <a href="https://developers.google.com/maps/documentation/javascript/geocoding?hl=zh-tw" target="_blank" rel="external">Google Map 地理編碼服務</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2015/04/22/2015-04-22-note-jquery-and-d3js-some-of-these-differences/" rel="next" title="[note] jQuery 與 d3.js 的一些不同之處">
+                <i class="fa fa-chevron-left"></i> [note] jQuery 與 d3.js 的一些不同之處
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2015/04/28/2015-04-28-through-the-google-maps-api-geojson-data/" rel="prev" title="透過 Google Maps API 處理 GeoJSON 資料">
+                透過 Google Maps API 處理 GeoJSON 資料 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Kuro Hsu" />
+          <p class="site-author-name" itemprop="name">Kuro Hsu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kuro Hsu</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>
