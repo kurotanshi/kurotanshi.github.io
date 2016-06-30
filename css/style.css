@@ -202,8 +202,8 @@ div {
       color: #444; }
   .post .post-content {
     clear: left;
-    font-size: 15px;
-    line-height: 1.77;
+    font-size: 16px;
+    line-height: 1.85;
     color: #444;
     padding-top: 25px;
     text-align: justify;
@@ -215,10 +215,12 @@ div {
       overflow: hidden; }
     .post .post-content h3 {
       margin: 1.4em 0 1.1em; }
+    .post .post-content h4 {
+      margin: 0; }
     .post .post-content pre code {
       padding: 0 2em; }
     .post .post-content p {
-      margin: 0 0 1.234em; }
+      margin: 0 0 .85em; }
       .post .post-content p code {
         display: inline-block;
         margin: 0 5px;
@@ -231,9 +233,9 @@ div {
         .post .post-content p a:hover {
           text-decoration: underline; }
     .post .post-content hr {
-      margin: 2.4em auto;
+      margin: 1.8em auto;
       border: none;
-      border-top: 1px solid #eee;
+      border-top: 1px solid #e7e7e7;
       position: relative; }
     .post .post-content img {
       max-width: 100%;
@@ -242,7 +244,7 @@ div {
       display: block; }
     .post .post-content ul, .post .post-content ol {
       border-radius: 3px;
-      margin: 1em 0; }
+      margin: .5em 0; }
       .post .post-content ul ul, .post .post-content ol ul {
         margin: 0; }
       .post .post-content ul code, .post .post-content ol code {
@@ -840,10 +842,10 @@ pre {
 /* syntax highlight*/
 figure.highlight,
 .codeblock {
-  background: #f7f8f8;
+  background-color: #2d2d2d;
+  color: #cccccc;
   margin: 1.5em 0;
   line-height: 1.2em;
-  color: #333;
   padding-top: 15px;
   overflow: hidden; }
   figure.highlight table,
@@ -885,12 +887,12 @@ figure.highlight,
       color: #01579f; }
   figure.highlight .gutter,
   .codeblock .gutter {
-    background: #f7f8f8;
+    background-color: #2d2d2d;
     border-right: 1px solid #e6e6e6;
     padding: 0.3em 15px; }
     figure.highlight .gutter .line,
     .codeblock .gutter .line {
-      color: #aaaaaa; }
+      color: #cccccc; }
   figure.highlight .code,
   .codeblock .code {
     padding: 0.3em 15px 0.3em 1em;
@@ -902,9 +904,10 @@ figure.highlight,
       overflow-y: hidden; }
   figure.highlight .line,
   .codeblock .line {
-    height: 1.3em;
+    height: 1.33em;
+    line-height: 1em;
     margin: .33em 0;
-    font-size: 13px; }
+    font-size: 14px; }
 
 .gist .line,
 .gist .line-number {
@@ -913,13 +916,13 @@ figure.highlight,
   margin: 0 0 5px 0; }
 
 .highlight .comment {
-  color: #969896; }
+  color: #229922; }
 
 .highlight .string {
-  color: #183691; }
+  color: #cccccc; }
 
 .highlight .keyword {
-  color: #a71d5d; }
+  color: #cc99cc; }
 
 .highlight.apacheconf .code .common,
 .highlight.apacheconf .code .nomarkup,
@@ -1004,15 +1007,12 @@ figure.highlight,
 .highlight.css .code .meta {
   color: #a71d5d; }
 
-.highlight.css .code .attribute,
-.highlight.css .code .hexcolor,
-.highlight.css .code .number,
-.highlight.css .code .function {
-  color: #0086b3; }
+.highlight.css .code .attribute {
+  color: #6699cc; }
 
 .highlight.css .code .attr_selector,
 .highlight.css .code .value {
-  color: #333; }
+  color: #cccccc; }
 
 .highlight.css .code .id,
 .highlight.css .code .class,
@@ -1022,6 +1022,32 @@ figure.highlight,
 
 .highlight.css .code .tag,
 .highlight.css .code .selector-tag {
+  color: #63a35c; }
+
+.highlight.scss .tag,
+.highlight.scss .at_rule,
+.highlight.scss .important {
+  color: #cc99cc; }
+
+.highlight.scss .attribute {
+  color: #6699cc; }
+
+.highlight.scss .variable {
+  color: #cccccc; }
+
+.highlight.scss .built_in {
+  color: #f99157; }
+
+.highlight.scss .id,
+.highlight.scss .pseudo,
+.highlight.scss .class,
+.highlight.scss .preprocessor,
+.highlight.scss .selector-class,
+.highlight.scss .selector-id {
+  color: #795da3; }
+
+.highlight.scss .tag,
+.highlight.scss .selector-tag {
   color: #63a35c; }
 
 .highlight.diff .code .chunk,
@@ -1036,28 +1062,6 @@ figure.highlight,
 .highlight.diff .code .deletion {
   color: #bd2c00;
   background-color: #ffecec; }
-
-.highlight.http .code .attribute,
-.highlight.http .code .attr {
-  color: #183691; }
-
-.highlight.http .code .literal {
-  color: #0086b3; }
-
-.highlight.http .code .request {
-  color: #a71d5d; }
-
-.highlight.ini .code .title,
-.highlight.ini .code .section {
-  color: #795da3; }
-
-.highlight.ini .code .setting,
-.highlight.ini .code .attr {
-  color: #a71d5d; }
-
-.highlight.ini .code .value,
-.highlight.ini .code .keyword {
-  color: #333; }
 
 .highlight.java .code .title {
   color: #795da3; }
@@ -1077,41 +1081,42 @@ figure.highlight,
   color: #1d3e81; }
 
 .highlight.js .code .built_in,
-.highlight.js .code .title {
-  color: #795da3; }
-
-.highlight.js .code .javadoc {
-  color: #969896; }
+.highlight.js .code .title,
+.highlight.js .code .regexp,
+.highlight.javascript .code .built_in,
+.highlight.javascript .code .title,
+.highlight.javascript .code .regexp {
+  color: #f99157; }
 
 .highlight.js .code .tag,
-.highlight.js .code .javadoctag {
-  color: #a71d5d; }
+.highlight.js .code .javadoctag,
+.highlight.javascript .code .tag,
+.highlight.javascript .code .javadoctag {
+  color: #66cccc; }
 
-.highlight.js .code .tag .title {
-  color: #333; }
-
-.highlight.js .code .regexp {
-  color: #df5000; }
+.highlight.js .code .tag .title,
+.highlight.javascript .code .tag .title {
+  color: #cccccc; }
 
 .highlight.js .code .literal,
-.highlight.js .code .number {
-  color: #0086b3; }
+.highlight.js .code .number,
+.highlight.javascript .code .literal,
+.highlight.javascript .code .number {
+  color: #66cccc; }
+
+.highlight.js .code .string,
+.highlight.javascript .code .string {
+  color: #99cc99; }
+
+.highlight.js .code .params,
+.highlight.javascript .code .params {
+  color: #ffcc66; }
 
 .highlight.json .code .attribute {
   color: #183691; }
 
 .highlight.json .code .number,
 .highlight.json .code .literal {
-  color: #0086b3; }
-
-.highlight.mak .code .constant {
-  color: #333; }
-
-.highlight.mak .code .title {
-  color: #795da3; }
-
-.highlight.mak .code .keyword,
-.highlight.mak .code .meta-keyword {
   color: #0086b3; }
 
 .highlight.md .code .value,
@@ -1132,20 +1137,6 @@ figure.highlight,
 .highlight.md .code .link {
   text-decoration: underline; }
 
-.highlight.nginx .code .title,
-.highlight.nginx .code .attribute {
-  color: #a71d5d; }
-
-.highlight.nginx .code .built_in,
-.highlight.nginx .code .literal {
-  color: #0086b3; }
-
-.highlight.nginx .code .regexp {
-  color: #183691; }
-
-.highlight.nginx .code .variable {
-  color: #333; }
-
 .highlight.objectivec .code .preprocessor,
 .highlight.objectivec .code .meta {
   color: #a71d5d; }
@@ -1164,28 +1155,22 @@ figure.highlight,
 .highlight.objectivec .code .built_in {
   color: #0086b3; }
 
-.highlight.perl .code .sub {
-  color: #795da3; }
-
-.highlight.perl .code .title {
-  color: #795da3; }
-
-.highlight.perl .code .regexp {
-  color: #df5000; }
-
 .highlight.php .code .phpdoc,
 .highlight.php .code .doctag {
-  color: #a71d5d; }
+  color: #cc99cc; }
 
 .highlight.php .code .regexp {
   color: #df5000; }
 
 .highlight.php .code .literal,
 .highlight.php .code .number {
-  color: #0086b3; }
+  color: #66cccc; }
 
 .highlight.php .code .title {
   color: #795da3; }
+
+.highlight.php .code .string {
+  color: #ffcc66; }
 
 .highlight.python .code .decorator,
 .highlight.python .code .title,
@@ -1212,103 +1197,24 @@ figure.highlight,
 .highlight.sql .number {
   color: #0086b3; }
 
-.highlight.xml .tag {
-  color: #333; }
+.highlight.xml .tag, .highlight.html .tag {
+  color: #66cccc; }
 
-.highlight.xml .value {
-  color: #183691; }
+.highlight.xml .value, .highlight.html .value {
+  color: #6699cc; }
 
 .highlight.xml .attribute,
-.highlight.xml .attr {
-  color: #795da3; }
+.highlight.xml .attr, .highlight.html .attribute,
+.highlight.html .attr {
+  color: #ffcc66; }
 
 .highlight.xml .title,
-.highlight.xml .name {
-  color: #63a35c; }
+.highlight.xml .name, .highlight.html .title,
+.highlight.html .name {
+  color: #f99157; }
 
-.highlight.puppet .title {
-  color: #795da3; }
-
-.highlight.puppet .function {
-  color: #0086b3; }
-
-.highlight.puppet .name {
-  color: #a71d5d; }
-
-.highlight.puppet .attr {
-  color: #0086b3; }
-
-.highlight.less .tag,
-.highlight.less .at_rule {
-  color: #a71d5d; }
-
-.highlight.less .number,
-.highlight.less .hexcolor,
-.highlight.less .function,
-.highlight.less .attribute {
-  color: #0086b3; }
-
-.highlight.less .built_in {
-  color: #df5000; }
-
-.highlight.less .id,
-.highlight.less .pseudo,
-.highlight.less .class,
-.highlight.less .selector-id,
-.highlight.less .selector-class,
-.highlight.less .selector-tag {
-  color: #795da3; }
-
-.highlight.scss .tag,
-.highlight.scss .at_rule,
-.highlight.scss .important {
-  color: #a71d5d; }
-
-.highlight.scss .number,
-.highlight.scss .hexcolor,
-.highlight.scss .function,
-.highlight.scss .attribute {
-  color: #0086b3; }
-
-.highlight.scss .variable {
-  color: #333; }
-
-.highlight.scss .built_in {
-  color: #df5000; }
-
-.highlight.scss .id,
-.highlight.scss .pseudo,
-.highlight.scss .class,
-.highlight.scss .preprocessor,
-.highlight.scss .selector-class,
-.highlight.scss .selector-id {
-  color: #795da3; }
-
-.highlight.scss .tag,
-.highlight.scss .selector-tag {
-  color: #63a35c; }
-
-.highlight.stylus .at_rule {
-  color: #a71d5d; }
-
-.highlight.stylus .tag,
-.highlight.stylus .selector-tag {
-  color: #63a35c; }
-
-.highlight.stylus .number,
-.highlight.stylus .hexcolor,
-.highlight.stylus .attribute,
-.highlight.stylus .params {
-  color: #0086b3; }
-
-.highlight.stylus .class,
-.highlight.stylus .id,
-.highlight.stylus .pseudo,
-.highlight.stylus .title,
-.highlight.stylus .selector-id,
-.highlight.stylus .selector-pseudo,
-.highlight.stylus .selector-class {
-  color: #795da3; }
+.highlight.xml .string, .highlight.html .string {
+  color: #99cc99; }
 
 .highlight.go .typename {
   color: #a71d5d; }
