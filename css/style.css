@@ -11,7 +11,7 @@ body {
   font-family: "TIBch", "Classic Grotesque W01", "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "WenQuanYi Micro Hei", SimSun, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px; }
+  font-size: 15px; }
 
 .body_container {
   padding: 0 60px;
@@ -73,13 +73,14 @@ div {
       padding: 3px 20px 3px;
       line-height: 30px;
       color: #444;
-      font-size: 13px;
+      font-size: 15px;
       border: 1px solid transparent; }
       #header #nav-menu a:hover {
         border-bottom-color: #444; }
       #header #nav-menu a.current {
         border: 1px solid #ddd;
-        border-bottom-color: #fff; }
+        border-bottom-color: #fff;
+        border-radius: 2px; }
 
 #sidebar {
   border-left: 1px solid #ddd;
@@ -149,9 +150,11 @@ div {
     margin-bottom: .5em;
     color: #555;
     text-align: left;
-    font: bold 25px/1.1 "ff-tisa-web-pro", Cambria, "Times New Roman", Georgia, Times, sans-serif; }
+    font: bold 27px/1.1 "ff-tisa-web-pro", Cambria, "Times New Roman", Georgia, Times, sans-serif; }
     .post .post-title a {
       color: #555; }
+    .post .post-title:hover a {
+      color: #D26911; }
   .post .post-meta {
     padding: 0;
     margin: 15px 0 0;
@@ -227,13 +230,6 @@ div {
         word-break: break-all; }
         .post .post-content p a:hover {
           text-decoration: underline; }
-      .post .post-content p .caption {
-        color: #444;
-        display: block;
-        font-size: 0.9em;
-        margin-top: 0.1em;
-        position: relative;
-        text-align: center; }
     .post .post-content hr {
       margin: 2.4em auto;
       border: none;
@@ -260,6 +256,8 @@ div {
         word-break: break-all; }
         .post .post-content ul a:hover, .post .post-content ol a:hover {
           text-decoration: underline; }
+  .post .caption {
+    display: none; }
   .post .tags {
     padding-bottom: 1em; }
     .post .tags a {
@@ -711,7 +709,6 @@ pre {
 .readmore a {
   font-size: 14px;
   color: #444;
-  margin: -10px 0;
   padding: 10px 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -1349,7 +1346,7 @@ figure.highlight,
 .post-nav {
   overflow: hidden;
   margin-top: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 2em;
   padding: 10px;
   white-space: nowrap;
   border-top: 1px solid #eee; }
@@ -1519,3 +1516,14 @@ em.search-keyword {
   font-weight: bold;
   font-style: normal;
   color: #01579f; }
+
+li.dsq-widget-item {
+  margin-bottom: 2em !important; }
+  li.dsq-widget-item .dsq-widget-user {
+    display: block;
+    font-size: 14px; }
+    li.dsq-widget-item .dsq-widget-user:before {
+      content: '- '; }
+  li.dsq-widget-item .dsq-widget-meta {
+    margin-top: 5px;
+    font-size: 12px; }
