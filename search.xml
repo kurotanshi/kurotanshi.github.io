@@ -5,7 +5,7 @@
     
     <entry>
       <title><![CDATA[(Vue.js) 在 v-for 列表中透過 filter 完成搜尋與分頁的功能]]></title>
-      <url>http://kuro.tw/posts/2016/05/30/2016-05-30-vuejs-in-v-for-through-the-filter-in-the-list-complete-search-and-page-functions/</url>
+      <url>http://kuro.tw/posts/2016/05/30/vuejs-in-v-for-through-the-filter-in-the-list-complete-search-and-page-functions/</url>
       <content type="html"><![CDATA[<p>最近 <a href="https://vuejs.org/" target="_blank" rel="external">Vue.js</a> 正夯，所以手上幾個東西打算用這個來改寫，關於 Vue.js 的基本介紹可以參考小弟的投影片，這裡就不再贅述。</p>
 <iframe src="//www.slideshare.net/slideshow/embed_code/key/DLQDvLrRSNunsY" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:10px; max-width: 100%;" allowfullscreen> </iframe>
 
@@ -28,7 +28,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[利用 d3.js 製作 responsive 的長條圖]]></title>
-      <url>http://kuro.tw/posts/2015/12/20/2015-12-20-use-d3js-to-create-responsive-histogram/</url>
+      <url>http://kuro.tw/posts/2015/12/20/use-d3js-to-create-responsive-histogram/</url>
       <content type="html"><![CDATA[<p>利用 d3.js 我們可以很輕易地產生我們想要的圖表，以最常見的長條圖為例，只要透過 scale (比例尺) 與 axis (軸線)，再加上一點 SVG 的基礎知識，像這樣的長條圖一下子就可以生成。</p>
 <p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/378297/2V8wHgLUTEawU5iJstYS_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-12-20%20%E4%B8%8B%E5%8D%8812.21.25.png" alt="螢幕快照 2015-12-20 下午12.21.25.png">
 [<a href="http://kurotanshi.github.io/d3js-samples/rwd/rwd.html" title="長條圖範例" target="_blank" rel="external">Code</a>]</p>
@@ -75,7 +75,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[利用 Google Fusion Table，不用寫 code 也可以產生主題地圖]]></title>
-      <url>http://kuro.tw/posts/2015/10/15/2015-10-15-using-google-fusion-table-without-writing-code-or-topic-maps/</url>
+      <url>http://kuro.tw/posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/</url>
       <content type="html"><![CDATA[<p>感謝台北市政府以及<a href="https://www.facebook.com/photo.php?fbid=10204828212414899&amp;set=a.1357755313713.2044236.1526408898&amp;type=3" target="_blank" rel="external">相關人士的努力</a>，在十月中旬的時候，台北市 open data 平台又開放了「<a href="http://data.taipei/opendata/datalist/datasetMeta?oid=68785231-d6c5-47a1-b001-77eec70bec02" target="_blank" rel="external">台北市住宅竊盜點位資訊</a>」這樣的資料，雖然很多人戲稱房價又要下跌了，但是老話一句，身為<del>有良心的開發者，當然居住安全比房價什麼的還要重要得多</del>。</p>
 <p>那麼，拿到這份資料我們可以怎麼玩呢?
 剛好這份資料的格式是 CSV (Comma-Separated Values，一種由逗點分隔的純文字資料格式)，所以本篇就來介紹如何透過 <a href="https://support.google.com/fusiontables/answer/2571232" target="_blank" rel="external">Google Fusion Table</a> 來讓我們不必寫任何的 code ，也可以建立主題地圖。</p>
@@ -122,7 +122,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[利用 Google Map 檢視台北市降雨淹水模擬圖]]></title>
-      <url>http://kuro.tw/posts/2015/09/30/2015-09-30-use-google-map-view-rainfall-simulation-of-flooding-in-taipei-city-map/</url>
+      <url>http://kuro.tw/posts/2015/09/30/use-google-map-view-rainfall-simulation-of-flooding-in-taipei-city-map/</url>
       <content type="html"><![CDATA[<p>看到前兩天的新聞: <a href="https://tw.news.yahoo.com/%E6%9F%AF%E6%96%87%E5%93%B2%E6%83%B3%E5%85%AC%E9%96%8B%E6%98%93%E6%B7%B9%E6%B0%B4%E5%9C%B0%E5%8D%80-%E5%8C%97%E5%B8%82%E5%BA%9C%E5%B7%B2%E4%B8%8A%E7%B6%B2-115016390.html" title="柯文哲想公開易淹水地區 北市府已上網" target="_blank" rel="external">柯文哲想公開易淹水地區 北市府已上網</a>，又剛好有前輩寫了一篇 <a href="http://gis.rchss.sinica.edu.tw/qgis/?p=3221" title="利用QGIS檢視台北市降雨淹水模擬圖" target="_blank" rel="external">利用QGIS檢視台北市降雨淹水模擬圖</a>，<del>雖然身處房仲業，但身為有良心的開發者不能只想著房價</del>，心想應也可透過 Google Map 來呈現，於是試了一下，順便寫篇記錄。</p>
 <p>首先從<a href="http://data.taipei/opendata/datalist/datasetMeta?oid=fa1e8012-ebb4-473b-888e-97f9a9ce365e" title="臺北市政府資料開放平台" target="_blank" rel="external">臺北市政府資料開放平台</a>將所需的資料一一下載下來，格式是 kmz (其實就是 zip 壓縮)。在解壓縮後可以得到 doc.kml 檔案。 接著，雖然 Google maps API 有提供 <a href="https://developers.google.com/maps/documentation/javascript/examples/layer-kml" title="Google maps API KML Layers" target="_blank" rel="external">KML Layers</a> 的圖層嵌套，但轉出來的 kml 檔似乎要稍作修改後才能透過 KML Layers 套用在 Google map 上，這裏我選擇另一種做法: 將 kml 轉為 geoJSON 後使用。</p>
 <p>前面說到要將 kml 檔案轉為 geoJSON，那麼該如何轉換格式呢？
@@ -138,7 +138,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[[筆記] JavaScript 變數宣告與作用域]]></title>
-      <url>http://kuro.tw/posts/2015/07/08/2015-07-08-note-javascript-variables-declared-with-the-scope-scope/</url>
+      <url>http://kuro.tw/posts/2015/07/08/note-javascript-variables-declared-with-the-scope-scope/</url>
       <content type="html"><![CDATA[<p>大家都知道，JavaScript 的變數有其作用域的範圍，若使用前未經 var 宣告，就會自動變成全域變數 (global variable)，而在其 code block 內宣告的變數也只有該 code block 內可以使用。</p>
 <p>這次的問題，其實很久以前在 tonyQ 的聚會上就聽他說過了，<del>只是沒想到還真的會遇到 XDDDD</del></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);		<span class="comment">// 1</span></div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
@@ -158,7 +158,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[Taipei D3.js Meetup 小聚分享心得]]></title>
-      <url>http://kuro.tw/posts/2015/06/18/2015-06-18-taipei-d3js-meetup-gathering-to-share-experiences/</url>
+      <url>http://kuro.tw/posts/2015/06/18/taipei-d3js-meetup-gathering-to-share-experiences/</url>
       <content type="html"><![CDATA[<p>這次我在 <a href="http://www.meetup.com/Taipei-D3-js-Meetup/" title="Taipei D3.js Meetup" target="_blank" rel="external">Taipei D3.js Meetup</a> (現在似乎改叫 Visual Thursday) 分享的 Talk 是有關於地理視覺化的簡介，雖然題目聽起來很學術，但其實內容是我這陣子對於 Web GIS 以及地圖視覺化的一些摸索心得分享。</p>
 <p>感謝台灣微軟提供場地 XD</p>
 <p>下面是我的投影片</p>
@@ -176,7 +176,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[[JS] [Note] TWD97 標轉換爲 經緯度 ]]></title>
-      <url>http://kuro.tw/posts/2015/06/11/2015-06-11-js-note-twd97-convert-to-longitude-and-latitude/</url>
+      <url>http://kuro.tw/posts/2015/06/11/js-note-twd97-convert-to-longitude-and-latitude/</url>
       <content type="html"><![CDATA[<p>因為從臺北市政府資料開放平台 API 拿到的資料是 TWD97 座標格式，所以我們必須要將它轉成經緯度後才能套用至 Google Map 使用。網路上查了很多資料，最後找到最親民的是米蟲大的 PHP 版本，於是就改成寫我最熟悉的 JS。</p>
 <p>reference:
 <a href="http://blog.xuite.net/vexed/tech/53749528-TWD97+%E5%BA%A7%E6%A8%99%E8%BD%89%E7%B6%93%E7%B7%AF%E5%BA%A6" target="_blank" rel="external">Vexed&#39;s Blog - TWD97 座標轉經緯度</a></p>
@@ -185,7 +185,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[在 Google Map 加入 D3 圖像 - 2]]></title>
-      <url>http://kuro.tw/posts/2015/05/20/2015-05-20-added-to-the-google-map-images-d3-2/</url>
+      <url>http://kuro.tw/posts/2015/05/20/added-to-the-google-map-images-d3-2/</url>
       <content type="html"><![CDATA[<p><a href="http://kuro.tw/posts/2015/05/20/join-the-d3-in-google-map-image" title="在 Google Map 加入 D3 圖像 ">上一篇</a>提到了如何在 Google Map 裡面加入 D3 的圖像，這次我們實際將資料套進去吧。</p>
 <p>資料來源是上篇提到的<a href="http://data.taipei/opendata/datalist/datasetMeta?oid=1d71c478-205f-42c5-8386-35f86d74fdd1" target="_blank" rel="external">臺北捷運各站進出量統計</a>的統計資料，因為台北市政府開放平台並沒有提供 CORS (跨來源資源共享)的服務，沒關係，我們直接將資料下載存成 json 檔案即可。 (範例為 2015/4 進出站人數)</p>
 <p>按照慣例，先看結果 - Demo: <a href="http://jsbin.com/wexiva/3/" target="_blank" rel="external">http://jsbin.com/wexiva/3/</a>
@@ -203,7 +203,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[在 Google Map 加入 D3 圖像]]></title>
-      <url>http://kuro.tw/posts/2015/05/19/2015-05-19-join-the-d3-in-google-map-image/</url>
+      <url>http://kuro.tw/posts/2015/05/19/join-the-d3-in-google-map-image/</url>
       <content type="html"><![CDATA[<p>因為昨天 <a href="http://data.taipei/" target="_blank" rel="external">台北市政府開放平台</a> 開始提供 <a href="http://data.taipei/opendata/datalist/datasetMeta?oid=1d71c478-205f-42c5-8386-35f86d74fdd1" target="_blank" rel="external">臺北捷運各站進出量統計</a> 的統計資料，所以就在思考可以利用這份資料做什麼應用，第一個想到的就是能否透過 D3 與地圖的共同呈現，當然就從我最熟悉的 Google Map 開始。</p>
 <p>不過這篇文章只會介紹到如何在 Google Map 加入 D3 (SVG) 圖像。
 等我將捷運各站資訊加入後也許會還有下回，哈哈哈。</p>
@@ -224,7 +224,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[Modern WebConf 2015 與我的講題：D3 圖表優化二三事]]></title>
-      <url>http://kuro.tw/posts/2015/05/17/2015-05-17-modern-webconf-2015-with-my-theme-d3-optimizing-two-or-three-things/</url>
+      <url>http://kuro.tw/posts/2015/05/17/modern-webconf-2015-with-my-theme-d3-optimizing-two-or-three-things/</url>
       <content type="html"><![CDATA[<p>下面投影片是這次小弟在 Modern WebConf 2015 分享的主題，內容是有關 D3 開發的一些心得。</p>
 <p>其實早先在準備的時候有些忐忑，像這種大拜拜的演講場合，很難預想聽眾的程度，講題太深擔心會眾無法吸收，太淺又怕對不起會眾的期待。 所以這次的內容安排了三分之一是從最基礎的 D3 data-driven 講起，再來才是開發心得與特性的介紹，期望不管是剛入門的朋友或是已經投入開發的老手都能從中獲得些什麼。因為我認為 Data-Driven 是 D3.js 的核心觀念之一，在瞭解如何將資料轉為 DOM / SVG 元件以後，剩下再去讀 D3 的 API 相信也能輕易上手。</p>
 <p><a href="http://audrey.nu/-/2015/05/16/open-source-enlightenment-2015" title="開源之道 2015 " target="_blank" rel="external">「萬事萬物都有缺口，缺口就是光的入口」</a>，如果有什麼是我講的不對的地方，也歡迎 <del>用力打臉</del> 糾正，畢竟我都這麼厚臉皮出來分享了，讓小弟我有機會獲得正確答案應該不過分，哈哈哈。</p>
@@ -238,7 +238,7 @@ result 代表傳入的資料， key 則是從 view 帶入的參數，這個範�
     
     <entry>
       <title><![CDATA[[筆記] 阻擋 android chrome 網頁下拉自動重整頁面]]></title>
-      <url>http://kuro.tw/posts/2015/05/11/2015-05-11-note-blocking-android-chrome-page-drop-down-automatically-restructure-page/</url>
+      <url>http://kuro.tw/posts/2015/05/11/note-blocking-android-chrome-page-drop-down-automatically-restructure-page/</url>
       <content type="html"><![CDATA[<p>早上開會時，同事提到了 Android 升級後，Chrome for Android 會出現網頁畫面在瀏覽器頂端時，往下拉會重整頁面的問題(<del>其實應該說是 Feature XD</del>)，因為這個新功能會造成網頁使用上的一些困擾，於是試了幾種方式，發現可以阻擋網頁重整的動作，趁還有印象就把它記錄下來。</p>
 <p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/275711/HX5wrVYQ8WW8gkKhK8rQ_2015-05-11%2015.12.02.jpg" alt="2015-05-11 15.12.02.jpg">
 (就是這個小圈圈，看到它就代表網頁要重整了)</p>
@@ -251,7 +251,7 @@ Demo: <a href="http://jsbin.com/conuga/1/" target="_blank" rel="external">http:/
     
     <entry>
       <title><![CDATA[[筆記] Shapefile to GeoJSON]]></title>
-      <url>http://kuro.tw/posts/2015/05/05/2015-05-05-note-shapefile-to-geojson/</url>
+      <url>http://kuro.tw/posts/2015/05/05/note-shapefile-to-geojson/</url>
       <content type="html"><![CDATA[<p>因為每次轉檔都要查，索性把步驟記錄下來。</p>
 <p>首先要安裝 GDAL (Geospatial Data Abstraction Library) 這個程式，
 因為我是用 Mac ，所以在 terminal 輸入 <code>brew install gdal</code> 就可以了。</p>
@@ -273,7 +273,7 @@ Demo: <a href="http://jsbin.com/conuga/1/" target="_blank" rel="external">http:/
     
     <entry>
       <title><![CDATA[[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果]]></title>
-      <url>http://kuro.tw/posts/2015/05/04/2015-05-04-snippet-d3js-donuts-chart-the-transition-effect/</url>
+      <url>http://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/</url>
       <content type="html"><![CDATA[<p>做法很簡單，就是做兩個 <code>d3.svg.arc()</code> 然後在 <code>mouseover</code> &amp; <code>mouseout</code> 的時候改變 <code>d</code> 屬性即可。</p>
 <p>這裏就拿 <a href="http://bl.ocks.org/mbostock/3887193" target="_blank" rel="external">http://bl.ocks.org/mbostock/3887193</a> 作為範例。</p>
 <p>DEMO: (original charts)
@@ -293,7 +293,7 @@ Demo: <a href="http://jsbin.com/conuga/1/" target="_blank" rel="external">http:/
     
     <entry>
       <title><![CDATA[淺談 Google map Heat map API ]]></title>
-      <url>http://kuro.tw/posts/2015/04/29/2015-04-29-a-brief-talk-on-google-map-heat-map-api/</url>
+      <url>http://kuro.tw/posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/</url>
       <content type="html"><![CDATA[<p>前陣子因為工作的需要，稍微研究了一下 Google Map 提供的 HeatMap (熱點圖/熱圖) API，實作方面也滿容易的，在這裡就簡單做個紀錄。</p>
 <p><strong>HeatMap</strong> (以下稱熱圖) 是用來表示<strong>資料數值強度與位置的可視化</strong>，Google 熱圖 API 在預設情況下，高強度的數值會以紅色表示，低強度的數值則是以綠色來表示。</p>
 <p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/262458/gg6DtVUASmSRqxaw8gpk_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-29%20%E4%B8%8B%E5%8D%883.37.46.png" alt="螢幕快照 2015-04-29 下午3.37.46.png">
@@ -328,7 +328,7 @@ DEMO: <a href="http://jsbin.com/xafagi/2/" target="_blank" rel="external">http:/
     
     <entry>
       <title><![CDATA[透過 Google Maps API 處理 GeoJSON 資料]]></title>
-      <url>http://kuro.tw/posts/2015/04/28/2015-04-28-through-the-google-maps-api-geojson-data/</url>
+      <url>http://kuro.tw/posts/2015/04/28/through-the-google-maps-api-geojson-data/</url>
       <content type="html"><![CDATA[<p>在說明 Google Map 如何存取 GeoJSON 前，先來簡單介紹 GeoJSON。</p>
 <p><a href="http://geojson.org/" title="GeoJSON" target="_blank" rel="external">GeoJSON</a> 是一種專門處理地理資訊 (GIS) 結構的 JSON 標準格式。 一個 GeoJSON 物件可以用來代表<strong>點</strong> (Point)，<strong>線</strong> (LineString)，<strong>多邊形</strong> (Polygon) 等等的幾何結構，以及<strong>特徵</strong> (Feature) 的集合，或是<strong>一系列的特徵</strong> (FeatureCollection)。</p>
 <p>也因為 GeoJSON 是一種基於 JSON 的公開標準，其結構簡單且容易讀取的特性也廣受開發者的歡迎，有不少開發程式庫開始支援 GeoJSON 的處理，也有許多政府開放資料(官方或非官方)開始提供 GeoJSON 作為其資料格式。</p>
@@ -365,7 +365,7 @@ Google Map 匯入 GeoJSON 的方式非常簡單，如果已經有一個完整的
     
     <entry>
       <title><![CDATA[透過 Google map Geocoder API 以經緯度轉換地址資訊]]></title>
-      <url>http://kuro.tw/posts/2015/04/27/2015-04-27-address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/</url>
+      <url>http://kuro.tw/posts/2015/04/27/address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/</url>
       <content type="html"><![CDATA[<p>前陣子因為需求的關係，需要以經緯度來轉換地址，幸好 Google map API 有提供 Geocoder 可以轉換大略地址的服務。使用方式非常簡單，我們這裡以立法院的經緯度 (25.0439892, 121.5212213) 為例：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> geocoder = <span class="keyword">new</span> google.maps.Geocoder();</div><div class="line"></div><div class="line"><span class="comment">// google.maps.LatLng 物件</span></div><div class="line"><span class="keyword">var</span> coord = <span class="keyword">new</span> google.maps.LatLng(<span class="number">25.0439892</span>, <span class="number">121.5212213</span>);</div><div class="line"></div><div class="line"><span class="comment">// 傳入 latLng 資訊至 geocoder.geocode</span></div><div class="line">geocoder.geocode(&#123;<span class="string">'latLng'</span>: coord &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">results, status</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (status === google.maps.GeocoderStatus.OK) &#123;</div><div class="line">    <span class="comment">// 如果有資料就會回傳</span></div><div class="line">    <span class="keyword">if</span> (results) &#123;</div><div class="line">      <span class="built_in">console</span>.log(results[<span class="number">0</span>]);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 經緯度資訊錯誤</span></div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    alert(<span class="string">"Reverse Geocoding failed because: "</span> + status);</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>我們傳入經緯度資訊 google.maps.LatLng 物件，透過 <code>geocoder.geocode</code> 轉換出來的結果會是這樣的：</p>
@@ -381,7 +381,7 @@ Google Map 匯入 GeoJSON 的方式非常簡單，如果已經有一個完整的
     
     <entry>
       <title><![CDATA[[note] jQuery 與 d3.js 的一些不同之處]]></title>
-      <url>http://kuro.tw/posts/2015/04/22/2015-04-22-note-jquery-and-d3js-some-of-these-differences/</url>
+      <url>http://kuro.tw/posts/2015/04/22/note-jquery-and-d3js-some-of-these-differences/</url>
       <content type="html"><![CDATA[<p>以前跟人家介紹 d3.js 的時候，我都會笑稱 d3.js 其實就是 SVG 界的 jQuery。
 但是最近發現不少人對兩者的 select 以及 append 有些疑問，特別把它寫下來紀錄。</p>
 <p>先說大家比較熟悉的 jQuery：</p>
@@ -408,7 +408,7 @@ Google Map 匯入 GeoJSON 的方式非常簡單，如果已經有一個完整的
     
     <entry>
       <title><![CDATA[偵測 Google Map 的 InfoWindow 訊息框是否被開啟 (v3)]]></title>
-      <url>http://kuro.tw/posts/2014/08/08/2014-08-08-google-map-infowindow-bubble-detection-box-is-opened/</url>
+      <url>http://kuro.tw/posts/2014/08/08/google-map-infowindow-bubble-detection-box-is-opened/</url>
       <content type="html"><![CDATA[<p>因為 Google Map 的 InfoWindow 是被新增出來的物件，所以我們可以透過修改 prototype 的方式，替 InfoWindow 增加新的 method。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">google.maps.InfoWindow.prototype.isOpen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> map = <span class="keyword">this</span>.getMap();</div><div class="line">  <span class="keyword">return</span> (map !== <span class="literal">null</span> &amp;&amp; <span class="keyword">typeof</span> map !== <span class="string">"undefined"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> popup = <span class="keyword">new</span> google.maps.InfoWindow();</div><div class="line">popup.isOpen();  <span class="comment">// will return ture or false.</span></div></pre></td></tr></table></figure>
 <p>參考資料： <a href="http://stackoverflow.com/a/12410385" target="_blank" rel="external">http://stackoverflow.com/a/12410385</a></p>
@@ -417,7 +417,7 @@ Google Map 匯入 GeoJSON 的方式非常簡單，如果已經有一個完整的
     
     <entry>
       <title><![CDATA[[PHP] 將 HTML5 Canvas 產生的圖片上傳至伺服器端處理]]></title>
-      <url>http://kuro.tw/posts/2013/09/08/2013-09-08-php-html5-canvas-resulting-base64-datauri-images-will-be-uploaded-to-the-server-side-processing/</url>
+      <url>http://kuro.tw/posts/2013/09/08/php-html5-canvas-resulting-base64-datauri-images-will-be-uploaded-to-the-server-side-processing/</url>
       <content type="html"><![CDATA[<p>一般來說有兩種處理方式：</p>
 <h2 id="直接把-DataURI-字串儲存起來，等要用的時候直接輸出至-lt-img-gt-的-src-屬性或是-CSS-中："><a href="#直接把-DataURI-字串儲存起來，等要用的時候直接輸出至-lt-img-gt-的-src-屬性或是-CSS-中：" class="headerlink" title="直接把 DataURI 字串儲存起來，等要用的時候直接輸出至 &lt;img&gt; 的 src 屬性或是 CSS 中："></a>直接把 DataURI 字串儲存起來，等要用的時候直接輸出至 <code>&lt;img&gt;</code> 的 src 屬性或是 CSS 中：</h2><p>  像這樣：</p>
 <pre><code>&lt;img src=&quot;&lt;?php echo $base64_img_string; ?&gt;&quot; /&gt;
@@ -471,7 +471,7 @@ IE7 以前的版本不支援 DataURI 格式。 IE8 開始雖然有支援，但�
     
     <entry>
       <title><![CDATA[淺談 ECMAScript 5 嚴格模式 (Strict Mode) ]]></title>
-      <url>http://kuro.tw/posts/2011/11/28/2011-11-28-ecmascript-5-strict-mode/</url>
+      <url>http://kuro.tw/posts/2011/11/28/ecmascript-5-strict-mode/</url>
       <content type="html"><![CDATA[<p>自 ECMAScript 5 開始，增加了一個 嚴格模式 (Strict Mode) 的新特性。</p>
 <p>ECMAScript 5 雖然可以跟前一版的 ECMAScript 3 相容 (ECMAScript 4 已廢棄)，但是，當我們宣告為 &quot;Strict Mode&quot; 後，那些 ECMAScript 5 不再建議使用的 ECMAScript 3 的舊語法會被全面禁止。
 一旦出現，便會出現錯誤或拋出異常 (Exception)。</p>
