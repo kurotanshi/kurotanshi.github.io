@@ -1517,6 +1517,12 @@ em.search-keyword {
   font-style: normal;
   color: #01579f; }
 
+#sidebar .widget a:hover {
+  color: #d44137; }
+
+li.post-list-item {
+  margin-bottom: 1em !important; }
+
 li.dsq-widget-item {
   margin-bottom: 2em !important; }
   li.dsq-widget-item .dsq-widget-user {
