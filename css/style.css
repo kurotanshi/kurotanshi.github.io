@@ -220,12 +220,13 @@ div {
     .post .post-content pre code {
       padding: 0 2em; }
     .post .post-content p {
-      margin: 0 0 .85em; }
+      margin: .25em 0 1.5em; }
       .post .post-content p code {
         display: inline-block;
         margin: 0 5px;
         padding: 0 5px;
-        background: #f7f8f8; }
+        background: #eee;
+        color: #333; }
       .post .post-content p a {
         color: #01579f;
         padding-bottom: 2px;
@@ -238,9 +239,10 @@ div {
       border-top: 1px solid #e7e7e7;
       position: relative; }
     .post .post-content img {
-      max-width: 100%;
+      max-width: 90%;
+      border: 1px solid #e7e7e7;
       padding: 0.5em 0;
-      margin: auto;
+      margin: 1em 3.5%;
       display: block; }
     .post .post-content ul, .post .post-content ol {
       border-radius: 3px;
