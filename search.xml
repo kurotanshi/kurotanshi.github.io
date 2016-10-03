@@ -12,7 +12,7 @@
 在這篇文章，我們就來談談 Vue 1.x 與 2.x 元件實體的差異。</p>
 <hr>
 
-<h3 id="Vue-2-0-元件實體註冊"><a href="#Vue-2-0-元件實體註冊" class="headerlink" title="Vue 2.0 元件實體註冊"></a>Vue 2.0 元件實體註冊</h3><p><img src="/static/img/vue-instance.png" alt="tree of components"></p>
+<h3 id="Vue-2-0-元件實體註冊"><a href="#Vue-2-0-元件實體註冊" class="headerlink" title="Vue 2.0 元件實體註冊"></a>Vue 2.0 元件實體註冊</h3><p><img alt="tree of components" src="/static/img/Vue-instance.png"></p>
 <p>像上面這樣的網站，我們可以將它抽象化為一棵「元件樹」，而每個元件樹都會有個根節點，或稱為根實體 (root Vue instance)。</p>
 <p>那麼，每個 Vue 元件樹的根實體其實是透過 <code>Vue</code> 這個建構函式所產生：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</div><div class="line">  <span class="comment">// options</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
