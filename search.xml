@@ -62,7 +62,7 @@ VueJS 2.0 的 virtual DOM 機制，是採用 <a href="https://github.com/snabbdo
 <hr style="border-top-color: #999;">
 
 <p style="font-size: 1.2em; line-height: 2;">
-<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
+<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img class="nofancybox" title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
 工商服務時間： 10/15 小弟在台北開了以<span style="color: #f00;"> VueJS 2.0 </span>為基礎的工作坊課程，
 <br>課程傳送門: <a href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external">VUE.JS 2.0 入門實戰</a> <br>
 如果你也對 VueJS 有興趣，或是想進入 VueJS 2.0 卻不知該從何開始，歡迎一起參加。 😃
@@ -89,7 +89,7 @@ VueJS 2.0 的 virtual DOM 機制，是採用 <a href="https://github.com/snabbdo
 <hr style="border-top-color: #999;">
 
 <p style="font-size: 1.2em; line-height: 2;">
-<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
+<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img class="nofancybox" title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
 工商服務時間： 10/15 小弟在台北開了以<span style="color: #f00;"> VueJS 2.0 </span>為基礎的工作坊課程，
 <br>課程傳送門: <a href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external">VUE.JS 2.0 入門實戰</a> <br>
 如果你也對 VueJS 有興趣，或是想進入 VueJS 2.0 卻不知該從何開始，歡迎一起參加。 😃
