@@ -206,6 +206,7 @@ div {
     line-height: 1.85;
     color: #444;
     padding-top: 25px;
+    padding-bottom: 20px;
     text-align: justify;
     text-justify: distribute;
     word-break: normal; }
@@ -219,12 +220,14 @@ div {
       margin: 0; }
     .post .post-content pre code {
       padding: 0 2em; }
+    .post .post-content .no-space + p {
+      display: none; }
     .post .post-content p {
       margin: .25em 0 1.5em; }
       .post .post-content p code {
         display: inline-block;
-        margin: 0 5px;
-        padding: 0 5px;
+        margin: 2px 5px;
+        padding: 0 3px;
         background: #eee;
         color: #333; }
       .post .post-content p a {
