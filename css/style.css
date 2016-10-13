@@ -227,7 +227,7 @@ div {
       .post .post-content p code {
         display: inline-block;
         margin: 2px 5px;
-        padding: 0 3px;
+        padding: 0 5px;
         background: #eee;
         color: #333; }
       .post .post-content p a {
@@ -240,7 +240,8 @@ div {
       margin: 1.8em auto;
       border: none;
       border-top: 1px solid #e7e7e7;
-      position: relative; }
+      position: relative;
+      width: 80%; }
     .post .post-content img {
       max-width: 90%;
       border: 1px solid #e7e7e7;
