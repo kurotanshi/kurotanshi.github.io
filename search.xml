@@ -36,14 +36,6 @@
 <img src="/static/img/yarn-vue-5.png"></p>
 <p>打開你的瀏覽器連到 <code>http://localhost:8080/</code> 看到 <code>Hello Vue!</code> 的字樣就代表成功執行囉！
 <img src="/static/img/yarn-vue-6.png"></p>
-<hr style="border-top-color: #999;">
-
-<p style="font-size: 1.2em; line-height: 2;">
-<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img class="nofancybox" title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
-工商服務時間： 10/15 小弟在台北開了以<span style="color: #f00;"> VueJS 2.0 </span>為基礎的工作坊課程，
-<br>課程傳送門: <a href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external">VUE.JS 2.0 入門實戰</a> <br>
-如果你也對 VueJS 有興趣，或是想進入 VueJS 2.0 卻不知該從何開始，歡迎一起參加。 😃
-</p>
 ]]></content>
     </entry>
     
@@ -146,14 +138,6 @@ VueJS 2.0 的 virtual DOM 機制，是採用 <a href="https://github.com/snabbdo
 <p>而 Vue 2.0 在通知 watcher 更新時，會去呼叫前面介紹的 「render function」與更新後的 data 去做更新後再次渲染，概念與 1.x 大致相同。
 但更新 DOM 的手法不同，減少了不必要的比對，也因此大幅度提升了效能。</p>
 <p><img src="/static/img/vue2-watcher.png"></p>
-<hr style="border-top-color: #999;">
-
-<p style="font-size: 1.2em; line-height: 2;">
-<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img class="nofancybox" title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
-工商服務時間： 10/15 小弟在台北開了以<span style="color: #f00;"> VueJS 2.0 </span>為基礎的工作坊課程，
-<br>課程傳送門: <a href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external">VUE.JS 2.0 入門實戰</a> <br>
-如果你也對 VueJS 有興趣，或是想進入 VueJS 2.0 卻不知該從何開始，歡迎一起參加。 😃
-</p>
 ]]></content>
     </entry>
     
@@ -173,14 +157,6 @@ VueJS 2.0 的 virtual DOM 機制，是採用 <a href="https://github.com/snabbdo
 <p>依照 migration helper 給的建議一一修正後，再次執行專案，檢查一下 console，是否有噴錯，如果沒有錯誤，那麼專案的升級也就差不多了。</p>
 <p>不過要注意，目前 Vue migration helper 還在 beta 階段，如果未來要再更新至新版的話，直接再次執行 <code>npm install --global git://github.com/vuejs/vue-migration-helper.git</code> 重新安裝一次就好。</p>
 <p>最後，鄉親啊，如果你正要開啟新專案，建議現在就可以直接從 Vue 2.0 進入喔！</p>
-<hr style="border-top-color: #999;">
-
-<p style="font-size: 1.2em; line-height: 2;">
-<a title="vue.js 2.0 入門實戰" href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external"><img class="nofancybox" title="vue.js 2.0 入門實戰" style="border: none; margin: 0 auto;" src="/static/img/5xruby-vue.png"></a>
-工商服務時間： 10/15 小弟在台北開了以<span style="color: #f00;"> VueJS 2.0 </span>為基礎的工作坊課程，
-<br>課程傳送門: <a href="https://5xruby.tw/talks/vuejs-3" target="_blank" rel="external">VUE.JS 2.0 入門實戰</a> <br>
-如果你也對 VueJS 有興趣，或是想進入 VueJS 2.0 卻不知該從何開始，歡迎一起參加。 😃
-</p>
 ]]></content>
     </entry>
     
