@@ -16,7 +16,7 @@
 <p>然後安裝 Yarn。 執行 <code>curl -o- -L https://yarnpkg.com/install.sh | bash</code> 即可。</p>
 <hr>
 
-<h3 id="第一步：安裝-vue-cli"><a href="#第一步：安裝-vue-cli" class="headerlink" title="第一步：安裝 vue-cli"></a>第一步：安裝 vue-cli</h3><p>很簡單，把原本的  <code>npm install -g vue-cli</code> 改成 <code>yarn add global vue-cli</code> 就可以了。執行的時候像這樣：
+<h3 id="第一步：安裝-vue-cli"><a href="#第一步：安裝-vue-cli" class="headerlink" title="第一步：安裝 vue-cli"></a>第一步：安裝 vue-cli</h3><p>很簡單，把原本的  <code>npm install -g vue-cli</code> 改成 <code>yarn global add vue-cli</code> 就可以了。執行的時候像這樣：
 <img src="/static/img/yarn-vue-1.png"></p>
 <p>而安裝完畢後，執行 <code>yarn vue</code> 應該可以看到這樣的畫面。
 <img src="/static/img/yarn-vue-2.png"></p>
