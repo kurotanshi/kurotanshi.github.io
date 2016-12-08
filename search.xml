@@ -8,7 +8,7 @@
       <url>http://kuro.tw/posts/2016/12/08/%E9%80%8F%E9%81%8E-VueCLI-%E5%BB%BA%E7%BD%AE%E5%B0%88%E6%A1%88%E6%99%82%EF%BC%8C%E8%87%AA%E5%8B%95%E5%88%87%E6%8F%9B-devtools-%E7%9A%84-debug-%E7%92%B0%E5%A2%83/</url>
       <content type="html"><![CDATA[<p>Vue 提供了相當好用的 debug 工具 (Chrome 套件)， <a href="https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd" target="_blank" rel="external">Vue.js devtools</a>，在安裝之後當你用 Chrome 開啟 Vue 專案時，Chrome 的開發者工具會多出一個 Vue 的 Tab，然後把 Vue Instance 裡的屬性通通列出來：</p>
 <p><img src="/static/img/vue-tool-screenshot.png"></p>
-<p>在預設開啟 debug mode 你會看到這樣畫面：
+<p>在預設開啟 debug mode 時，按下 Vue devtools 的 icon 你會看到這樣畫面：
 <img src="/static/img/vue-tool-on.png"></p>
 <p>這時候打開 Chrome 開發者工具， vue 專案中所有 Instance 的屬性資料通通一覽無遺。</p>
 <hr>
