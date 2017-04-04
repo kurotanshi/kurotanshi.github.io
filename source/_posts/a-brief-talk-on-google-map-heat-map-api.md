@@ -19,7 +19,7 @@ tags: [google map, Heatmap]
 
 ``` html
 <script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false">
+  src="https://maps.googleapis.com/maps/api/js?libraries=visualization">
 </script>
 ```
 

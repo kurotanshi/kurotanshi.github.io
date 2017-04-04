@@ -31,7 +31,7 @@ a, button.submit {
   transition: all .1s ease-in; }
 
 a:hover, a:active {
-  color: #444; }
+  color: #8b0000; }
 
 a:focus {
   outline: auto; }
@@ -269,7 +269,7 @@ div {
   .post .tags {
     padding-bottom: 1em; }
     .post .tags a {
-      margin-right: .5em; }
+      margin-right: 1em; }
       .post .tags a:before {
         font-family: "FontAwesome";
         content: "\f0c6";
