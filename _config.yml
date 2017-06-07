@@ -8,6 +8,7 @@ subtitle:
 description: 隨手寫寫，就是個人的筆記。
 author: Kuro Hsu
 language: zh-TW
+disqus_shortname: kurotw
 timezone:
 
 # URL
@@ -40,8 +41,8 @@ relative_link: false
 future: true
 
 highlight:
-  enable: true
-  auto_detect: false
+  enable: true #true
+  auto_detect: true
   line_number: true
   tab_replace: true
 
@@ -68,6 +69,15 @@ pagination_dir: page
 # theme: landscape
 theme: maupassant
 
+# 在归档页面显示所有文章 （Show all articles at archive page.）
+# 需要安装(Need to install) hexo-generator-archive 插件支持
+archive_generator:
+  per_page: 0
+  yearly: false
+  monthly: false
+  daily: false
+
+
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
@@ -76,10 +86,10 @@ deploy:
   branch: master
 
 marked:
-    gfm: true
-    pedantic: false
-    sanitize: false
-    tables: false
-    breaks: false
-    smartLists: false
-    smartypants: false
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: false
+  breaks: false
+  smartLists: false
+  smartypants: false
