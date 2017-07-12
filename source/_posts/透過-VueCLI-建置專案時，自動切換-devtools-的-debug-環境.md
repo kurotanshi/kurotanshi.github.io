@@ -4,7 +4,7 @@ title: 透過 Vue-CLI 建置專案時，自動切換 devtools 的 debug 環境
 date: 2016-12-08 11:40:00
 comments: true
 categories: [vue.js]
-tags: [vue.js, webpack, devtools]
+tags: [vue.js, vue-cli, webpack, devtools]
 ---
 
 Vue 提供了相當好用的 debug 工具 (Chrome 套件)， [Vue.js devtools](https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)，在安裝之後當你用 Chrome 開啟 Vue 專案時，Chrome 的開發者工具會多出一個 Vue 的 Tab，然後把 Vue Instance 裡的屬性通通列出來：

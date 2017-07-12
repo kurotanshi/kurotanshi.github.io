@@ -4,7 +4,7 @@ title: 利用 Yarn 安裝 Vue-cli
 date: 2016-10-13 11:49:07
 comments: true
 categories: [vue.js]
-tags: [vue.js]
+tags: [vue.js, yarn]
 ---
 
 這兩天 JavaScript 圈子的最大新聞應該就是 Facebook 發布了一套新的 JavaScript 套件管理工具 Yarn，感覺來勢洶洶勢不可擋。
