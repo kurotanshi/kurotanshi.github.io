@@ -104,7 +104,7 @@ function draw_heatmap(results) {
     heatmapData.push(weightedLoc);
   }
 
-	// 生成熱圖圖層
+  // 生成熱圖圖層
   var heatmap = new google.maps.visualization.HeatmapLayer({
     data: heatmapData,
     dissipating: true,
