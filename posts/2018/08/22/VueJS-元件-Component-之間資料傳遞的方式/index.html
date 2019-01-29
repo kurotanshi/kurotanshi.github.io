@@ -1,0 +1,468 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><title>VueJS 元件 (Component) 之間資料溝通傳遞的方式 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=018.0102001"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">VueJS 元件 (Component) 之間資料溝通傳遞的方式</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首頁</i></a><a href="/archives/"><i class="fa fa-archive"> 所有文章</i></a><a href="/atom.xml"><i class="fa fa-rss"> 訂閱</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">VueJS 元件 (Component) 之間資料溝通傳遞的方式</h1><div class="post-meta">2018-08-22 12:30<span> | </span><span class="category"><a href="/categories/vue-js/">vue.js</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 閱讀</span></span></div><a data-disqus-identifier="posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/" href="/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p><img src="/static/img/vue-instance.png"></p>
+<p>由於 VueJS 採用元件系統 (Component System) 來組織我們的應用程式，元件之間的資料傳遞，一直都是個不容忽視的問題，尤其在過去我們看過太多資料傳遞不當處理的方式，專案隨著時間不斷擴張，變得難以維護，最終導致不得不砍掉重練的悲劇。</p>
+<h2 id="讓我們先從一個最簡單的範例說起吧！"><a href="#讓我們先從一個最簡單的範例說起吧！" class="headerlink" title="讓我們先從一個最簡單的範例說起吧！"></a>讓我們先從一個最簡單的範例說起吧！</h2><pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;button @click=&quot;count++&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre><code class="javascript">  var app = new Vue({
+    el: &#39;#app&#39;,
+    data: {
+      count: 0
+    }
+  });
+</code></pre>
+<p>上面是一個點擊計數器的範例，當我們點擊畫面按鈕的時候，按鈕裡面的數字也會隨著增加。</p>
+<p><img src="/static/img/vue-component-data-transfer/button.png">
+<a href="http://output.jsbin.com/bedeho" target="_blank" rel="noopener">Demo link</a></p>
+<p>接著，如果我們需要增加另一個計數器呢？</p>
+<p>聰明的你也許會想到，那我們就複製一份 <code>button</code> 吧！</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;button @click=&quot;count++&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;
+    &lt;button @click=&quot;count++&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>此時畫面雖然變成兩個按鈕，但問題來了，當我按下其中一個按鈕的時候，兩個按鈕內的 <code>count</code> 都增加了！ 這是因為這兩個按鈕<strong>共用</strong>同一份 <code>count</code> 的狀態。</p>
+<p><img src="/static/img/vue-component-data-transfer/button-sync.gif">
+<a href="https://jsbin.com/neberoc/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>此時，你可能會說，那我就改成 <code>count1</code> 、 <code>count2</code> ... 這樣新增下去。</p>
+<p>沒錯，這樣雖然可以避開錯誤，讓每一個按鈕擁有各自的狀態，但我們的程式也失去了彈性，有幾個按鈕就必須事先新增幾個 count 的屬性。</p>
+<p>這個時候，就需要利用 VueJS 的元件系統來將計數器切分成各自的元件。</p>
+<p><img src="/static/img/vue-instance.png"></p>
+<p>在 VueJS 每個元件實體都有自己的資料作用範圍 (通常稱之為 scope)，每個元件的資料都是<strong>獨立</strong>的。 換言之，我們無法直接從某個元件去存取其他元件的資料。</p>
+<p>這樣講可能不太好理解，讓我們改寫一下剛剛的計數器範例：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;button-counter&gt;&lt;/button-counter&gt;
+    &lt;button-counter&gt;&lt;/button-counter&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre><code class="javascript">Vue.component(&#39;button-counter&#39;, {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: &#39;&lt;button @click=&quot;count++&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;&#39;
+})
+
+var app = new Vue({
+  el: &#39;#app&#39;
+});
+</code></pre>
+<p>像這樣，我們將計數器包裝成獨立的元件 <code>&lt;button-counter&gt;</code>，雖然同樣是計數器元件，但各自的 <code>count</code> 資料屬性都是獨立的，並不會因為按了 A 按鈕，B 按鈕就跟著加一。</p>
+<p>如果要新增多組計數器，我們也只需要在 View 中繼續增加 <code>&lt;button-counter&gt;</code> 的數量就可以了，不必擔心彼此的資料是否衝突。</p>
+<p><img src="/static/img/vue-component-data-transfer/button-no-sync.gif">
+<a href="https://jsbin.com/bigomeh/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>完美！</p>
+<h2 id="工商服務插播"><a href="#工商服務插播" class="headerlink" title="工商服務插播"></a>工商服務插播</h2><p>這是我最近在五倍紅寶石開設的 VueJS 入門課程，時間在九月底。
+如果你對 VueJS 有興趣，卻總是不得其門而入，歡迎點此 <a href="https://5xruby.tw/talks/vue-js" target="_blank" rel="noopener">https://5xruby.tw/talks/vue-js</a> 報名參加，聽說早鳥票有打折，而且折扣還不少。</p>
+<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F5xruby%2Fposts%2F890142061185403&width=500" width="500" height="440" style="border:none;overflow:hidden;max-width:100%;" scrolling="no" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<hr>
+
+
+<h2 id="父與子：-「props-in-events-out」"><a href="#父與子：-「props-in-events-out」" class="headerlink" title="父與子： 「props in, events out」"></a>父與子： 「props in, events out」</h2><p>當然事情不會如你我所想得這麼簡單，此時問題又來了！</p>
+<p>假設今天有個需求，想要知道所有按鈕被按下的次數，也就是說，就是要計算所有 <code>&lt;button-counter&gt;</code> 的 <code>count</code>，並且加總。 在元件資料各自為政的情況下，我們該如何處理？</p>
+<p>當然我們不能直接在某個元件去<strong>直接存取</strong>另一個元件的資料，在 VueJS 裡面處理元件資料的時候，有個很重要的觀念：</p>
+<h3 id="「props-in-events-out」"><a href="#「props-in-events-out」" class="headerlink" title="「props in, events out」"></a>「props in, events out」</h3><p><img src="/static/img/props-in-events-out.png"></p>
+<p>資料透過 props 傳入，而更新透過 events 觸發。</p>
+<p>關於 props 的部份我們稍後再提。</p>
+<hr>
+
+<p>現在我們要做 <code>count</code> 的加總，
+那麼首先，我們就在父層 <code>#app</code> 上加上一個資料屬性： <code>sum</code> 來儲存各個元件的總量，並且在 HTML 把它顯示出來：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;h1&gt;Total: {{sum}}&lt;/h1&gt;
+    &lt;button-counter&gt;&lt;/button-counter&gt;
+    &lt;button-counter&gt;&lt;/button-counter&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre><code class="javascript">Vue.component(&#39;button-counter&#39;, {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: &#39;&lt;button @click=&quot;count++&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;&#39;
+})
+
+var app = new Vue({
+  el: &#39;#app&#39;,
+  data: {
+    sum: 0
+  }
+});
+</code></pre>
+<p><img src="/static/img/vue-component-data-transfer/no-events.gif">
+<a href="https://jsbin.com/qoduvovare/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>像這樣，雖然畫面顯示了「Total: 0」的字樣，但是當我們按下按鈕的時候，並未有任何反應。</p>
+<p>你沒看錯，因為我們只是新增了 sum，程式還沒寫。</p>
+<hr>
+
+<p>還記得剛剛曾說過的「<strong>props in, events out</strong>」嗎? 雖然我們不能在 <code>&lt;button-counter&gt;</code> 裡面控制父層的 <code>sum</code>，但我們可以透過「<strong>事件</strong>」來讓父層去觸發資料更新。</p>
+<p>要觸發事件，自然要先註冊事件。</p>
+<p>第一步，在 view 上面加上 <code>@add-sum=&quot;sum++&quot;</code> 來註冊我們的自訂事件「add-sum」，在 <code>add-sum</code> 這個事件被觸發的時候，會對父層的做 <code>sum++</code>。</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;h1&gt;Total: {{sum}}&lt;/h1&gt;
+    &lt;button-counter @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+    &lt;button-counter @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>那麼，在 <code>button-counter</code> 的部分，則是在原本的 click 事件中，加入 <code>$emit(&#39;add-sum&#39;)</code> 來表示當使用者點擊按鈕的同時，也要跟著發送 <code>add-sum</code> 事件：</p>
+<pre><code class="javascript">Vue.component(&#39;button-counter&#39;, {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: &#39;&lt;button @click=&quot;count++; $emit(\&#39;add-sum\&#39;)&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;&#39;,
+});
+</code></pre>
+<p><img src="/static/img/vue-component-data-transfer/event-out.gif">
+<a href="https://jsbin.com/numipawowe/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>於是現在我們在點擊按鈕的時候，也能同時透過觸發「事件」去通知上層元件去更新對應資料，而不是直接存取父層的 data 屬性，這就是前面說的「Events out」。</p>
+<hr>
+
+<p>那麼 Props in 呢？</p>
+<p>前面說過每個元件都有各自獨立的 Scope，但有時候我們元件內的資料是需要從外部引進來的，這時我們就必須要透過 「Props」這個屬性來宣告我們要從外部引進的資料。</p>
+<p>一樣是前面的計數器範例。</p>
+<p>假設 PM 今天又新增了一個需求：「欸欸，我的計數器<strong>可不可以不要從零開始跳，我想指定從某個數字開始</strong>...」</p>
+<p>『<strong>當然不可以啊</strong>』</p>
+<p>............ 雖然我知道你很想這樣回，但現實總是殘酷，實話永遠傷人。</p>
+<p>回到程式。 最簡單的用法就是在 component 裡面新增 props 這個屬性：</p>
+<pre><code class="javascript">Vue.component(&#39;button-counter&#39;, {
+  props: {
+    [&#39;initialCounter&#39;]
+  },
+  data: function () {
+    return {
+      count: this.initialCounter
+    }
+  },
+  template: &#39;&lt;button @click=&quot;count++; $emit(\&#39;add-sum\&#39;)&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;&#39;,
+});
+</code></pre>
+<p>像這樣，我們就新增了一個叫 <code>initialCounter</code> 的 props，而原本的 <code>count</code> 也改為由 props 帶入的 <code>this.initialCounter</code> 來表示。</p>
+<p>props 宣告完成了，那麼，該怎麼把資料帶到 <code>button-counter</code> 呢？</p>
+<p>很簡單，這裡我們來改寫一下 HTML 的部分：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;h1&gt;Total: {{sum}}&lt;/h1&gt;
+    &lt;button-counter :initial-counter=&quot;10&quot; @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+    &lt;button-counter :initial-counter=&quot;20&quot; @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>這裏需要注意的是，由於 HTML 不分大小寫的特性，我們定義的 <code>initialCounter</code> props，必須要轉成 <strong>kebab-case</strong> (單字與單字用 - 符號連結) 的寫法，才能正確傳入喔。</p>
+<p>像這樣，現在我們就可以針對不同計數器去個別定義它們的初始數值了！</p>
+<p><img src="/static/img/vue-component-data-transfer/init-num.gif">
+<a href="https://jsbin.com/hinixokiwa/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>就這樣，一天又平安的過去了，感謝飛天小女警的努力！</p>
+<hr>
+
+<h2 id="老司機送貨囉：-Event-bus"><a href="#老司機送貨囉：-Event-bus" class="headerlink" title="老司機送貨囉： Event bus"></a>老司機送貨囉： Event bus</h2><p>前面提到元件間的溝通，如果是單純的父子層級，透過 props 與 events 來處理顯然沒有什麼問題。
+但是我們的專案不會總是只有父子兩層這樣單純的關係，若是同層間的元件或是跨層級元件的互相溝通呢？</p>
+<p>那麼就得找來老司機 Event bus 來幫忙了！</p>
+<p><img src="/static/img/vue-component-data-transfer/event-bus.png"></p>
+<p>那怎麼使用 Event bus 呢？ 很簡單，我們新增一個變數，並指定一個新的 Vue 物件實體給它：</p>
+<pre><code class="javascript">// event bus
+var bus = new Vue();
+</code></pre>
+<p>沒開玩笑，就這樣。 不相信？ 好，讓我們再回到前面的計數器範例。</p>
+<p>前面做好的計數器看起來很完美，但總覺得好像缺少了什麼東西對吧... 是 reset 啊，我忘了 reset ！ 沒錯，如果沒有 reset 按鈕，如果要重新計算的話不就每次都得重整頁面，實在太 low 了。</p>
+<p>沒問題，我們這就新增一顆 reset 按鈕：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;h1&gt;Total: {{sum}}&lt;/h1&gt;
+    &lt;button-counter @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+    &lt;button-counter @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+
+    &lt;button&gt;reset&lt;/button&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>但問題來了，我要怎麼在這個 reset 按鈕按下去的同時，針對所有的計數器與頂層的 sum 來歸零呢？</p>
+<p>此時輪到老司機出場了！</p>
+<p>首先，我們先將 reset button 封裝成一個獨立的元件 <code>&lt;button-reset&gt;</code>：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;h1&gt;Total: {{sum}}&lt;/h1&gt;
+    &lt;button-counter @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+    &lt;button-counter @add-sum=&quot;sum++&quot;&gt;&lt;/button-counter&gt;
+
+    &lt;button-reset&gt;&lt;/button-reset&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>然後是 JS 的部分，一開始先新增一個 Vue 實體物件來當作 Event Bus：</p>
+<pre><code class="javascript">var bus = new Vue();
+
+</code></pre>
+<p>我們在原本的 <code>&lt;button-counter&gt;</code> 與頂層實體 <code>#app</code> 分別加上 <code>reset</code> 這個 method，當各自的 <code>reset</code> 被呼叫的時候，所屬的 <code>count</code> 與 <code>sum</code> 就歸零。</p>
+<pre><code class="javascript">Vue.component(&#39;button-counter&#39;, {
+  props: [&#39;initialCounter&#39;],
+  data: function () {
+    return {
+      count: this.initialCounter || 0
+    }
+  },
+  template: &#39;&lt;button @click=&quot;count++; $emit(\&#39;add-sum\&#39;)&quot;&gt;You clicked me {{ count }} times.&lt;/button&gt;&#39;,
+  methods: {
+    reset: function(){
+      this.count = 0;
+    }
+  },
+  created: function(){
+    bus.$on(&#39;reset&#39;, this.reset);
+  }
+});
+
+var app = new Vue({
+  el: &#39;#app&#39;,
+  data: {
+    sum: 0,
+  },
+  methods: {
+    reset: function(){
+      this.sum = 0;
+    }
+  },
+  created: function(){
+    bus.$on(&#39;reset&#39;, this.reset);
+  }
+});
+</code></pre>
+<p>然後，我們在元件的 <code>created</code> 階段分別為 <code>bus</code> 註冊了 <code>reset</code> 事件： <code>bus.$on(&#39;reset&#39;, this.reset);</code> ，意思是說，當 <code>bus</code> 觸發了 <code>reset</code> 這個事件的時候，就會去呼叫實體內的 <code>reset</code> method。</p>
+<p>當然，事件註冊之後，總要有個地方觸發它，這個任務就交給後來新增的 <code>&lt;button-reset&gt;</code> 吧。</p>
+<pre><code class="javascript">Vue.component(&#39;button-reset&#39;, {
+  template: &#39;&lt;button @click=&quot;reset&quot;&gt;reset&lt;/button&gt;&#39;,
+  methods: {
+    reset: function(){
+      bus.$emit(&#39;reset&#39;);
+    }
+  }
+});
+</code></pre>
+<p>可以看到 <code>&lt;button-reset&gt;</code> 的內部構造其實很簡單，當 reset 按鈕被點擊的時候，就向 <code>bus</code> 去發送 <code>reset</code> 這個事件。</p>
+<p>然後接下來的事情就交給老司機 <code>bus</code> 去處理啦！</p>
+<p><img src="/static/img/vue-component-data-transfer/reset.gif">
+<a href="https://jsbin.com/lozivij/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>雖然 Event Bus 很方便，但需要注意的小地方也不少，例如小心<strong>事件命名的衝突</strong>，以及在元件銷毀 (beforeDestroy) 前，要記得自行透過 <code>$off</code> 清除所監聽的所有事件，如：</p>
+<pre><code class="js">Vue.component(&#39;button-counter&#39;, {
+  // 略
+  created: function(){
+    bus.$on(&#39;reset&#39;, this.reset);
+  },
+  beforeDestroy: function(){
+    bus.$off(&#39;reset&#39;, this.reset);
+  }
+});
+</code></pre>
+<hr>
+
+<h2 id="全域狀態的管理"><a href="#全域狀態的管理" class="headerlink" title="全域狀態的管理"></a>全域狀態的管理</h2><p>這部分其實跟資料傳遞比較沒有關係，要講的是狀態管理的策略。
+前面提到每個元件都有自己獨立的 scope，但是當某個資料 (或狀態) 需要在多處被引用的時候，光靠 Props / Events 其實是不好維護的。</p>
+<p>做法有很多種，但概念都是一樣的。</p>
+<p>像是在開發階段，很多人會設定環境變數來區別「開發模式」或是「線上模式」，像這樣：</p>
+<pre><code class="js">var hostName = (Vue.config.productionTip) ? &#39;http://localhost:3000&#39; : &#39;https://www.your-api.com&#39;;
+</code></pre>
+<p>但是否代表我們在每個 component 的 <code>created</code> 階段就必須跑一次這段程式呢？
+如果是初始後就不會被改變的值，我們可以這樣做：</p>
+<pre><code class="js">Vue.config.productionTip = false;
+Vue.prototype.$hostname = (Vue.config.productionTip) ? &#39;http://localhost:3000&#39; : &#39;https://www.your-api.com&#39;;
+</code></pre>
+<p>透過 <code>Vue.prototype</code> 來定義 <code>$hostname</code>，然後在 component 裡面可以透過 <code>this.$hostname</code> 來取用：</p>
+<pre><code class="js">Vue.component(&#39;custom-component&#39;, {
+  created: function(){
+    console.log(this.$hostname);
+  }
+});
+</code></pre>
+<p>或者如果你不希望每個 Vue 元件實體都被建立這份資料，那也可以改用 mixins 的方式，在你想要設定的元件上加入：</p>
+<pre><code class="js">// define a mixin object
+var myMixin = {
+  data: function(){
+    Vue.config.productionTip = false;
+    return{
+      hostname: (Vue.config.productionTip) ? &#39;http://localhost:3000&#39; : &#39;https://www.your-api.com&#39;
+    }
+  }
+};
+
+Vue.component(&#39;custom-component&#39;, {
+  mixins: [myMixin],
+  created: function(){
+    console.log(this.hostname);
+  }
+});
+</code></pre>
+<p>當然，透過 mixin 所生成的 data 在建立之後，每個元件的 data 就都是獨立的了。 以上面的例子來說，當你改了某個元件的 <code>hostname</code> 並不會影響到另一個元件的 <code>hostname</code>。</p>
+<p>當然 mixins 也有 <a href="https://vuejs.org/v2/guide/mixins.html#Global-Mixin" target="_blank" rel="noopener">global mixin</a> 的寫法，但就要小心這樣的用法會影響的可是所有引入的元件 (包括 third-party component) 需要特別注意。</p>
+<h2 id="真相只有一個：-SSOT-Single-Source-of-Truth"><a href="#真相只有一個：-SSOT-Single-Source-of-Truth" class="headerlink" title="真相只有一個： SSOT - Single Source of Truth"></a>真相只有一個： SSOT - Single Source of Truth</h2><p>前面講的是元件引入外部全域資料的做法，最後來講講元件之間資料共享的部分。</p>
+<p>為什麼會需要資料共享？ 先看個例子。</p>
+<hr>
+
+<p>近年出國的人很多，尤其是日本，所以現在我們想要做個幣值轉換器，來計算台幣與日幣的轉換。 假設 1 日幣 = 0.278 台幣，那麼我們也許可以這樣開始寫：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;1 日幣 = 0.278 台幣&lt;/p&gt;
+    &lt;div&gt;台幣 &lt;input type=&quot;text&quot; v-model=&quot;twd&quot;&gt;&lt;/div&gt;
+    &lt;div&gt;日幣 &lt;input type=&quot;text&quot; v-model=&quot;jpy&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre><code class="javascript">  var app = new Vue({
+    el: &#39;#app&#39;,
+    data: {
+     twd: 0.278,
+     jpy: 1,
+    }
+  });
+</code></pre>
+<p><img src="/static/img/vue-component-data-transfer/ssot-1.png"></p>
+<p>當然現在還沒有任何功能，我們只是把兩個欄位分別與 data 的 <code>twd</code> 與 <code>jpy</code> 做綁定。 接下來要開始做連動功能，所以我們加上 <code>twd2jpy</code> 與 <code>jpy2twd</code> 兩個 method 來計算。</p>
+<p>像這樣，我們分別為兩個輸入框加上 input 事件，並觸發 <code>twd2jpy</code> 或 <code>jpy2twd</code> 來幫我們做計算：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;1 日幣 = 0.278 台幣&lt;/p&gt;
+    &lt;div&gt;台幣 &lt;input type=&quot;text&quot; v-model=&quot;twd&quot; @input=&quot;twd2jpy&quot;&gt;&lt;/div&gt;
+    &lt;div&gt;日幣 &lt;input type=&quot;text&quot; v-model=&quot;jpy&quot; @input=&quot;jpy2twd&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre><code class="javascript">var app = new Vue({
+  el: &#39;#app&#39;,
+  data: {
+     twd: 0.278,
+     jpy: 1,
+  },
+  methods: {
+    twd2jpy: function(){
+      this.jpy = Number.parseFloat(Number(this.twd) / 0.278).toFixed(3);
+    },
+    jpy2twd: function(){
+      this.twd = Number.parseFloat(Number(this.jpy) * 0.278).toFixed(3);
+    },
+  }
+});
+</code></pre>
+<p><img src="/static/img/vue-component-data-transfer/ssot-1.gif">
+<a href="https://jsbin.com/tirunex/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>喔喔，看起來真的是好棒棒啊！ 果然 Vue 就是神！ 我們又完成了一項艱難的任務！</p>
+<p><strong style="font-size: 22px;">等等！</strong></p>
+<p>從遠方看到 PM 又走來了 (謎之聲：<del>哪來的 PM </del>) ，並問說「哇這麼厲害，那可不可以也幫我加上美金、人民幣的轉換啊」</p>
+<p>程序猿心想，如果要加上人民幣與美金的話，那就還得再加入 <code>twd2usd</code>、<code>twd2rmb</code>、<code>jpy2usd</code>、<code>jpy2rmb</code>、<code>usd2twd</code>、<code>usd2jpy</code>、<code>usd2rmb</code> ......</p>
+<p>(程序猿吐血而亡)</p>
+<hr>
+
+<p>看到這裡，相信你已經發現問題出在哪了吧！</p>
+<p>在做幣值的計算，其實不管台幣換日幣，或是日幣換台幣，從一開始我們就只需要一種基準值，不管怎麼換，錢都是一樣的。</p>
+<p><img src="/static/img/vue-component-data-transfer/state.png"></p>
+<p>換言之，程式可以改寫成這樣：</p>
+<pre><code class="html">  &lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;1 日幣 = 0.278 台幣&lt;/p&gt;
+    &lt;div&gt;台幣 &lt;input type=&quot;text&quot; v-model=&quot;twd&quot;&gt;&lt;/div&gt;
+    &lt;div&gt;日幣 &lt;input type=&quot;text&quot; v-model=&quot;jpy&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+</code></pre>
+<pre><code>var app = new Vue({
+  el: &#39;#app&#39;,
+  data: {
+     twd: 0.278 ,
+  },
+  computed: {
+    jpy:{
+      get: function(){
+        return Number.parseFloat(Number(this.twd) / 0.278).toFixed(3);
+      },
+      set: function(val){
+        this.twd = Number.parseFloat(Number(val) * 0.278).toFixed(3);
+      }
+    }
+  }
+});
+</code></pre><p>此時 data 只留下 <code>twd</code> 作為基準， <code>jpy</code> 則是透過 computed 來依賴 <code>twd</code> 計算，並在 <code>jpy</code> 更新的時候，透過 <code>set</code> 去改寫 <code>twd</code> 的數值。</p>
+<p><a href="https://jsbin.com/mokahev/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>往後，就算我們要加上美金也只需要在 <code>computed</code> 屬性加上 <code>usd</code>：</p>
+<pre><code>var app = new Vue({
+  el: &#39;#app&#39;,
+  data: {
+     twd: 1,
+  },
+  computed: {
+    jpy: {
+      get: function(){
+        return Number.parseFloat(Number(this.twd) / 0.278).toFixed(3);
+      },
+      set: function(val){
+        this.twd = Number.parseFloat(Number(val) * 0.278).toFixed(3);
+      }
+    },
+    usd: {
+      get: function(){
+        return Number.parseFloat(Number(this.twd) / 30.645).toFixed(3);
+      },
+      set: function(val){
+        this.twd = Number.parseFloat(Number(val) * 30.645).toFixed(3);
+      }
+    }
+  }
+});
+</code></pre><p><img src="/static/img/vue-component-data-transfer/ssot-2.gif">
+<a href="https://jsbin.com/jovopux/1/edit?html,js,output" target="_blank" rel="noopener">Demo link</a></p>
+<p>相信未來若要再加入其他幣值的計算，肯定也不是難事了！</p>
+<hr>
+
+<p>從以上的範例當中，我們可以看到 SSOT (Single Source of Truth) 其實只是一種開發準則、概念性的東西，順著這個邏輯再往下延伸，相信一定會有朋友會想到 <a href="https://facebook.github.io/flux/" target="_blank" rel="noopener">Flux</a> 或是 <a href="https://github.com/vuejs/vuex" target="_blank" rel="noopener">Vuex</a> 的架構。</p>
+<p>沒錯，在 Vue 開發大型應用架構確實用 Vuex 來做集中式狀態管理是相當實用的，礙於篇章的關係，網路上的相關介紹與教學文件也不少，就請有興趣的朋友自行搜尋囉。</p>
+</div><script type="text/javascript" src="/js/share.js?v=018.0102001" async></script><a data-url="https://kuro.tw/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/" data-id="cjrhmgvu3006qwns69o1j43so" class="article-share-link">分享</a><div class="tags"><a href="/tags/vue-js/">vue.js</a></div><div class="post-nav"><a href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/" class="pre">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a><a href="/posts/2018/07/04/初探-Vue-CLI-3-0/" class="next">初探 Vue-CLI v3.0</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/';
+var disqus_title = "VueJS 元件 (Component) 之間資料溝通傳遞的方式";
+var disqus_url = 'https://kuro.tw/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="https://kuro.tw"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分類</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 標籤</i></div><div class="tagcloud"><a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/">VueJS 元件 (Component) 之間資料溝通傳遞的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/07/04/初探-Vue-CLI-3-0/">初探 Vue-CLI v3.0</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/01/02/寫在-IT-鐵人完賽之後/">寫在 IT 鐵人完賽之後</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/20/What-is-THIS-in-JavaScript-下/">What's THIS in JavaScript ? [下]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/17/What-s-THIS-in-JavaScript-中/">What's THIS in JavaScript ? [中]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/12/What-is-THIS-in-JavaScript-上/">What's THIS in JavaScript ? [上]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/09/21/VueJS-元件載入模板-template-的幾種方式/">VueJS 元件載入模板 (template) 的幾種方式</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近評論</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=018.0102001" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=018.0102001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=018.0102001"></script><script type="text/javascript" src="/js/smartresize.js?v=018.0102001"></script></div></body></html>

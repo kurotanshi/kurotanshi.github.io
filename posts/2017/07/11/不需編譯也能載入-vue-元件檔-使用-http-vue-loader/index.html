@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><title>不需編譯也能載入 .vue 元件檔: 使用 http-vue-loader | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=018.0102001"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">不需編譯也能載入 .vue 元件檔: 使用 http-vue-loader</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首頁</i></a><a href="/archives/"><i class="fa fa-archive"> 所有文章</i></a><a href="/atom.xml"><i class="fa fa-rss"> 訂閱</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">不需編譯也能載入 .vue 元件檔: 使用 http-vue-loader</h1><div class="post-meta">2017-07-11 00:16<span> | </span><span class="category"><a href="/categories/vue-js/">vue.js</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 閱讀</span></span></div><a data-disqus-identifier="posts/2017/07/11/不需編譯也能載入-vue-元件檔-使用-http-vue-loader/" href="/posts/2017/07/11/不需編譯也能載入-vue-元件檔-使用-http-vue-loader/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>上週在 Vue 社群圈有個令人興奮的熱門新聞: CodePen 可以支援 <code>.vue</code> 檔案了！</p>
+<p><blockquote class="twitter-tweet" data-lang="zh-tw"><p lang="en" dir="ltr">Check it out - you can use <code>.vue</code> files in CodePen Projects easily:<a href="https://t.co/Cd3Qr11xYQ" target="_blank" rel="noopener">https://t.co/Cd3Qr11xYQ</a> <a href="https://t.co/QvtIXxKRUk" target="_blank" rel="noopener">pic.twitter.com/QvtIXxKRUk</a></p>&mdash; Chris Coyier (@chriscoyier) <a href="https://twitter.com/chriscoyier/status/880859500185616387" target="_blank" rel="noopener">2017年6月30日</a></blockquote></p>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>身為使用 Vue 的開發者聽到這樣的消息當然感到相當開心，但同時也不禁感到好奇，CodePen 是如何做到不須透過 webpack 編譯 vue 檔案，就可以將 .vue 的 component 如實顯示到網頁中。</p>
+<p>大家都知道，在網頁開發的世界中，前端是沒有秘密的。 打開了開發工具，才知道原來是透過 <strong><a href="https://github.com/FranckFreiburger/http-vue-loader" target="_blank" rel="noopener">http-vue-loader</a></strong> 這個工具做到的。</p>
+<hr>
+
+<p><strong><a href="https://github.com/FranckFreiburger/http-vue-loader" target="_blank" rel="noopener">http-vue-loader</a></strong> 這套工具可提供開發者直接在網頁環境中載入 <code>.Vue</code> File，無需透過 nodeJS 環境編譯，也不需要 Build 的步驟。</p>
+<p>用法很簡單，首先在網頁上載入 Vue 與 http-vue-loader，如下</p>
+<pre><code class="html">  &lt;script src=&quot;https://unpkg.com/vue&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://unpkg.com/http-vue-loader&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>接著，假設我們有一個 <code>my-component.vue</code> 的檔案：</p>
+<pre><code class="html">&lt;template&gt;
+    &lt;div class=&quot;hello&quot;&gt;Hello {{who}}&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+module.exports = {
+    data: function() {
+        return {
+            who: &#39;world&#39;
+        }
+    }
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+.hello {
+    background-color: #ffe;
+}
+&lt;/style&gt;
+
+</code></pre>
+<p>那麼，我們就可以在 <code>components</code> 內透過 <code>httpVueLoader</code> 來載入我們的子元件：</p>
+<pre><code class="html">&lt;div id=&quot;my-app&quot;&gt;
+  &lt;my-component&gt;&lt;/my-component&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+  new Vue({
+    el: &#39;#my-app&#39;,
+    components: {
+      &#39;my-component&#39;: httpVueLoader(&#39;my-component.vue&#39;)
+    }
+  });
+&lt;/script&gt;
+</code></pre>
+<p><br></p>
+<p>當然，httpVueLoader 也提供了類似 <code>Vue.component(&#39;my-component&#39;, { ... })</code> 的宣告方式:</p>
+<pre><code class="js">  httpVueLoaderRegister(Vue, &#39;my-component.vue&#39;);
+
+  new Vue({
+      components: [
+          &#39;my-component&#39;
+      },
+</code></pre>
+<p>或是將 httpVueLoader 當作 Plugin 來使用：</p>
+<pre><code class="js">  Vue.use(httpVueLoader);
+
+  new Vue({
+    components: {
+        &#39;my-component&#39;: &#39;url:my-component.vue&#39;
+    },
+    ...
+</code></pre>
+<p>甚至是 Array 的形式也可以：</p>
+<pre><code class="js">    new Vue({
+        components: [
+            &#39;url:my-component.vue&#39;
+        },
+        ...
+</code></pre>
+<p>需要注意的是，httpVueLoader 目前僅支援 Vue 2 以上的版本，而作者也在專案內說明， httpVueLoader 只是提供一個簡便的測試與開發環境，方便開發者不需要透過繁複的編譯過程才能使用 vue file 進行開發。</p>
+<p>若是要發佈到線上的專案，建議還是需要透過工具編譯打包，會有更好的效能以及更佳的支援度喔。</p>
+</div><script type="text/javascript" src="/js/share.js?v=018.0102001" async></script><a data-url="https://kuro.tw/posts/2017/07/11/不需編譯也能載入-vue-元件檔-使用-http-vue-loader/" data-id="cjrhmgver0029wns6ecq3rxa1" class="article-share-link">分享</a><div class="tags"><a href="/tags/vue-js/">vue.js</a><a href="/tags/httpVueLoader/">httpVueLoader</a></div><div class="post-nav"><a href="/posts/2017/07/26/從Vue來看CSS管理方案的發展/" class="pre">從 Vue 來看 CSS 管理方案的發展</a><a href="/posts/2017/06/07/如何在-Vue-CLI-建立的開發環境呼叫跨域遠端-RESTful-APIs/" class="next">如何在 Vue-CLI 建立的開發環境呼叫跨域遠端 RESTful APIs</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2017/07/11/不需編譯也能載入-vue-元件檔-使用-http-vue-loader/';
+var disqus_title = "不需編譯也能載入 .vue 元件檔: 使用 http-vue-loader";
+var disqus_url = 'https://kuro.tw/posts/2017/07/11/不需編譯也能載入-vue-元件檔-使用-http-vue-loader/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="https://kuro.tw"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分類</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 標籤</i></div><div class="tagcloud"><a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/">VueJS 元件 (Component) 之間資料溝通傳遞的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/07/04/初探-Vue-CLI-3-0/">初探 Vue-CLI v3.0</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/01/02/寫在-IT-鐵人完賽之後/">寫在 IT 鐵人完賽之後</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/20/What-is-THIS-in-JavaScript-下/">What's THIS in JavaScript ? [下]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/17/What-s-THIS-in-JavaScript-中/">What's THIS in JavaScript ? [中]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/12/What-is-THIS-in-JavaScript-上/">What's THIS in JavaScript ? [上]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/09/21/VueJS-元件載入模板-template-的幾種方式/">VueJS 元件載入模板 (template) 的幾種方式</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近評論</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=018.0102001" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=018.0102001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=018.0102001"></script><script type="text/javascript" src="/js/smartresize.js?v=018.0102001"></script></div></body></html>

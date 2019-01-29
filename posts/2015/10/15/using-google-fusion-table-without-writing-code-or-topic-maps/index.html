@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><title>利用 Google Fusion Table，不用寫 code 也可以產生主題地圖 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=018.0102001"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">利用 Google Fusion Table，不用寫 code 也可以產生主題地圖</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首頁</i></a><a href="/archives/"><i class="fa fa-archive"> 所有文章</i></a><a href="/atom.xml"><i class="fa fa-rss"> 訂閱</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">利用 Google Fusion Table，不用寫 code 也可以產生主題地圖</h1><div class="post-meta">2015-10-15 02:16<span> | </span><span class="category"><a href="/categories/Google-Map/">Google Map</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 閱讀</span></span></div><a data-disqus-identifier="posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/" href="/posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>感謝台北市政府以及<a href="https://www.facebook.com/photo.php?fbid=10204828212414899&amp;set=a.1357755313713.2044236.1526408898&amp;type=3" target="_blank" rel="noopener">相關人士的努力</a>，在十月中旬的時候，台北市 open data 平台又開放了「<a href="http://data.taipei/opendata/datalist/datasetMeta?oid=68785231-d6c5-47a1-b001-77eec70bec02" target="_blank" rel="noopener">台北市住宅竊盜點位資訊</a>」這樣的資料，雖然很多人戲稱房價又要下跌了，但是老話一句，身為<del>有良心的開發者，當然居住安全比房價什麼的還要重要得多</del>。</p>
+<p>那麼，拿到這份資料我們可以怎麼玩呢?
+剛好這份資料的格式是 CSV (Comma-Separated Values，一種由逗點分隔的純文字資料格式)，所以本篇就來介紹如何透過 <a href="https://support.google.com/fusiontables/answer/2571232" target="_blank" rel="noopener">Google Fusion Table</a> 來讓我們不必寫任何的 code ，也可以建立主題地圖。</p>
+<p>首先先到<a href="http://data.taipei/opendata/datalist/datasetMeta?oid=68785231-d6c5-47a1-b001-77eec70bec02" target="_blank" rel="noopener">台北市住宅竊盜點位資訊</a>，點一下「使用資料」將所需的檔案下載下來，會得到一份 csv 檔案。</p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/UsvTpRmSDWhtT8junGNw_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.16.22.png" alt="螢幕快照 2015-10-15 上午10.16.22.png"></p>
+<p>接著打開 <a href="https://support.google.com/fusiontables/answer/2571232" target="_blank" rel="noopener">Google Fusion Table</a> 的頁面，看到下面這個畫面：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/vFIqF2IuSOuhKhR0mKUt_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.33.31.png" alt="螢幕快照 2015-10-15 上午10.33.31.png"></p>
+<p>接著選擇「CREATE A FUSION TABLE」，會看到這樣的畫面：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/QrsLmP03QNamaW0qrqjT_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.37.48.png" alt="螢幕快照 2015-10-15 上午10.37.48.png"></p>
+<p>現在試著把剛剛的 csv 直接餵給他，看看會發生什麼事
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/Wf4cjXTQTrCXlw0UDWMl_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.05.47.png" alt="螢幕快照 2015-10-15 上午10.05.47.png"></p>
+<p>如果不意外，你應該會得到像這樣的亂碼資料 XDDDDD
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/AUqRTPyFQX29z5TdLGaM_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.06.19.png" alt="螢幕快照 2015-10-15 上午10.06.19.png"></p>
+<p>不過沒關係，山不轉路轉，檔案格式當然也可以轉。只是需要多走幾步路。
+這次我們將原始的 csv 資料先丟到 <a href="http://www.google.com/intl/zh-TW_tw/sheets/about/" target="_blank" rel="noopener">Google Sheet</a> 內，請他將我們的資料轉成正確的編碼。 在建立一個新的 Google Sheet 之後，我們選擇 File &gt; Import 將剛剛的 csv 檔案匯入：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/fNpq4j4rTEuynwQAcxOO_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.07.40.png" alt="螢幕快照 2015-10-15 上午10.07.40.png"></p>
+<p>記得一樣要選擇 Comma，因為是透過逗點分隔的資料格式。
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/bbUWtz7RXqdpZsizK5Lw_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.08.07.png" alt="螢幕快照 2015-10-15 上午10.08.07.png"></p>
+<p>然後就會得到正確編碼後的資料囉。<del>不過糖廍里一樣 GG...因為原始資料就 GG 了... orz</del>
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/wYMPpnlHTRmrgoywrKGc_%E6%9C%AA%E5%91%BD%E5%90%8D.png" alt="未命名.png"></p>
+<p>ok, 到了這裡我們已經有一份正確的資料，這時再回到 Funsion Table，我們選擇 「Google Spreadsheets」，然後將剛剛建立的 Google Sheet 匯入進來:
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/QrsLmP03QNamaW0qrqjT_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.37.48.png" alt="螢幕快照 2015-10-15 上午10.37.48.png"></p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/66zfnteRQy6L50MJQUZ1_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.11.18.png" alt="螢幕快照 2015-10-15 上午10.11.18.png"></p>
+<p>匯入成功後，Funsion Table 會出現這樣的畫面：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/pDQ7qI4WSDub29jPiglU_%E6%9C%AA%E5%91%BD%E5%90%8D.png" alt="未命名.png"></p>
+<p>這個時候，因為我們要製作地圖，所以要告訴 Funsion Table 地點的欄位不是單純的字串，而是用來表示地理資訊的資料。點選 Edit &gt; Change columns：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/thibCn9zRMO435hQgjFd_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.11.57.png" alt="螢幕快照 2015-10-15 上午10.11.57.png"></p>
+<p>然後將發生地點的 Type 改成 Location，然後點上面藍色的 Save 儲存。
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/TK4RPNQtQNiXcQBclDeu_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.12.09.png" alt="螢幕快照 2015-10-15 上午10.12.09.png"></p>
+<p>資料都準備好了，然後我們建立地圖：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/csg65yBiQIyKcj1PAnNk_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.58.53.png" alt="螢幕快照 2015-10-15 上午10.58.53.png"></p>
+<p>不意外的話你應該會看到這樣的畫面，是因為我們傳入的是地址的文字資訊， Google 需要將它轉為經緯度後才能對應到地圖上：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/JJNbZ5DRRmehqBdoDytm_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.13.03.png" alt="螢幕快照 2015-10-15 上午10.13.03.png"></p>
+<p>然後等待一段時間後，Funsion Table 就會為我們產生地圖，像這樣：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/7cjQA7USzGy7nGrQRLDr_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8810.20.02.png" alt="螢幕快照 2015-10-15 上午10.20.02.png"></p>
+<p>除了地點標示外，他也提供了熱圖 (Heat Map) 的呈現，試著拉拉旁邊的捲軸調整參數吧：
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/304787/wMQb7zI8R72jFxu7a3g4_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-10-15%20%E4%B8%8A%E5%8D%8811.03.53.png" alt="螢幕快照 2015-10-15 上午11.03.53.png"></p>
+<p>當然你也可以做好的地圖 share 出來，像這樣：</p>
+<iframe width="800" height="400" scrolling="no" frameborder="no" src="https://www.google.com/fusiontables/embedviz?q=select+col3+from+1sAGtul5gWv1_yRpPTYI1ZvPaHQRPDod-B0MbOeS_&amp;viz=MAP&amp;h=false&amp;lat=25.05814459656792&amp;lng=121.63429174086912&amp;t=1&amp;z=12&amp;l=col3&amp;y=3&amp;tmplt=4&amp;hml=GEOCODABLE"></iframe>
+
+<p>透過 Fusion Table 我們可以不用寫任何的程式碼就生成一份資訊地圖，很簡單吧 :)</p>
+</div><script type="text/javascript" src="/js/share.js?v=018.0102001" async></script><a data-url="https://kuro.tw/posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/" data-id="cjrhmgveq0024wns6djkacfj7" class="article-share-link">分享</a><div class="tags"><a href="/tags/google-map/">google map</a><a href="/tags/Fusion-Table/">Fusion Table</a></div><div class="post-nav"><a href="/posts/2015/12/20/use-d3js-to-create-responsive-histogram/" class="pre">利用 d3.js 製作 responsive 的長條圖</a><a href="/posts/2015/09/30/use-google-map-view-rainfall-simulation-of-flooding-in-taipei-city-map/" class="next">利用 Google Map 檢視台北市降雨淹水模擬圖</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/';
+var disqus_title = "利用 Google Fusion Table，不用寫 code 也可以產生主題地圖";
+var disqus_url = 'https://kuro.tw/posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="https://kuro.tw"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分類</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 標籤</i></div><div class="tagcloud"><a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/">VueJS 元件 (Component) 之間資料溝通傳遞的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/07/04/初探-Vue-CLI-3-0/">初探 Vue-CLI v3.0</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/01/02/寫在-IT-鐵人完賽之後/">寫在 IT 鐵人完賽之後</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/20/What-is-THIS-in-JavaScript-下/">What's THIS in JavaScript ? [下]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/17/What-s-THIS-in-JavaScript-中/">What's THIS in JavaScript ? [中]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/12/What-is-THIS-in-JavaScript-上/">What's THIS in JavaScript ? [上]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/09/21/VueJS-元件載入模板-template-的幾種方式/">VueJS 元件載入模板 (template) 的幾種方式</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近評論</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=018.0102001" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=018.0102001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=018.0102001"></script><script type="text/javascript" src="/js/smartresize.js?v=018.0102001"></script></div></body></html>

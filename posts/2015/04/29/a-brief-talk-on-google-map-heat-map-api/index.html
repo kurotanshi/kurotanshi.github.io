@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><title>淺談 Google map Heat map API  | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=018.0102001"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">淺談 Google map Heat map API </h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首頁</i></a><a href="/archives/"><i class="fa fa-archive"> 所有文章</i></a><a href="/atom.xml"><i class="fa fa-rss"> 訂閱</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">淺談 Google map Heat map API </h1><div class="post-meta">2015-04-29 08:01<span> | </span><span class="category"><a href="/categories/Google-Map/">Google Map</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 閱讀</span></span></div><a data-disqus-identifier="posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/" href="/posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>前陣子因為工作的需要，稍微研究了一下 Google Map 提供的 HeatMap (熱點圖/熱圖) API，實作方面也滿容易的，在這裡就簡單做個紀錄。</p>
+<p><strong>HeatMap</strong> (以下稱熱圖) 是用來表示<strong>資料數值強度與位置的可視化</strong>，Google 熱圖 API 在預設情況下，高強度的數值會以紅色表示，低強度的數值則是以綠色來表示。</p>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/262458/gg6DtVUASmSRqxaw8gpk_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-29%20%E4%B8%8B%E5%8D%883.37.46.png" alt="螢幕快照 2015-04-29 下午3.37.46.png">
+圖片來源: <a href="https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap" target="_blank" rel="noopener">https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap</a></p>
+<p>有了簡單的認知後，那麼就來說明如何透過 Google Map API 在 Google Map 載入熱圖。</p>
+<p>首先是在載入 Google Maps API 時，必須加入 <strong>visualization</strong> 這個 library。在後面加入 <code>libraries=visualization</code> 即可，要是想再加入其他 library 可用 <code>,</code> 逗號隔開。如果沒有載入 visualization 這個 library，熱圖會無法顯示。</p>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot;
+  src=&quot;https://maps.googleapis.com/maps/api/js?libraries=visualization&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>再來，因爲熱圖其實是一連串 <strong>座標點</strong> 與 <strong>數值</strong> 的集合，所以我們要先準備好一個陣列來存放 LatLng 物件的集合：</p>
+<pre><code class="javascript">// 存放 google.maps.LatLng 物件的陣列
+var heatmapData = [
+  new google.maps.LatLng(37.782, -122.447),
+  new google.maps.LatLng(37.782, -122.445),
+    // 以下略 ...
+];
+
+// 產生一個 Heatmap Layer
+var heatmap = new google.maps.visualization.HeatmapLayer({
+  data: heatmapData
+});
+
+// 將 heatmap 圖層加入至 map
+heatmap.setMap(map);
+</code></pre>
+<p>如果想要改變熱圖樣式的話也很簡單，有兩種方式，第一種是在 <code>new google.maps.visualization.HeatmapLayer</code> 時加入樣式的設定，如：</p>
+<pre><code class="javascript">var heatmap = new google.maps.visualization.HeatmapLayer({
+  data: heatmapData,
+  gradient: [&#39;transparent&#39;, &#39;#f00&#39;, &#39;#0f0&#39;, &#39;#00f&#39;],    // 指定顏色範圍 ex:透明, 紅, 綠, 藍
+  radius: 10,                // 每個點的半徑 (單位 px)
+  opacity: 0.5            // 熱圖圖層透明度 (0 ~ 1)
+});
+</code></pre>
+<p>或是想改變已載入熱圖的樣式，可以透過 <code>heatmap.set()</code> :</p>
+<pre><code class="javascript">// 改變範圍顏色
+heatmap.set(&#39;gradient&#39;, [&#39;transparent&#39;, &#39;#f00&#39;, &#39;#0f0&#39;, &#39;#00f&#39;]);
+
+// 改變透明度
+heatmap.set(&#39;opacity&#39;, 0.5);
+</code></pre>
+<p>完整範例可以參考 Google Heat Map 文件：
+<a href="https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap" target="_blank" rel="noopener">https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap</a></p>
+<p>接著，同場加映。</p>
+<p>如果今天我們有一份完整的 GeoJSON (關於 GeoJSON 可參考<a href="http://kuro.tw/posts/2015/04/28/through-the-google-maps-api-geojson-data">前篇 GeoJSON 介紹</a>)文件，是否可以直接生成熱圖？ 當然沒問題。</p>
+<p>我們只要將取得的 GeoJSON 解析出來，並存入陣列內就可以輕鬆地生成熱圖。</p>
+<p>這是 GeoJSON 範例的格式，可以看出來這是一個 Point，而且有個屬性 valueCount，值為 5。</p>
+<pre><code class="javascript">{
+  &quot;type&quot;: &quot;Feature&quot;,
+  &quot;geometry&quot;: {
+      &quot;type&quot;: &quot;Point&quot;,
+      &quot;coordinates&quot;: [121.52803907522677, 25.036051507818932]
+  },
+  &quot;properties&quot;: { &quot;valueCount&quot;: 5 }
+}
+</code></pre>
+<pre><code class="javascript">// 畫熱圖
+function draw_heatmap(results) {
+  var heatmapData = [];
+
+  for (var i = 0; i &lt; results.features.length; i++) {
+    // 取得座標
+    var coords = results.features[i].geometry.coordinates;
+    // 要注意： LatLng 物件的經緯度順序與 GeoJSON 的座標順序相反
+    var latLng = new google.maps.LatLng(coords[1], coords[0]);
+
+    var weightedLoc = {
+      // 位置
+      location: latLng,
+      // 單位強度，這裏由 GeoJSON 內的 valueCount 屬性取得
+      weight: results.features[i].properties.valueCount
+    };
+
+    heatmapData.push(weightedLoc);
+  }
+
+  // 生成熱圖圖層
+  var heatmap = new google.maps.visualization.HeatmapLayer({
+    data: heatmapData,
+    dissipating: true,
+    map: map,
+    radius: 40,
+    gradient: [&#39;transparent&#39;, &#39;#f00&#39;, &#39;#0f0&#39;, &#39;#00f&#39;]
+  });
+}
+</code></pre>
+<p><img src="http://user-image.logdown.io/user/3292/blog/3340/post/262458/jE7EkvSumXUFaRKArSMw_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-29%20%E4%B8%8B%E5%8D%883.50.00.png" alt="螢幕快照 2015-04-29 下午3.50.00.png">
+DEMO: <a href="http://jsbin.com/xafagi/1/" target="_blank" rel="noopener">http://jsbin.com/xafagi/1/</a></p>
+<p>如果想要 debug 確認生成的熱圖是否正確，因為我們是利用 GeoJSON 產生熱圖，所以我們可以透過 <code>map.data.addGeoJson( geoJson );</code> 來加入 marker 供我們確認。
+<img src="http://user-image.logdown.io/user/3292/blog/3340/post/262458/iU5KQsFgRQKTwgEjNraG_%E8%9E%A2%E5%B9%95%E5%BF%AB%E7%85%A7%202015-04-29%20%E4%B8%8B%E5%8D%883.59.13.png" alt="螢幕快照 2015-04-29 下午3.59.13.png">
+DEMO: <a href="http://jsbin.com/xafagi/2/" target="_blank" rel="noopener">http://jsbin.com/xafagi/2/</a></p>
+<p>參考資料：
+<a href="https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap" target="_blank" rel="noopener">https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap</a>
+<a href="https://developers.google.com/maps/documentation/javascript/heatmaplayer" target="_blank" rel="noopener">https://developers.google.com/maps/documentation/javascript/heatmaplayer</a></p>
+</div><script type="text/javascript" src="/js/share.js?v=018.0102001" async></script><a data-url="https://kuro.tw/posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/" data-id="cjrhmgve5000cwns63i7qns2g" class="article-share-link">分享</a><div class="tags"><a href="/tags/google-map/">google map</a><a href="/tags/Heatmap/">Heatmap</a></div><div class="post-nav"><a href="/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/" class="pre">[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果</a><a href="/posts/2015/04/28/through-the-google-maps-api-geojson-data/" class="next">透過 Google Maps API 處理 GeoJSON 資料</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/';
+var disqus_title = "淺談 Google map Heat map API ";
+var disqus_url = 'https://kuro.tw/posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"><input type="hidden" name="sitesearch" value="https://kuro.tw"></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分類</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 標籤</i></div><div class="tagcloud"><a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/22/VueJS-元件-Component-之間資料傳遞的方式/">VueJS 元件 (Component) 之間資料溝通傳遞的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/07/04/初探-Vue-CLI-3-0/">初探 Vue-CLI v3.0</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/01/02/寫在-IT-鐵人完賽之後/">寫在 IT 鐵人完賽之後</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/20/What-is-THIS-in-JavaScript-下/">What's THIS in JavaScript ? [下]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/17/What-s-THIS-in-JavaScript-中/">What's THIS in JavaScript ? [中]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/10/12/What-is-THIS-in-JavaScript-上/">What's THIS in JavaScript ? [上]</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2017/09/21/VueJS-元件載入模板-template-的幾種方式/">VueJS 元件載入模板 (template) 的幾種方式</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近評論</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=018.0102001" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=018.0102001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=018.0102001"></script><script type="text/javascript" src="/js/smartresize.js?v=018.0102001"></script></div></body></html>
