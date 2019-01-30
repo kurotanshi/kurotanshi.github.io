@@ -149,14 +149,14 @@
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2011/11/28/ecmascript-5-strict-mode/</loc>
+    <loc>https://kuro.tw/posts/2015/04/27/address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2015/04/27/address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/</loc>
+    <loc>https://kuro.tw/posts/2011/11/28/ecmascript-5-strict-mode/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -177,7 +177,7 @@
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2015/05/17/modern-webconf-2015-with-my-theme-d3-optimizing-two-or-three-things/</loc>
+    <loc>https://kuro.tw/posts/2015/06/11/js-note-twd97-convert-to-longitude-and-latitude/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -191,14 +191,14 @@
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2015/07/08/note-javascript-variables-declared-with-the-scope-scope/</loc>
+    <loc>https://kuro.tw/posts/2015/05/17/modern-webconf-2015-with-my-theme-d3-optimizing-two-or-three-things/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2015/06/11/js-note-twd97-convert-to-longitude-and-latitude/</loc>
+    <loc>https://kuro.tw/posts/2015/07/08/note-javascript-variables-declared-with-the-scope-scope/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -219,13 +219,6 @@
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2015/06/18/taipei-d3js-meetup-gathering-to-share-experiences/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://kuro.tw/posts/2013/09/08/php-html5-canvas-resulting-base64-datauri-images-will-be-uploaded-to-the-server-side-processing/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
@@ -234,6 +227,20 @@
   
   <url>
     <loc>https://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/06/18/taipei-d3js-meetup-gathering-to-share-experiences/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/04/28/through-the-google-maps-api-geojson-data/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -255,13 +262,6 @@
   
   <url>
     <loc>https://kuro.tw/posts/2015/10/15/using-google-fusion-table-without-writing-code-or-topic-maps/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/04/28/through-the-google-maps-api-geojson-data/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
