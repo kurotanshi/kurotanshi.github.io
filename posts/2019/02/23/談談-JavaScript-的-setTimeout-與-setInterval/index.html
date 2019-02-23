@@ -248,11 +248,11 @@ window.setInterval(function(){
 
 (下略)
 </code></pre>
-<p>像上面這樣，即便每次執行都只有 100 ~ 200 ms 誤差，但久而久之 <code>setInterval()</code> 的誤差就會漸漸擴大。</p>
+<p>像上面這樣，即便每次執行都只有 100 ~ 200 ms 誤差，但久而久之 <code>setInterval()</code> 帶來的誤差就會漸漸擴大。</p>
 <h2 id="精準校時？"><a href="#精準校時？" class="headerlink" title="精準校時？"></a>精準校時？</h2><p>先說結論，別傻了孩子，不管你怎麼對 <code>setTimeout()</code> 或 <code>setInterval()</code> 做優化，誤差永遠都會存在。
 但好消息是我們可以透過一些手法來降低誤差，像是一開始就先計算 client 的時間與 server 端的時間差，並定期與 server 端做時間同步修正，使誤差維持在最小可接受範圍內等。</p>
 <p>如果是要執行動畫，則建議用 <a href="https://developer.mozilla.org/zh-TW/docs/Web/API/Window.requestAnimationFrame" target="_blank" rel="noopener">requestAnimationFrame</a> 來取代 <code>setTimeout()</code> 或 <code>setInterval()</code>。  比起傳統的 <code>setTimeout()</code> 或 <code>setInterval()</code> ， <code>requestAnimationFrame</code> 的執行效能會好上許多。</p>
-</div><script type="text/javascript" src="/js/share.js?v=018.0102001" async></script><a data-url="https://kuro.tw/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/" data-id="cjshc60gi00628ls621c9xjiz" class="article-share-link">分享</a><div class="tags"><a href="/tags/javascript/">javascript</a><a href="/tags/setTimeout/">setTimeout</a></div><div class="post-nav"><a href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/" class="next">企業前端框架趨勢論壇之問與答遺珠</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+</div><script type="text/javascript" src="/js/share.js?v=018.0102001" async></script><a data-url="https://kuro.tw/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/" data-id="cjshcao5100629rs6mspdq6f5" class="article-share-link">分享</a><div class="tags"><a href="/tags/javascript/">javascript</a><a href="/tags/setTimeout/">setTimeout</a></div><div class="post-nav"><a href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/" class="next">企業前端框架趨勢論壇之問與答遺珠</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
 var disqus_identifier = 'posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/';
 var disqus_title = "談談 JavaScript 的 setTimeout 與 setInterval";
 var disqus_url = 'https://kuro.tw/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/';
