@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://kuro.tw/posts/2019/07/31/%E8%AB%87%E8%AB%87%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</loc>
+    
+    <lastmod>2019-07-31T10:48:37.389Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://kuro.tw/posts/2017/12/08/JavaScript-%E6%98%AF%E3%80%8C%E5%82%B3%E5%80%BC%E3%80%8D%E6%88%96%E3%80%8C%E5%82%B3%E5%9D%80%E3%80%8D/</loc>
     
     <lastmod>2019-02-26T06:10:44.629Z</lastmod>
@@ -142,118 +149,6 @@
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2016/09/30/Vue-2-0-%E5%8D%87%E7%B4%9A%E5%B0%8F%E5%B9%AB%E6%89%8B-Vue-migration-helper/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2016/10/03/VueJS-V1-%E8%88%87-V2-%E5%85%83%E4%BB%B6%E5%AF%A6%E9%AB%94%E4%B9%8B%E5%B7%AE%E7%95%B0/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2016/10/05/VueJS-%E5%90%84%E7%A8%AE%E8%B3%87%E6%96%99%E7%B6%81%E5%AE%9A-data-binding-%E7%9A%84%E6%96%B9%E5%BC%8F/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/05/20/added-to-the-google-map-images-d3-2/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/04/27/address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2011/11/28/ecmascript-5-strict-mode/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2014/08/08/google-map-infowindow-bubble-detection-box-is-opened/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/06/11/js-note-twd97-convert-to-longitude-and-latitude/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/05/19/join-the-d3-in-google-map-image/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/05/11/note-blocking-android-chrome-page-drop-down-automatically-restructure-page/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/04/22/note-jquery-and-d3js-some-of-these-differences/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/05/17/modern-webconf-2015-with-my-theme-d3-optimizing-two-or-three-things/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/05/05/note-shapefile-to-geojson/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2015/06/18/taipei-d3js-meetup-gathering-to-share-experiences/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2013/09/08/php-html5-canvas-resulting-base64-datauri-images-will-be-uploaded-to-the-server-side-processing/</loc>
-    
-    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://kuro.tw/posts/2015/09/30/use-google-map-view-rainfall-simulation-of-flooding-in-taipei-city-map/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
@@ -262,6 +157,13 @@
   
   <url>
     <loc>https://kuro.tw/posts/2015/12/20/use-d3js-to-create-responsive-histogram/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2016/10/05/VueJS-%E5%90%84%E7%A8%AE%E8%B3%87%E6%96%99%E7%B6%81%E5%AE%9A-data-binding-%E7%9A%84%E6%96%B9%E5%BC%8F/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -282,7 +184,21 @@
   </url>
   
   <url>
-    <loc>https://kuro.tw/posts/2015/04/28/through-the-google-maps-api-geojson-data/</loc>
+    <loc>https://kuro.tw/posts/2016/09/30/Vue-2-0-%E5%8D%87%E7%B4%9A%E5%B0%8F%E5%B9%AB%E6%89%8B-Vue-migration-helper/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/05/20/added-to-the-google-map-images-d3-2/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/04/27/address-information-is-obtained-through-google-map-geocoder-with-the-latitude-and-longitude/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -290,6 +206,34 @@
   
   <url>
     <loc>https://kuro.tw/posts/2016/10/13/%E5%88%A9%E7%94%A8-yarn-%E5%AE%89%E8%A3%9D-vue-cli/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2011/11/28/ecmascript-5-strict-mode/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2014/08/08/google-map-infowindow-bubble-detection-box-is-opened/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/05/19/join-the-d3-in-google-map-image/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/06/11/js-note-twd97-convert-to-longitude-and-latitude/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
@@ -311,6 +255,69 @@
   
   <url>
     <loc>https://kuro.tw/posts/2016/12/08/%E9%80%8F%E9%81%8E-VueCLI-%E5%BB%BA%E7%BD%AE%E5%B0%88%E6%A1%88%E6%99%82%EF%BC%8C%E8%87%AA%E5%8B%95%E5%88%87%E6%8F%9B-devtools-%E7%9A%84-debug-%E7%92%B0%E5%A2%83/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/05/17/modern-webconf-2015-with-my-theme-d3-optimizing-two-or-three-things/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/05/11/note-blocking-android-chrome-page-drop-down-automatically-restructure-page/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2016/10/03/VueJS-V1-%E8%88%87-V2-%E5%85%83%E4%BB%B6%E5%AF%A6%E9%AB%94%E4%B9%8B%E5%B7%AE%E7%95%B0/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/04/22/note-jquery-and-d3js-some-of-these-differences/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/05/05/note-shapefile-to-geojson/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2013/09/08/php-html5-canvas-resulting-base64-datauri-images-will-be-uploaded-to-the-server-side-processing/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/06/18/taipei-d3js-meetup-gathering-to-share-experiences/</loc>
+    
+    <lastmod>2017-07-12T07:44:40.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kuro.tw/posts/2015/04/28/through-the-google-maps-api-geojson-data/</loc>
     
     <lastmod>2017-07-12T07:44:40.000Z</lastmod>
     
