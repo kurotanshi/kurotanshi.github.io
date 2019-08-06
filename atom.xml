@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kuro.tw/"/>
-  <updated>2019-08-05T04:50:46.041Z</updated>
+  <updated>2019-08-06T05:15:16.468Z</updated>
   <id>https://kuro.tw/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>初探 Vue 3.0 Function-based API</title>
+    <link href="https://kuro.tw/posts/2019/08/06/%E5%88%9D%E6%8E%A2-Vue-3-0-Function-based-API/"/>
+    <id>https://kuro.tw/posts/2019/08/06/初探-Vue-3-0-Function-based-API/</id>
+    <published>2019-08-06T05:10:45.000Z</published>
+    <updated>2019-08-06T05:15:16.468Z</updated>
+    
+    <content type="html"><![CDATA[<p>從去年年底開始， Vue 3.0 的消息就不斷開始流傳，無論是官方或非官方的消息都有。 尤其在今年 (2019) 六月在 Vue.js 的作者尤雨溪在 VueConf 2019 上海的演講 (<a href="https://docs.google.com/presentation/d/1giA0aF6b5kljg42NUYVTB5bMxxgAc2iRVPVDo2sTirI/edit" target="_blank" rel="noopener">投影片</a> / <a href="https://www.youtube.com/watch?v=AnoZheeH0Nk" target="_blank" rel="noopener">錄影</a>)，讓我們終於可以一窺堂奧，感受 Vue 3.0 一個比較完整的樣貌。</p><p>而其中改變最多，也是爭議最大的一個新特性，當屬 <strong>Vue 3.0 Function-based API</strong> 了。</p><h2 id="增強對-TypeScript-的支援"><a href="#增強對-TypeScript-的支援" class="headerlink" title="增強對 TypeScript 的支援"></a>增強對 TypeScript 的支援</h2><p>如果一直以來都有追蹤 Vue.js 3.0 相關的消息，你應該知道 3.0 其中有個很重要的目標是增強對 TypeScript 的支援。</p><p>為什麼這麼強調對 TypeScript 的支援? 這就要說到早期 Vue.js 的設計，其實是沒有做類型系統 (type-system) 的設計，而 Vue.js 的 Component 本質上就是一個「描述元件各種屬性 (options) 的物件」，這樣的好處是開發可以很容易上手，如果有寫過 Vue.js 的朋友應該很清楚這點。</p><p>但相對地缺點就是沒有了這些設計，Vue.js 要做到與工具鍊的組合以及 virtual dom、模板與 js 邏輯的映射優化，就不免處處遇到限制。</p><p>而當年為了弭平這個問題，官方選擇的解法是 Facebook 提供的 Flow 來提供 Vue.js 的類型檢查，而不是 MS 的 TypeScript。 後來的結局就是 Flow 爛尾了，TypeScript 整個生態圈越來越完整... 套句尤大的說法就是：呵呵，真香。</p><h2 id="被廢棄的-Class-API"><a href="#被廢棄的-Class-API" class="headerlink" title="被廢棄的 Class API"></a>被廢棄的 Class API</h2><p>前面說到， Vue.js 為了與 TypeScript 有更好的支援與整合，在 2.x 時期的做法是透過 <a href="https://github.com/vuejs/vue-class-component" target="_blank" rel="noopener">vue-class-component</a> 來整合，這樣的做法雖然可以做到型別系統，但在底層仍繞了很多彎，踩了不少坑。</p><p>而 Vue.js 3.0 在新版本考慮到與原有 API 的相容性、在 TypeScript 與非 TypeScript 開發者間的平衡 (看看 Angular 2+，不用 TS 無法開發)、瀏覽器對原生 class 的支援程度、透過 class API 開發所需要的 <code>Class fields</code>, <code>Decorators</code> 等等提案還不穩定 (stage &lt; 4) 等因素，因此最後決定放棄 Class API 的路線。</p><h2 id="Vue-3-0-Function-based-API"><a href="#Vue-3-0-Function-based-API" class="headerlink" title="Vue 3.0 Function-based API"></a>Vue 3.0 Function-based API</h2><p>放棄 Class API 的路線之後，取而代之的是 Function-based API。</p><p>Function-based API，又稱 composition functions：</p><pre><code class="js">const App = {  setup() {    // data    const count = value(0)    // computed    const plusOne = computed(() =&gt; count.value + 1)    // method    const increment = () =&gt; { count.value++ }    // watch    watch(() =&gt; count.value * 2, v =&gt; console.log(v))    // lifecycle    onMounted(() =&gt; console.log(&#39;mounted!&#39;))    // 暴露给模版或渲染函数    return { count }  }}</code></pre><p>可以看到，雖然捨棄了過去在 <code>mixins</code> 的直覺，改採 <code>setup()</code> 的 function 來包裝所有的共用邏輯，但以往在 component 裡的所有 options 都可以一一找到對應。</p><p>簡單來說，它的精神是以「組合代替繼承」來實作對元件的複用。</p><p>在過去我們可能會透過 <code>mixins</code> 、 <code>HOC</code> (Higher-order Components) 或是 <code>Renderless Components</code> 與 <code>slot</code> 來處理邏輯的抽象與複用，但他們各自都有各自產生的問題，當你用多了之後，就容易產生像是 <strong>Namespace 衝突、 Prop 的資料來源難以追蹤，或是要產生額外的 component 實體造成性能的消耗</strong> 等。</p><p>而 Function-based API 則順利地解決了上面這些可能會遇到的問題。</p><p>關於 Vue 3.0 Function-based API 的細節，大家可以參考這份 <a href="https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md" target="_blank" rel="noopener">RFC</a> (Request for Comments, 意見徵求稿) ，英文不太好的朋友，這裡有 <a href="https://zhuanlan.zhihu.com/p/68477600" target="_blank" rel="noopener">中文</a> 的版本，不過要注意因為是 RFC 階段，所以<strong>隨時都還有可能會更新，而翻譯版本通常不會同步更新</strong>。</p><p>--</p><p>雖然目前 Vue 3.0 還在 RFC 的階段，但如果你也想先試試 Function-based API 的威力的話，這裡有個為了 2.x 的版本增強的 plugin: <a href="https://github.com/vuejs/vue-function-api" target="_blank" rel="noopener">Vue Function API</a></p><p>使用方式就跟過去使用其他 Vue 相關 Plugin 一樣，如果你是使用 cli 或自建 vue-loader：</p><p>npm:</p><pre><code>$ npm install vue-function-api --save</code></pre><p>yarn:</p><pre><code>$ yarn add vue-function-api</code></pre><p>然後再透過 <code>import</code> 與 <code>Vue.use</code> 的方式載入即可：</p><pre><code class="js">import Vue from &#39;vue&#39;import { plugin } from &#39;vue-function-api&#39;Vue.use(plugin)</code></pre><p>詳細的內容 API 文件裡都有，有興趣的朋友可以自行參閱: <a href="https://github.com/vuejs/vue-function-api/blob/master/README.md" target="_blank" rel="noopener">https://github.com/vuejs/vue-function-api/blob/master/README.md</a></p><hr><p>同時在八月份的社群聚會，我也改寫了文件上的範例，做了 V2 與 Function-based API 的簡單 demo，提供給大家做比較：</p><p><img src="/static/img/vue-function-demo.png" alt=""></p><h4 id="傳統-Vue-2-x-的做法"><a href="#傳統-Vue-2-x-的做法" class="headerlink" title="傳統 Vue 2.x 的做法"></a>傳統 Vue 2.x 的做法</h4><pre><code class="js">export default {  props: {    title: String  },  data() {    return {      todo: &quot;&quot;,      items: [&quot;Vue&quot;, &quot;is&quot;, &quot;Awesome&quot;]    };  },  methods: {    // Add: Click Handler Function    add() {      if (this.todo) {        this.items.push(this.todo);        this.todo = &quot;&quot;;      }    },    // Remove: Click Handler Function    remove(item) {      this.items = this.items.filter(v =&gt; v !== item);    }  },  // mounted hook  mounted() {    console.log(`mounted ! ${ this.title }`);  }};</code></pre><h4 id="Function-based-API-的做法"><a href="#Function-based-API-的做法" class="headerlink" title="Function-based API 的做法"></a>Function-based API 的做法</h4><pre><code class="js">import { value, onMounted } from &quot;vue-function-api&quot;;export default {  props: {    title: String  },  setup(props, context) {    // Reactive value-based variables    const todo = value(&quot;&quot;);    const items = value([&quot;Vue&quot;, &quot;is&quot;, &quot;Awesome&quot;]);    // Add: Click Handler Function    const add = () =&gt; {      if (todo.value) {        items.value.push(todo.value);        todo.value = &quot;&quot;;      }    };    // Remove: Click Handler Function    const remove = item =&gt; {      items.value = items.value.filter(v =&gt; v !== item);    };    // mounted hook    onMounted( () =&gt; {      console.log(`onMounted ! ${ props.title }`);    });    return {      todo,      items,      add,      remove    };  }};</code></pre><p>可以看到新的寫法將邏輯統一包裝在 <code>sutup()</code> function 中，對比過去以物件的形式來說，不管是在共用邏輯的管理 (現代的關注點分離：以「元件、功能」為區分，該放一起的就放一起，不像過去以 HTML / CSS / JS 來區分)，在程式打包、壓縮以及 Tree-shaking 來說都有著更大的優勢。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;從去年年底開始， Vue 3.0 的消息就不斷開始流傳，無論是官方或非官方的消息都有。 
+尤其在今年 (2019) 六月在 Vue.js 的作者尤雨溪在 VueConf 2019 上海的演講 
+(&lt;a href=&quot;https://docs.google.com/presen
+      
+    
+    </summary>
+    
+      <category term="vue.js" scheme="https://kuro.tw/categories/vue-js/"/>
+    
+    
+      <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
+    
+      <category term="vue.js 3.0" scheme="https://kuro.tw/tags/vue-js-3-0/"/>
+    
+      <category term="Function-based API" scheme="https://kuro.tw/tags/Function-based-API/"/>
+    
+      <category term="TypeScript" scheme="https://kuro.tw/tags/TypeScript/"/>
+    
+  </entry>
   
   <entry>
     <title>JS 冷知識: 你所不知道的 void</title>
@@ -547,32 +580,6 @@
       
         &lt;p&gt;前幾天在 VueTW 活動結束後，有朋友來問：Vue 的開發環境能不能在 local 端建立 proxy 服務來解決跨域讀取後端的 API，
 &lt;del&gt;隔壁棚的 Angular CLI 好像有這功能&lt;/del&gt;，&lt;a href=&quot;https://github.com/vue
-      
-    
-    </summary>
-    
-      <category term="vue.js" scheme="https://kuro.tw/categories/vue-js/"/>
-    
-    
-      <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[VueJS-V2] 在 v-for 列表完成分頁功能 (從 v1 至 v2)</title>
-    <link href="https://kuro.tw/posts/2017/05/30/VueJS-V2-%E5%9C%A8-v-for-%E5%88%97%E8%A1%A8%E5%AE%8C%E6%88%90%E5%88%86%E9%A0%81%E5%8A%9F%E8%83%BD/"/>
-    <id>https://kuro.tw/posts/2017/05/30/VueJS-V2-在-v-for-列表完成分頁功能/</id>
-    <published>2017-05-30T09:00:00.000Z</published>
-    <updated>2018-08-21T06:09:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Vue 2 都發行半年多了，直到最近有網友留言這才想起一直沒更新裡面的內容，囧。</p><p>延續上回 <a href="https://kuro.tw/posts/2016/05/30/vuejs-in-v-for-through-the-filter-in-the-list-complete-search-and-page-functions/">[VueJS] 在 v-for 列表中透過 filter 完成搜尋與分頁的功能</a> 這篇的說明，這次我們來看看，自從 <span style="color: red">VueJS 更新到 V2 拿掉了內建的 filterBy、limitBy 等好用的 filter 後</span>，要如何修改才能做到分頁的功能。</p><p>首先看到原本 V1 的範例，是這樣的，這裡透過 <code>limitBy countOfPage pageStart</code> 來完成分頁，如下：</p><pre><code class="html">  &lt;tr v-for=&quot;r in rows    | filterBy filter_name in &#39;name&#39;    | recordLength &#39;filteredRowCount&#39;    | limitBy countOfPage pageStart &quot;&gt;    &lt;td&gt;{{ (currPage-1) * countOfPage + $index + 1 }}&lt;/td&gt;    &lt;td&gt;{{ r.name }}&lt;/td&gt;    &lt;td&gt;{{ r.age }}&lt;/td&gt;    &lt;td&gt;{{ r.gender }}&lt;/td&gt;  &lt;/tr&gt;</code></pre><p>因為從 V2 開始，<code>filterBy</code> 、 <code>limitBy</code> 、 <code>orderBy</code> 都沒有了，所以我們直接移除掉：</p><pre><code class="html">  &lt;tr v-for=&quot;r in rows&quot;&gt;    &lt;td&gt;{{ (currPage-1) * countOfPage + $index + 1 }}&lt;/td&gt;    &lt;td&gt;{{ r.name }}&lt;/td&gt;    &lt;td&gt;{{ r.age }}&lt;/td&gt;    &lt;td&gt;{{ r.gender }}&lt;/td&gt;  &lt;/tr&gt;</code></pre><p>這時應該會出現錯誤，因為 <code>$index</code> 的寫法也更新了，所以改一下 <code>v-for</code> 的內容：</p><pre><code class="html">  &lt;tr v-for=&quot;(r, index) in rows&quot;&gt;    &lt;td&gt;{{ (currPage-1) * countOfPage + index + 1 }}&lt;/td&gt;    &lt;td&gt;{{ r.name }}&lt;/td&gt;    &lt;td&gt;{{ r.age }}&lt;/td&gt;    &lt;td&gt;{{ r.gender }}&lt;/td&gt;  &lt;/tr&gt;</code></pre><p>到目前為止，至少可以看到程式正常運作，但相對地<span style="color: red">分頁與搜尋的功能也沒了</span>，所以接下來先來處理<strong>搜尋</strong>的部份。</p><hr><p>首先，在 <code>computed</code> 屬性，我們新增一個叫做 <code>filteredRows</code> 的屬性，用來處理與 <code>filter_name</code> 比對後的結果：</p><pre><code class="javascript">  filteredRows: function(){    // 因為 JavaScript 的 filter 有分大小寫，    // 所以這裡將 filter_name 與 rows[n].name 通通轉小寫方便比對。    var filter_name = this.filter_name.toLowerCase();    // 如果 filter_name 有內容，回傳過濾後的資料，否則將原本的 rows 回傳。    return ( this.filter_name.trim() !== &#39;&#39; ) ?        this.rows.filter(function(d){ return d.name.toLowerCase().indexOf(filter_name) &gt; -1; }) :        this.rows;  },</code></pre><p>然後將 html 內的 <code>rows</code> 換成 <code>filteredRows</code></p><pre><code class="html">  &lt;tr v-for=&quot;(r, index) in filteredRows&quot;&gt;    &lt;td&gt;{{ (currPage-1) * countOfPage + index + 1 }}&lt;/td&gt;    &lt;td&gt;{{ r.name }}&lt;/td&gt;    &lt;td&gt;{{ r.age }}&lt;/td&gt;    &lt;td&gt;{{ r.gender }}&lt;/td&gt;  &lt;/tr&gt;</code></pre><p>name 搜尋的部份到這裡就算完成了，接著回頭來處理<strong>分頁</strong>。</p><hr><p>處理分頁之前，先看到底下的分頁按鈕， <code>n in range</code> 在 V2 的寫法也有不同，原本的索引會由 0 開始，但從 V2 開始會由 1 開始，所以需要把原本的：</p><pre><code class="html">&lt;div class=&quot;pagination&quot;&gt;    &lt;ul&gt;    &lt;li v-bind:class=&quot;{&#39;disabled&#39;: (currPage === 1)}&quot;        @click.prevent=&quot;setPage(currPage-1)&quot;&gt;&lt;a href=&quot;#&quot;&gt;Prev&lt;/a&gt;&lt;/li&gt;    &lt;li v-for=&quot;n in totalPage&quot;        v-bind:class=&quot;{&#39;active&#39;: (currPage === (n+1))}&quot;        @click.prevent=&quot;setPage(n+1)&quot;&gt;&lt;a href=&quot;#&quot;&gt;{{n+1}}&lt;/a&gt;&lt;/li&gt;    &lt;li v-bind:class=&quot;{&#39;disabled&#39;: (currPage === totalPage)}&quot;        @click.prevent=&quot;setPage(currPage+1)&quot;&gt;&lt;a href=&quot;#&quot;&gt;Next&lt;/a&gt;&lt;/li&gt;    &lt;/ul&gt;&lt;/div&gt;</code></pre><p>改寫成：</p><pre><code class="html">&lt;div class=&quot;pagination&quot;&gt;    &lt;ul&gt;    &lt;li v-bind:class=&quot;{&#39;disabled&#39;: (currPage === 1)}&quot;        @click.prevent=&quot;setPage(currPage-1)&quot;&gt;&lt;a href=&quot;#&quot;&gt;Prev&lt;/a&gt;&lt;/li&gt;    &lt;li v-for=&quot;n in totalPage&quot;        v-bind:class=&quot;{&#39;active&#39;: (currPage === (n))}&quot;        @click.prevent=&quot;setPage(n)&quot;&gt;&lt;a href=&quot;#&quot;&gt;{{n}}&lt;/a&gt;&lt;/li&gt;    &lt;li v-bind:class=&quot;{&#39;disabled&#39;: (currPage === totalPage)}&quot;        @click.prevent=&quot;setPage(currPage+1)&quot;&gt;&lt;a href=&quot;#&quot;&gt;Next&lt;/a&gt;&lt;/li&gt;    &lt;/ul&gt;&lt;/div&gt;</code></pre><p>顯示就會是正常的從 1 開始了。</p><p>再來處理顯示筆數時，需要的會有 <code>pageStart</code> 、 <code>countOfPage</code> 與 <code>totalPage</code> 這三個部分，其中 <code>totalPage</code> 會跟先前提到的 <strong>搜尋</strong> 比較有關係，因為總頁數不對，算出來的分頁也會有問題。</p><p>原本的 <code>totalPage</code> 長這樣：</p><pre><code class="javascript">  totalPage: function(){    if( this.filter_name.trim() === &#39;&#39; ) {        return Math.ceil(this.rows.length / this.countOfPage);    }    else{        return Math.ceil(this.filteredRowCount / this.countOfPage);    }  }</code></pre><p>因為資料在先前都交給 <code>filteredRows</code> 處理了，所以可以改寫成</p><pre><code class="javascript">  totalPage: function(){    return Math.ceil(this.filteredRows.length / this.countOfPage);  }</code></pre><p>實際執行會發現最底下的分頁按鈕已經會隨著 Filter 的結果筆數而有所不同：</p><p><img src="/static/img/v2-filter-1.png"></p><p><hr><img src="/static/img/v2-filter-2.png"></p><p>最後，再回到處理<span style="color: red">每頁顯示資料量</span>的部分。</p><p>在沒有了 <code>limitBy</code> 之後，顯示筆數的部份我們可以透過 JavaScript 的 <code>slice</code> 來處理，當然也可以寫在 <code>computed</code> 屬性。但這個範例只是單純在顯示作切換，所以可以直接寫在 view 上，像這樣將 <code>filteredRows</code> 改寫成 <code>filteredRows.slice(pageStart, pageStart + countOfPage)</code>：</p><p>對 <code>slice</code> 不熟的朋友可參考： MDN: <a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/slice" target="_blank" rel="noopener">Array.prototype.slice()</a></p><pre><code class="html">  &lt;tr v-for=&quot;(r, index) in filteredRows.slice(pageStart, pageStart + countOfPage)&quot;&gt;    &lt;td&gt;{{ (currPage-1) * countOfPage + index + 1 }}&lt;/td&gt;    &lt;td&gt;{{ r.name }}&lt;/td&gt;    &lt;td&gt;{{ r.age }}&lt;/td&gt;    &lt;td&gt;{{ r.gender }}&lt;/td&gt;  &lt;/tr&gt;</code></pre><p>就完成了從 V1 更新到 V2 的過程了。</p><p>完整更新的範例可在此參考：<br><a class="jsbin-embed" href="http://jsbin.com/kusafiqaka/embed?html,js,output" target="_blank" rel="noopener">JS Bin on jsbin.com</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Vue 2 都發行半年多了，直到最近有網友留言這才想起一直沒更新裡面的內容，囧。&lt;/p&gt;
-&lt;p&gt;延續上回 &lt;a href=&quot;https://kuro.tw/posts/2016/05/30/vuejs-in-v-for-through-the-filter-in-the-l
       
     
     </summary>
