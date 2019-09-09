@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  $('img').each(function() {
+  $('.post img').each(function() {
     if ($(this).parent().hasClass('fancybox')) return;
     if ($(this).hasClass('nofancybox')) return;
     var alt = this.alt;
@@ -16,5 +16,3 @@ $(document).ready(function() {
     helpers : { title: { type: 'inside'} }
   });
 });
-
-

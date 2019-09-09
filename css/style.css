@@ -1154,3 +1154,9 @@ em.search-keyword {
   color: #fff;
   background-color: #999999;
   text-shadow: 0; }
+
+.widget-ad a {
+  display: block;
+  margin: 1em 0; }
+  .widget-ad a .ad-header {
+    margin-top: 5px; }
