@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://kuro.tw/posts/2019/08/06/%E5%88%9D%E6%8E%A2-Vue-3-0-Function-based-API/</loc>
+    
+    <lastmod>2019-12-09T06:40:49.980Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://kuro.tw/posts/2017/10/17/What-s-THIS-in-JavaScript-%E4%B8%AD/</loc>
     
     <lastmod>2019-12-06T11:28:53.310Z</lastmod>
@@ -285,13 +292,6 @@
     <loc>https://kuro.tw/posts/2018/07/04/%E5%88%9D%E6%8E%A2-Vue-CLI-3-0/</loc>
     
     <lastmod>2019-12-06T11:25:16.213Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kuro.tw/posts/2019/08/06/%E5%88%9D%E6%8E%A2-Vue-3-0-Function-based-API/</loc>
-    
-    <lastmod>2019-12-06T11:25:11.549Z</lastmod>
     
   </url>
   
