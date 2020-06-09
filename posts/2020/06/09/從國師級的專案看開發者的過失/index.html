@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/index.html"><meta name="og:title" content="[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果"><meta name="og:description" content="&lt;p&gt;做法很簡單，就是做兩個 &lt;code&gt;d3.svg.arc()&lt;/code&gt; 然後在 &lt;code&gt;mouseover&lt;/code&gt; &amp;amp; &lt;code&gt;mouseout&lt;/code&gt; 的時候改變 &lt;code&gt;d&lt;/code&gt; 屬性即可。&lt;/p&gt;
-&lt;p&gt;這裏就拿 &lt;a href=&quot;http://bl.ocks.org/mbostock/3887193&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://bl.ocks.org/mbostock/3887193&lt;/a&gt; 作為範例。&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2020/06/09/從國師級的專案看開發者的過失/index.html"><meta name="og:title" content="從國師級的專案看開發者的過失"><meta name="og:description" content><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>從國師級的專案看開發者的過失 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
@@ -35,52 +34,39 @@ ga('create','UA-27126624-1','auto');ga('send','pageview');
       hljs.configure({languages: []});
       hljs.highlightBlock(block);
     });
-});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果</h1><div class="post-meta">2015-05-04 10:47<span> | </span><span class="category"><a href="/categories/D3-js/">D3.js</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/" href="/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>做法很簡單，就是做兩個 <code>d3.svg.arc()</code> 然後在 <code>mouseover</code> &amp; <code>mouseout</code> 的時候改變 <code>d</code> 屬性即可。</p>
-<p>這裏就拿 <a href="http://bl.ocks.org/mbostock/3887193" target="_blank" rel="noopener">http://bl.ocks.org/mbostock/3887193</a> 作為範例。</p>
-<a id="more"></a>
-<p>DEMO: (original charts)
-<a href="http://output.jsbin.com/darexo/1/" target="_blank" rel="noopener">http://output.jsbin.com/darexo/1/</a></p>
-<p>DEMO2: (add hover effect)
-<a href="http://output.jsbin.com/darexo/3/" target="_blank" rel="noopener">http://output.jsbin.com/darexo/3/</a></p>
-<iframe class="jsbin-embed" src="http://jsbin.com/darexo/3/embed?output" frameborder="0" height="400"></iframe>
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">從國師級的專案看開發者的過失</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">從國師級的專案看開發者的過失</h1><div class="post-meta">2020-06-09 18:00<span> | </span><span class="category"><a href="/categories/個人喇賽/">個人喇賽</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2020/06/09/從國師級的專案看開發者的過失/" href="/posts/2020/06/09/從國師級的專案看開發者的過失/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>在技術圈打滾了一段時間，各種鄙視鏈看得也不少，時不時就會看到有人問，ＯＯ 跟 ＸＸ 相比那個比較強啊？
+別誤會，我們今天不談大亂鬥也不談鄙視鏈。</p>
+<p>今天在臉書社團看到國師有個新開發的星盤網站，不看還好一看驚為天人。</p>
+<p>居然是用 Vue.js 寫的，而且開發者模式 (development mode) 還開著。
+Vue.js 提供的開發者模式，其實是方便開發者在「編寫程式的時候」除錯，所以不會對專案的程式碼進行打包與優化。</p>
+<p>那，一個上線的專案開著開發者模式，這有什麼關係嗎？</p>
+<p>確實在正常情況下開著開發者模式頂多就是執行起來效能比較差，
+馬照跑，舞照跳，<del>50年不變</del> 程式還是會動，頂多就是寫在前端的程式碼讓大家參觀，沒有什麼大不了。</p>
+<p>但是對開發習慣極差的開發者來說，上線前的打包動作，其實是前端建構工具保護你的最後一道關卡。</p>
+<p><img src="https://imgur.com/ABPZmUj.jpg" alt="一言不合就開源，全站大放送"></p>
+<hr>
 
-<pre><code class="javascript">// original
-var arc = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(radius - 70);
+<p>有些開發者為了一時方便測試，會將測試的資訊寫在程式碼註解裡無可厚非，
+但是當網站在開發者模式的時候，任何人都可以從瀏覽器裡看到這些測試資訊的註解，而且不用裝任何外掛就看得到。</p>
+<p><img src="https://imgur.com/523FYYj.jpg" alt="應該是測試登入的使用者資訊，實際上還真的能用"></p>
+<hr>
 
-// arc with scaling
-var arcOver = d3.svg.arc()
-    .outerRadius(radius)
-    .innerRadius(radius - 70);
-</code></pre>
-<p>中間略</p>
-<pre><code class="javascript">// adding mouse events with transition
-g.selectAll(&quot;.arc &gt; path&quot;)
-    .on({
-        &quot;mouseover&quot;: function(d, i){
-            d3.select(this).transition().duration(250).attr(&#39;d&#39;, arcOver);
-        },
-        &quot;mouseout&quot;: function(d, i){
-            d3.select(this).transition().duration(250).attr(&#39;d&#39;, arc);
-        }
-});
-</code></pre>
-<p>補充：感謝小馬提出 hover 在 text 上會無法執行動畫的問題。
-只要把 mouse event 改綁在上一層的 <code>&lt;g&gt;</code> 上面，或是在 text 的 CSS 下 <code>pointer-events: none;</code> 取消它的 pointer 事件即可。</p>
-<pre><code class="javascript">  g.on({
-    &quot;mouseover&quot;: function(d, i){
-      d3.select(this.childNodes[0]).transition().duration(250).attr(&#39;d&#39;, arcOver);
-    },
-    &quot;mouseout&quot;: function(d, i){
-      d3.select(this.childNodes[0]).transition().duration(250).attr(&#39;d&#39;, arc);
-    }
-  });
-</code></pre>
-</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/" data-id="ckb7pt6q70020f0s6z8q9pspo" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/D3-js/">D3.js</a><a href="/tags/donut-chart/">donut chart</a></div><div class="post-nav"><a href="/posts/2015/05/05/note-shapefile-to-geojson/" class="pre">[筆記] Shapefile to GeoJSON</a><a href="/posts/2015/04/29/a-brief-talk-on-google-map-heat-map-api/" class="next">淺談 Google map Heat map API </a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
-var disqus_identifier = 'posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/';
-var disqus_title = "[snippet] D3.js 甜甜圈圖 (donut chart) 的放大漸變效果";
-var disqus_url = 'https://kuro.tw/posts/2015/05/04/snippet-d3js-donuts-chart-the-transition-effect/';
+<p>換言之，我們只要按照上面所寫的，將測試資訊寫入 <code>localStorage</code> 就可以模擬開發者的身分，超開心！
+如果說，這是個收費的網站，是否代表所有人都可以不用註冊免費算到飽？</p>
+<p>虧錢事小，最嚴重的問題在於，<strong>任何人都可以利用這個漏洞來隨意取得其他人的個資，甚至連登入都不需要</strong>。</p>
+<p><img src="https://i.imgur.com/DS2DMez.jpg" alt="攤開在 HTML 裡的 CSS 有 4944 個 !important 堪稱本世紀的奇蹟"></p>
+<hr>
+
+<p>千算萬算，唐老師你有算到你的網站正冒著極大風險之中嗎？</p>
+<p>開發工具原本應該是帶給開發者方便，但不代表就可以拿著隨便用，
+任何一個有職業良知的開發者都不應該犯這種低級錯誤。</p>
+<p>技術圈各種鄙視鏈，大家早已見怪不怪，可以說是哪裡有人，哪裡就有鄙視鏈。</p>
+<p>但技術真有高下？ 我說<strong>再好的技術都擋不住開發習慣極差的開發者</strong>。</p>
+<p><img src="https://imgur.com/7cQj5fL.jpg" alt="是南北拳的問題還是寫程式的人的問題呢"></p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2020/06/09/從國師級的專案看開發者的過失/" data-id="ckb7pt6r1003vf0s6ezx37lop" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/vue-js/">vue.js</a><a href="/tags/前端開發/">前端開發</a></div><div class="post-nav"><a href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/" class="next">初探 Vue 3.0 Function-based API</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2020/06/09/從國師級的專案看開發者的過失/';
+var disqus_title = "從國師級的專案看開發者的過失";
+var disqus_url = 'https://kuro.tw/posts/2020/06/09/從國師級的專案看開發者的過失/';
 $('.btn_click_load').click(function() {
   (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

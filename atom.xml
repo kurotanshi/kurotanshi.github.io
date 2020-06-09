@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kuro.tw/"/>
-  <updated>2019-12-09T06:40:49.980Z</updated>
+  <updated>2020-06-09T09:36:56.096Z</updated>
   <id>https://kuro.tw/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>從國師級的專案看開發者的過失</title>
+    <link href="https://kuro.tw/posts/2020/06/09/%E5%BE%9E%E5%9C%8B%E5%B8%AB%E7%B4%9A%E7%9A%84%E5%B0%88%E6%A1%88%E7%9C%8B%E9%96%8B%E7%99%BC%E8%80%85%E7%9A%84%E9%81%8E%E5%A4%B1/"/>
+    <id>https://kuro.tw/posts/2020/06/09/從國師級的專案看開發者的過失/</id>
+    <published>2020-06-09T10:00:26.000Z</published>
+    <updated>2020-06-09T09:36:56.096Z</updated>
+    
+    <content type="html"><![CDATA[<p>在技術圈打滾了一段時間，各種鄙視鏈看得也不少，時不時就會看到有人問，ＯＯ 跟 ＸＸ 相比那個比較強啊？別誤會，我們今天不談大亂鬥也不談鄙視鏈。</p><p>今天在臉書社團看到國師有個新開發的星盤網站，不看還好一看驚為天人。</p><p>居然是用 Vue.js 寫的，而且開發者模式 (development mode) 還開著。Vue.js 提供的開發者模式，其實是方便開發者在「編寫程式的時候」除錯，所以不會對專案的程式碼進行打包與優化。</p><p>那，一個上線的專案開著開發者模式，這有什麼關係嗎？</p><p>確實在正常情況下開著開發者模式頂多就是執行起來效能比較差，馬照跑，舞照跳，<del>50年不變</del> 程式還是會動，頂多就是寫在前端的程式碼讓大家參觀，沒有什麼大不了。</p><p>但是對開發習慣極差的開發者來說，上線前的打包動作，其實是前端建構工具保護你的最後一道關卡。</p><p><img src="https://imgur.com/ABPZmUj.jpg" alt="一言不合就開源，全站大放送"></p><hr><p>有些開發者為了一時方便測試，會將測試的資訊寫在程式碼註解裡無可厚非，但是當網站在開發者模式的時候，任何人都可以從瀏覽器裡看到這些測試資訊的註解，而且不用裝任何外掛就看得到。</p><p><img src="https://imgur.com/523FYYj.jpg" alt="應該是測試登入的使用者資訊，實際上還真的能用"></p><hr><p>換言之，我們只要按照上面所寫的，將測試資訊寫入 <code>localStorage</code> 就可以模擬開發者的身分，超開心！如果說，這是個收費的網站，是否代表所有人都可以不用註冊免費算到飽？</p><p>虧錢事小，最嚴重的問題在於，<strong>任何人都可以利用這個漏洞來隨意取得其他人的個資，甚至連登入都不需要</strong>。</p><p><img src="https://i.imgur.com/DS2DMez.jpg" alt="攤開在 HTML 裡的 CSS 有 4944 個 !important 堪稱本世紀的奇蹟"></p><hr><p>千算萬算，唐老師你有算到你的網站正冒著極大風險之中嗎？</p><p>開發工具原本應該是帶給開發者方便，但不代表就可以拿著隨便用，任何一個有職業良知的開發者都不應該犯這種低級錯誤。</p><p>技術圈各種鄙視鏈，大家早已見怪不怪，可以說是哪裡有人，哪裡就有鄙視鏈。</p><p>但技術真有高下？ 我說<strong>再好的技術都擋不住開發習慣極差的開發者</strong>。</p><p><img src="https://imgur.com/7cQj5fL.jpg" alt="是南北拳的問題還是寫程式的人的問題呢"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在技術圈打滾了一段時間，各種鄙視鏈看得也不少，時不時就會看到有人問，ＯＯ 跟 ＸＸ 相比那個比較強啊？
+別誤會，我們今天不談大亂鬥也不談鄙視鏈。&lt;/p&gt;
+&lt;p&gt;今天在臉書社團看到國師有個新開發的星盤網站，不看還好一看驚為天人。&lt;/p&gt;
+&lt;p&gt;居然是用 Vue.js 寫的，而
+      
+    
+    </summary>
+    
+      <category term="個人喇賽" scheme="https://kuro.tw/categories/%E5%80%8B%E4%BA%BA%E5%96%87%E8%B3%BD/"/>
+    
+    
+      <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
+    
+      <category term="前端開發" scheme="https://kuro.tw/tags/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/"/>
+    
+  </entry>
   
   <entry>
     <title>初探 Vue 3.0 Function-based API</title>
@@ -514,31 +544,6 @@
       <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
     
       <category term="httpVueLoader" scheme="https://kuro.tw/tags/httpVueLoader/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何在 Vue-CLI 建立的開發環境呼叫跨域遠端 RESTful APIs</title>
-    <link href="https://kuro.tw/posts/2017/06/07/%E5%A6%82%E4%BD%95%E5%9C%A8-Vue-CLI-%E5%BB%BA%E7%AB%8B%E7%9A%84%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E5%91%BC%E5%8F%AB%E8%B7%A8%E5%9F%9F%E9%81%A0%E7%AB%AF-RESTful-APIs/"/>
-    <id>https://kuro.tw/posts/2017/06/07/如何在-Vue-CLI-建立的開發環境呼叫跨域遠端-RESTful-APIs/</id>
-    <published>2017-06-07T10:14:00.000Z</published>
-    <updated>2019-12-06T11:25:08.369Z</updated>
-    
-    <content type="html"><![CDATA[<p>前幾天在 VueTW 活動結束後，有朋友來問：Vue 的開發環境能不能在 local 端建立 proxy 服務來解決跨域讀取後端的 API，<del>隔壁棚的 Angular CLI 好像有這功能</del>，<a href="https://github.com/vuejs/vue-cli" target="_blank" rel="noopener">Vue-CLI</a> 是不是也能做到。</p><p>(使用 Angular 開發專案的朋友，這裏推薦參考 Will 保哥這篇文章：<a href="http://blog.miniasp.com/post/2017/02/05/Setup-proxy-to-backend-in-Angular-CLI.aspx" target="_blank" rel="noopener">如何在 Angular CLI 建立的 Angular 2 開發環境呼叫遠端 RESTful APIs</a>)。</p><p>使用 Vue 的朋友，別著急莫緊張，Vue-CLI 也有提供類似功能喔。</p><a id="more"></a><blockquote><p>注意： 本文撰寫時，使用 Node v8.0.0 / NPM 5.0.0 與 yarn v0.24.6，Vue-CLI 為 2.8.2。實際執行情況可能因執行環境的版本會有所差異。</p></blockquote><p>首先，第一步當然是先安裝 Vue-CLI:</p><ul><li><p>NPM:</p><pre><code class="shell">$ npm install -g vue-cli</code></pre></li><li><p>YARN:</p><pre><code class="shell">$ yarn global add vue-cli</code></pre></li></ul><hr><p>安裝好了之後，接著我們透過 Vue-CLI 來建立新專案，樣板的部分我們選用 <span style="color: red;">webpack</span>，然後執行：</p><pre><code class="shell"> $ vue init webpack test</code></pre><p>上面指令中的 <code>test</code> 是專案名稱，這裏請自行取名替換成你要的名稱。 為了節省時間，範例裡只安裝必要的套件，其他選項可依你的需要選用安裝。<img src="/static/img/vue-cli.png"></p><p>接著切換至新增好的目錄後，安裝相關套件。</p><ul><li><p>NPM:</p><pre><code class="shell">$ cd test$ npm i$ npm run dev</code></pre></li><li><p>YARN:</p><pre><code class="shell">$ cd test$ yarn$ yarn dev</code></pre></li></ul><p>安裝完成並執行 dev-server 之後，應該會自動開啟瀏覽器 <code>http://localhost:8080/</code> 並看到畫面：<img src="/static/img/hello-vue.png"></p><p>到目前為止已經建立起一個基本的 Vue 專案了。</p><hr><p>接著，我們以 <a href="http://data.taipei/" target="_blank" rel="noopener">Data.Taipei</a> 的 <a href="http://data.taipei/opendata/datalist/datasetMeta/preview?id=8ef1626a-892a-4218-8344-f7ac46e1aa48&amp;rid=9c6a96d6-353c-41c0-84cc-d181988304f2" target="_blank" rel="noopener">Youbike臺北市公共自行車即時資訊</a> 作為本次的範例。<img src="/static/img/data-taipei-Youbike.png"></p><p>VueJS 的核心並沒有提供 Ajax 這樣的功能，所以在發送遠端請求的時候，我們要先安裝 <a href="https://github.com/mzabriskie/axios" target="_blank" rel="noopener">axios</a> 這樣的套件來協助我們，當然你想要用 jQuery AJAX 或是 Fetch API 也是 ok 的。</p><p>安裝方式：</p><ul><li><p>NPM:</p><pre><code class="shell">$ npm install --save axios vue-axios</code></pre></li><li><p>YARN:</p><pre><code class="shell">$ yarn add axios vue-axios</code></pre></li></ul><p>安裝完畢後，我們打開 App.vue 檔，並加上 <code>import</code> 以及 <code>Vue.use</code> 來載入外部的套件：</p><pre><code class="javascript">import Vue from &#39;vue&#39;import axios from &#39;axios&#39;import VueAxios from &#39;vue-axios&#39;Vue.use(VueAxios, axios)</code></pre><p>接著，我們在 Vue 實體的 <code>create</code> hook 裡面來送出 GET 請求試試：</p><pre><code class="javascript">  created(){    Vue.axios.get(&#39;http://data.taipei/youbike&#39;).then((response) =&gt; {      console.log(response.data)    })  },</code></pre><p>像這樣：<img src="/static/img/vue-axios-code.png"></p><p>存檔後再次開啟 dev-server，毫無意外地，你應該會看到像這樣的錯誤：<img src="/static/img/ajax-error.png"></p><p>因為遠端的 API 並沒有開啟 CORS 協定，所以我們無法跨域存取這個資源。 不過還好，Vue-CLI 的 dev server 整合了 <a href="https://github.com/chimurai/http-proxy-middleware" target="_blank" rel="noopener">http-proxy-middleware</a>。 這個工具替我們在 local 端建立一個代理層，讓我們在開發時期就可以很方便的呼叫遠端的 HTTP API。</p><p>套件的部分，Vue-CLI 都幫我們準備好了，接著打開專案下 <code>config/index.js</code> 這個檔案，然後編輯 <code>proxyTable: {}</code> 的部分。<img src="/static/img/proxyTable.png"></p><p>修改 <code>config/index.js</code> 如下：</p><pre><code class="javascript">  proxyTable: {    &#39;/data&#39;: {                        // 自訂 local 端的位置      target: &#39;http://data.taipei/&#39;,  // 遠端 URL Domain      changeOrigin: true,      pathRewrite: {        &#39;^/data&#39;: &#39;&#39;      }    }  },</code></pre><p>經過這樣設定後，<code>http://data.taipei/</code> 網域內的資源，都會在 local 端以 <code>/data</code> 的形式被代理，也就是說，像 <code>http://data.taipei/youbike</code> 這樣的遠端資源，我們就可以在 local 端用 <code>/data/youbike</code> 來取得。</p><p>所以，再回到 <code>App.vue</code>，這裏將原本的 <code>http://data.taipei/youbike</code> 改成 <code>/data/youbike</code>，像這樣：</p><pre><code class="javascript">  created(){    Vue.axios.get(&#39;/data/youbike&#39;).then((response) =&gt; {      console.log(response.data)    })  },</code></pre><p>接著，記得要重開 dev-server，執行 <code>$ npm run dev</code> 或 <code>$ yarn dev</code> 。</p><p>最後，在網頁讀取完成後，打開 console 就可以看到，遠端的 youbike 資訊已經可以正確取得囉。<img src="/static/img/vue-axios-ok.png"></p><p>詳細的 http-proxy-middleware 設定可以參考這裡：</p><ul><li><a href="https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options" target="_blank" rel="noopener">https://github.com/chimurai/http-proxy-middleware#http-proxy-middleware-options</a></li><li><a href="https://vuejs-templates.github.io/webpack/proxy.html" target="_blank" rel="noopener">https://vuejs-templates.github.io/webpack/proxy.html</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;前幾天在 VueTW 活動結束後，有朋友來問：Vue 的開發環境能不能在 local 端建立 proxy 服務來解決跨域讀取後端的 API，
-&lt;del&gt;隔壁棚的 Angular CLI 好像有這功能&lt;/del&gt;，&lt;a href=&quot;https://github.com/vuejs/vue-cli&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Vue-CLI&lt;/a&gt; 是不是也能做到。&lt;/p&gt;
-&lt;p&gt;(使用 Angular 開發專案的朋友，這裏推薦參考 Will 保哥這篇文章：&lt;a href=&quot;http://blog.miniasp.com/post/2017/02/05/Setup-proxy-to-backend-in-Angular-CLI.aspx&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;如何在 Angular CLI 建立的 Angular 2 開發環境呼叫遠端 RESTful APIs&lt;/a&gt;)。&lt;/p&gt;
-&lt;p&gt;使用 Vue 的朋友，別著急莫緊張，Vue-CLI 也有提供類似功能喔。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="vue.js" scheme="https://kuro.tw/categories/vue-js/"/>
-    
-    
-      <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
     
   </entry>
   
