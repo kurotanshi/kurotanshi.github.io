@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kuro.tw/"/>
-  <updated>2020-06-09T11:42:33.554Z</updated>
+  <updated>2020-07-06T04:28:33.976Z</updated>
   <id>https://kuro.tw/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Vue 3.0 升級紀錄</title>
+    <link href="https://kuro.tw/posts/2020/07/06/Vue-3-0-%E5%8D%87%E7%B4%9A%E7%B4%80%E9%8C%84/"/>
+    <id>https://kuro.tw/posts/2020/07/06/Vue-3-0-升級紀錄/</id>
+    <published>2020-07-06T04:30:01.000Z</published>
+    <updated>2020-07-06T04:28:33.976Z</updated>
+    
+    <content type="html"><![CDATA[<p>隨著 Vue 3.0 進入到 Beta 階段，而且官方也給出了預計在七月中旬發佈 RC (Release Candidate)，以及正式版即將在八月發佈的明確目標，相信已經有不少朋友都想試試 Vue 3.0 了吧？</p><p>最近也 <del>超前部署</del> 花了一點時間將工作專案從 Vue 2.6 升級上 Vue 3.0 Beta，這篇就簡單做個記錄，以及分享一些升級過程可能會遇到的坑。</p><h2 id="環境說明"><a href="#環境說明" class="headerlink" title="環境說明"></a>環境說明</h2><p>為了確保開發環境造成的差異，這裡先列出我目前使用的開發環境：</p><pre><code>$ node -vv14.3.0</code></pre><pre><code>$ yarn -v1.22.4</code></pre><pre><code>$ npm -v6.14.5</code></pre><pre><code>$ vue -V@vue/cli 4.4.6</code></pre><h2 id="起手式"><a href="#起手式" class="headerlink" title="起手式"></a>起手式</h2><p>首先你得要有個 Vue 2.x (當初是以 VueCLI 建置) 的專案，然後在專案目錄下執行</p><pre><code>$ vue add vue-next</code></pre><p>這個時候， Vue CLI 會自動安裝對應的套件。</p><p><img src="/static/img/v3-upgrade/install.png" alt></p><p>看到這個畫面就代表套件升級完成了，升級後可以檢查你的 <code>package.json</code> 檔案以及相關的版本是否有正確更新。</p><h2 id="掛載點的變更"><a href="#掛載點的變更" class="headerlink" title="掛載點的變更"></a>掛載點的變更</h2><p>如果你是用 CLI 預設的 <code>main.js</code> 作為進入點，那麼 Vue CLI 會自動將原本的</p><pre><code class="js">import Vue from &#39;vue&#39;</code></pre><p>改為</p><pre><code class="js">import { createApp } from &#39;vue&#39;;</code></pre><p>原本的掛載點</p><pre><code class="js">new Vue({  router,  store,  render: h =&gt; h(App)}).$mount(&#39;#app&#39;)</code></pre><p>也會自動變成</p><pre><code class="js">createApp(App).use(router).use(store).mount(&#39;#app&#39;)</code></pre><p>的新版語法。</p><p>如果你跟我一樣，使用的是多頁型的專案配置，那麼你會看到</p><pre><code>Cannot find file src/main.js</code></pre><p><img src="/static/img/v3-upgrade/error.png" alt="找不到 main.js"></p><p>的錯誤訊息。</p><p>不過沒關係，相關套件還是會升級，只是你得花點力氣人工手動將每一頁的進入點從 <code>import vue from &#39;vue&#39;</code> 改成 <code>import { createApp } from &#39;vue&#39;</code>，以及 <code>new Vue({...})</code> 改成 <code>createApp(App).mount(&#39;XXX&#39;)</code> 的寫法。</p><p><code>el</code> 屬性不再適用，而掛載時的 <code>mount</code> 也無需再加上 <code>$</code> 了。</p><h2 id="明顯的語法變動"><a href="#明顯的語法變動" class="headerlink" title="明顯的語法變動"></a>明顯的語法變動</h2><p>多數的語法更新在執行 <code>vue-cli-service lint</code> 都會有提示。這裡講一下更新時幾個明顯的語法變動。</p><p>首先是 <code>filter</code> option 被移除，替代方式很簡單就是搬到 <code>methods</code> 來使用，然後將 template 的 pipe 語法改寫。</p><p>事件修飾子的 <code>.native</code> 被移除，更準確的說是不需要了。</p><p>讓我花最多時間改寫的其實是 EventBus 的部分。</p><p>由於 Vue 3.0 移除了事件處理的 <code>$on</code>, <code>$off</code> 以及 <code>$once</code>，使得過去我們透過一個空的 Vue 實體來當作事件訂閱/傳遞的載體 (俗稱 EventBus)，這樣的方式已經不再適用，對於這個問題，我的建議是：直上 Vuex。 </p><p>你終究要用到 Vuex 的。 <del>當然也有其他方法硬幹，就不在這篇的討論範圍</del></p><h2 id="Vuex-的變動"><a href="#Vuex-的變動" class="headerlink" title="Vuex 的變動"></a>Vuex 的變動</h2><p>既然講到 Vuex，那麼 Vuex 升級後有沒有什麼要注意的地方？</p><p>有的，將原本的 </p><pre><code class="js">export default new Vuex.Store({ ... })</code></pre><p>改成</p><pre><code class="js">export default Vuex.createStore({ ... })</code></pre><p>就這樣，沒了。</p><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>最後是 webpack 或 <code>vue.config.js</code> 的 <code>alias</code> 需要改成 <code>vue$: &#39;vue/dist/vue.esm-bundler.js&#39;</code>，否則 CLI 會告訴你他找不到 Vue，一直要你重裝。</p><p>目前升級 Vue3.0 體驗相當好，像是大家都很熟悉的 composition api、直接在 component 使用 <code>v-model</code>，以及新增的 async-component 與 <code>&lt;Suspense&gt;</code> 等等，都是非常實用的功能。</p><p>缺點是截至目前還沒有 devtool 可以用，得憑經驗通靈。 聽說 RC 出來的時候就會有了 XD</p><h2 id="工商服務"><a href="#工商服務" class="headerlink" title="工商服務"></a>工商服務</h2><p>這篇只是記錄一下升級遇到的幾個問題。</p><p>如果你對 Vue 3.0 新增的部分也有興趣，剛好我在五倍紅寶石八月份有開設一門 VueJS 課程，<strong>教材已經更新至 3.0 (當然 2.x 也適用)</strong>，歡迎你來參加。</p><p><a href="http://5xruby.tw/talks/vue-js/" target="_blank" rel="noopener">  <img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg"></a></p><p>參考資料與相關連結:</p><ol><li><a href="https://github.com/vuejs/rfcs/issues/183/" target="_blank" rel="noopener">https://github.com/vuejs/rfcs/issues/183/</a></li><li><a href="https://github.com/vuejs/vue-next" target="_blank" rel="noopener">https://github.com/vuejs/vue-next</a></li><li><a href="https://github.com/vuejs/vue-cli-plugin-vue-next" target="_blank" rel="noopener">https://github.com/vuejs/vue-cli-plugin-vue-next</a></li><li><a href="https://github.com/vuejs/rfcs/tree/master/active-rfcs" target="_blank" rel="noopener">https://github.com/vuejs/rfcs/tree/master/active-rfcs</a></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;隨著 Vue 3.0 進入到 Beta 階段，而且官方也給出了預計在七月中旬發佈 RC (Release Candidate)，
+以及正式版即將在八月發佈的明確目標，相信已經有不少朋友都想試試 Vue 3.0 了吧？&lt;/p&gt;
+&lt;p&gt;最近也 &lt;del&gt;超前部署&lt;/del&gt; 花
+      
+    
+    </summary>
+    
+      <category term="vue.js" scheme="https://kuro.tw/categories/vue-js/"/>
+    
+    
+      <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
+    
+      <category term="vue 3.0" scheme="https://kuro.tw/tags/vue-3-0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>從國師級的專案看開發者的過失</title>
     <link href="https://kuro.tw/posts/2020/06/09/%E5%BE%9E%E5%9C%8B%E5%B8%AB%E7%B4%9A%E7%9A%84%E5%B0%88%E6%A1%88%E7%9C%8B%E9%96%8B%E7%99%BC%E8%80%85%E7%9A%84%E9%81%8E%E5%A4%B1/"/>
     <id>https://kuro.tw/posts/2020/06/09/從國師級的專案看開發者的過失/</id>
     <published>2020-06-09T09:32:26.000Z</published>
-    <updated>2020-06-09T11:42:33.554Z</updated>
+    <updated>2020-06-10T03:04:12.003Z</updated>
     
     <content type="html"><![CDATA[<p>在技術圈打滾了一段時間，各種鄙視鏈看得也不少，時不時就會看到有人問，ＯＯ 跟 ＸＸ 相比那個比較強啊？別誤會，我們今天不談什麼框架大亂鬥也不講語言鄙視鏈。</p><p>今天在臉書社團看到國師有個新開發的星盤網站，不看還好一看驚為天人。</p><p><img src="https://imgur.com/Yb472Ad.jpg" alt="國師級的專案"></p><p>居然是用 Vue.js 寫的，而且開發者模式 (development mode) 還開著。Vue.js 提供的開發者模式，其實是方便開發者在「編寫程式的時候」除錯，所以不會對專案的程式碼進行打包與優化。</p><p>那，一個上線的專案開著開發者模式，這有什麼關係嗎？</p><p>確實在正常情況下開著開發者模式頂多就是執行起來效能比較差，馬照跑，舞照跳，<del>50年不變</del> 程式還是會動，頂多就是寫在前端的程式碼讓大家參觀，沒有什麼大不了。</p><p>但是對開發習慣極差的開發者來說，上線前的打包動作，除了對專案的各種優化外，其實是前端建構工具保護你的最後一道關卡。</p><p><img src="https://imgur.com/ABPZmUj.jpg" alt="一言不合就開源，全站大放送"></p><hr><p>有些開發者為了一時方便測試，會將測試的資訊寫在程式碼註解裡無可厚非，但是當網站在開發者模式的時候，任何人都可以從瀏覽器裡看到這些測試資訊的註解，而且不用裝任何外掛就看得到。</p><p><img src="https://imgur.com/523FYYj.jpg" alt="應該是測試登入的使用者資訊，實際上還真的能用"></p><hr><p>換言之，我們只要按照上面所寫的，將測試資訊寫入 <code>localStorage</code> 就可以模擬開發者的身分，超開心！如果說，這是個收費的網站，是否代表所有人都可以不用註冊免費算到飽？</p><p>連 swagger 都不藏私，佛心！</p><p><img src="https://imgur.com/p8Uwnty.jpg" alt="想要我的星盤嗎？ 想要的話可以全部給你，去找吧！ 我把所有的星盤都放在那裡了。"></p><hr><p>虧錢事小，最嚴重的問題在於，<strong>任何人都可以利用這個漏洞來隨意取得其他人的個資，甚至連登入都不需要</strong>。</p><p><img src="https://i.imgur.com/DS2DMez.jpg" alt="攤開在 HTML 裡的 CSS 有 4944 個 !important 堪稱本世紀的奇蹟"></p><hr><p>千算萬算，唐老師你有算到你的網站正冒著極大風險之中嗎？</p><p>前端後端都不行，做網站不是只有畫面好看就好，開發者自己都沒有格調就不要怪人家看你沒有。開發工具原本應該是帶給開發者方便，但不代表就可以拿著隨便用，任何一個有職業良知的開發者都不應該犯這種低級錯誤。</p><p>技術圈各種鄙視鏈，大家早已見怪不怪，可以說是哪裡有人，哪裡就有鄙視鏈。</p><p>但技術真有高下？ 我說<strong>再好的技術都擋不住開發習慣極差的開發者</strong>。</p><p><img src="https://imgur.com/7cQj5fL.jpg" alt="是南北拳的問題還是寫程式的人的問題呢"></p>]]></content>
     
@@ -98,9 +127,9 @@
     
       <category term="javascript" scheme="https://kuro.tw/tags/javascript/"/>
     
-      <category term="void" scheme="https://kuro.tw/tags/void/"/>
-    
       <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
+    
+      <category term="void" scheme="https://kuro.tw/tags/void/"/>
     
   </entry>
   
@@ -360,9 +389,9 @@
     
       <category term="javascript" scheme="https://kuro.tw/tags/javascript/"/>
     
-      <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
-    
       <category term="this" scheme="https://kuro.tw/tags/this/"/>
+    
+      <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
     
   </entry>
   
@@ -386,9 +415,9 @@
     
       <category term="javascript" scheme="https://kuro.tw/tags/javascript/"/>
     
-      <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
-    
       <category term="this" scheme="https://kuro.tw/tags/this/"/>
+    
+      <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
     
   </entry>
   
@@ -412,9 +441,9 @@
     
       <category term="javascript" scheme="https://kuro.tw/tags/javascript/"/>
     
-      <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
-    
       <category term="this" scheme="https://kuro.tw/tags/this/"/>
+    
+      <category term="重新認識 JavaScript" scheme="https://kuro.tw/tags/%E9%87%8D%E6%96%B0%E8%AA%8D%E8%AD%98-JavaScript/"/>
     
   </entry>
   
@@ -515,35 +544,6 @@
       <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
     
       <category term="CSS" scheme="https://kuro.tw/tags/CSS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>不需編譯也能載入 .vue 元件檔: 使用 http-vue-loader</title>
-    <link href="https://kuro.tw/posts/2017/07/11/%E4%B8%8D%E9%9C%80%E7%B7%A8%E8%AD%AF%E4%B9%9F%E8%83%BD%E8%BC%89%E5%85%A5-vue-%E5%85%83%E4%BB%B6%E6%AA%94-%E4%BD%BF%E7%94%A8-http-vue-loader/"/>
-    <id>https://kuro.tw/posts/2017/07/11/不需編譯也能載入-vue-元件檔-使用-http-vue-loader/</id>
-    <published>2017-07-10T16:16:55.000Z</published>
-    <updated>2019-12-06T11:24:41.849Z</updated>
-    
-    <content type="html"><![CDATA[<p>上週在 Vue 社群圈有個令人興奮的熱門新聞: CodePen 可以支援 <code>.vue</code> 檔案了！</p><p><blockquote class="twitter-tweet" data-lang="zh-tw"><p lang="en" dir="ltr">Check it out - you can use <code>.vue</code> files in CodePen Projects easily:<a href="https://t.co/Cd3Qr11xYQ" target="_blank" rel="noopener">https://t.co/Cd3Qr11xYQ</a> <a href="https://t.co/QvtIXxKRUk" target="_blank" rel="noopener">pic.twitter.com/QvtIXxKRUk</a></p>&mdash; Chris Coyier (@chriscoyier) <a href="https://twitter.com/chriscoyier/status/880859500185616387" target="_blank" rel="noopener">2017年6月30日</a></blockquote></p><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script><p>身為使用 Vue 的開發者聽到這樣的消息當然感到相當開心，但同時也不禁感到好奇，CodePen 是如何做到不須透過 webpack 編譯 vue 檔案，就可以將 .vue 的 component 如實顯示到網頁中。</p><p>大家都知道，在網頁開發的世界中，前端是沒有秘密的。 打開了開發工具，才知道原來是透過 <strong><a href="https://github.com/FranckFreiburger/http-vue-loader" target="_blank" rel="noopener">http-vue-loader</a></strong> 這個工具做到的。</p><a id="more"></a><hr><p><strong><a href="https://github.com/FranckFreiburger/http-vue-loader" target="_blank" rel="noopener">http-vue-loader</a></strong> 這套工具可提供開發者直接在網頁環境中載入 <code>.Vue</code> File，無需透過 nodeJS 環境編譯，也不需要 Build 的步驟。</p><p>用法很簡單，首先在網頁上載入 Vue 與 http-vue-loader，如下</p><pre><code class="html">  &lt;script src=&quot;https://unpkg.com/vue&quot;&gt;&lt;/script&gt;  &lt;script src=&quot;https://unpkg.com/http-vue-loader&quot;&gt;&lt;/script&gt;</code></pre><p>接著，假設我們有一個 <code>my-component.vue</code> 的檔案：</p><pre><code class="html">&lt;template&gt;    &lt;div class=&quot;hello&quot;&gt;Hello {{who}}&lt;/div&gt;&lt;/template&gt;&lt;script&gt;module.exports = {    data: function() {        return {            who: &#39;world&#39;        }    }}&lt;/script&gt;&lt;style&gt;.hello {    background-color: #ffe;}&lt;/style&gt;</code></pre><p>那麼，我們就可以在 <code>components</code> 內透過 <code>httpVueLoader</code> 來載入我們的子元件：</p><pre><code class="html">&lt;div id=&quot;my-app&quot;&gt;  &lt;my-component&gt;&lt;/my-component&gt;&lt;/div&gt;&lt;script type=&quot;text/javascript&quot;&gt;  new Vue({    el: &#39;#my-app&#39;,    components: {      &#39;my-component&#39;: httpVueLoader(&#39;my-component.vue&#39;)    }  });&lt;/script&gt;</code></pre><p><br></p><p>當然，httpVueLoader 也提供了類似 <code>Vue.component(&#39;my-component&#39;, { ... })</code> 的宣告方式:</p><pre><code class="js">  httpVueLoaderRegister(Vue, &#39;my-component.vue&#39;);  new Vue({      components: [          &#39;my-component&#39;      },</code></pre><p>或是將 httpVueLoader 當作 Plugin 來使用：</p><pre><code class="js">  Vue.use(httpVueLoader);  new Vue({    components: {        &#39;my-component&#39;: &#39;url:my-component.vue&#39;    },    ...</code></pre><p>甚至是 Array 的形式也可以：</p><pre><code class="js">    new Vue({        components: [            &#39;url:my-component.vue&#39;        },        ...</code></pre><p>需要注意的是，httpVueLoader 目前僅支援 Vue 2 以上的版本，而作者也在專案內說明， httpVueLoader 只是提供一個簡便的測試與開發環境，方便開發者不需要透過繁複的編譯過程才能使用 vue file 進行開發。</p><p>若是要發佈到線上的專案，建議還是需要透過工具編譯打包，會有更好的效能以及更佳的支援度喔。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;上週在 Vue 社群圈有個令人興奮的熱門新聞: CodePen 可以支援 &lt;code&gt;.vue&lt;/code&gt; 檔案了！&lt;/p&gt;
-&lt;p&gt;&lt;blockquote class=&quot;twitter-tweet&quot; data-lang=&quot;zh-tw&quot;&gt;&lt;p lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;Check it out - you can use &lt;code&gt;.vue&lt;/code&gt; files in CodePen Projects easily:&lt;a href=&quot;https://t.co/Cd3Qr11xYQ&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://t.co/Cd3Qr11xYQ&lt;/a&gt; &lt;a href=&quot;https://t.co/QvtIXxKRUk&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;pic.twitter.com/QvtIXxKRUk&lt;/a&gt;&lt;/p&gt;&amp;mdash; Chris Coyier (@chriscoyier) &lt;a href=&quot;https://twitter.com/chriscoyier/status/880859500185616387&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;2017年6月30日&lt;/a&gt;&lt;/blockquote&gt;&lt;/p&gt;
-&lt;script async src=&quot;//platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
-
-&lt;p&gt;身為使用 Vue 的開發者聽到這樣的消息當然感到相當開心，但同時也不禁感到好奇，CodePen 是如何做到不須透過 webpack 編譯 vue 檔案，就可以將 .vue 的 component 如實顯示到網頁中。&lt;/p&gt;
-&lt;p&gt;大家都知道，在網頁開發的世界中，前端是沒有秘密的。 打開了開發工具，才知道原來是透過 &lt;strong&gt;&lt;a href=&quot;https://github.com/FranckFreiburger/http-vue-loader&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http-vue-loader&lt;/a&gt;&lt;/strong&gt; 這個工具做到的。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="vue.js" scheme="https://kuro.tw/categories/vue-js/"/>
-    
-    
-      <category term="vue.js" scheme="https://kuro.tw/tags/vue-js/"/>
-    
-      <category term="httpVueLoader" scheme="https://kuro.tw/tags/httpVueLoader/"/>
     
   </entry>
   
