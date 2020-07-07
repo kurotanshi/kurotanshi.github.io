@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/index.html"><meta name="og:title" content="談談 JavaScript 的 setTimeout 與 setInterval"><meta name="og:description" content="&lt;p&gt;相信接觸過 JavaScript 的朋友對於要透過 JavaScript 來控制時間或是實作一個計時器，一定都會想到 &lt;code&gt;setTimeout()&lt;/code&gt; / &lt;code&gt;setInterval()&lt;/code&gt;。 &lt;/p&gt;
+&lt;p&gt;但你知道透過 &lt;code&gt;setTimeout()&lt;/code&gt; 或 &lt;code&gt;setInterval()&lt;/code&gt; 來計算時間，不僅每個人執行的結果不同，而且&lt;strong&gt;誤差還可能相當大&lt;/strong&gt;嗎？
+在正式進入主題前，先來簡單介紹一下 &lt;code&gt;setTimeout()&lt;/code&gt; 與 &lt;code&gt;setInterval()&lt;/code&gt; 。&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>談談 JavaScript 的 setTimeout 與 setInterval | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">談談 JavaScript 的 setTimeout 與 setInterval</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">談談 JavaScript 的 setTimeout 與 setInterval</h1><div class="post-meta">2019-02-23 18:12<span> | </span><span class="category"><a href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>相信接觸過 JavaScript 的朋友對於要透過 JavaScript 來控制時間或是實作一個計時器，一定都會想到 <code>setTimeout()</code> / <code>setInterval()</code>。 </p>
+<p>但你知道透過 <code>setTimeout()</code> 或 <code>setInterval()</code> 來計算時間，不僅每個人執行的結果不同，而且<strong>誤差還可能相當大</strong>嗎？
+在正式進入主題前，先來簡單介紹一下 <code>setTimeout()</code> 與 <code>setInterval()</code> 。</p>
+<a id="more"></a>
+<h2 id="setTimeout-與-setInterval"><a href="#setTimeout-與-setInterval" class="headerlink" title="setTimeout() 與 setInterval()"></a><code>setTimeout()</code> 與 <code>setInterval()</code></h2><p>根據 <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout" target="_blank" rel="noopener">MDN 定義</a> <code>setTimeout()</code> 的作用
+是在延遲了某段時間 (單位為毫秒) 之後，才去執行「一次」指定的程式碼，並且會回傳一個獨立的 timer ID：</p>
+<pre><code class="javascript">var timeoutID = scope.setTimeout(function[, delay, param1, param2, ...]);
+var timeoutID = scope.setTimeout(function[, delay]);
+var timeoutID = scope.setTimeout(code[, delay]);
+</code></pre>
+<p>如：</p>
+<pre><code class="javascript">var timeoutID = window.setTimeout(( () =&gt; console.log(&quot;Hello!&quot;) ), 1000);
+</code></pre>
+<p>而 <code>setInterval()</code> 則是固定延遲了某段時間之後，才去執行對應的程式碼，然後「不斷循環」。 當然也會回傳一個獨立的 timer ID：</p>
+<pre><code class="javascript">var intervalID = scope.setInterval(func, delay[, param1, param2, ...]);
+var intervalID = scope.setInterval(code, delay);
+</code></pre>
+<p>如：</p>
+<pre><code class="javascript">var timeoutID = window.setInterval(( () =&gt; console.log(&quot;Hello!&quot;) ), 1000);
+</code></pre>
+<p>兩者的不同之處是 <code>setTimeout()</code> 只會執行一次就結束，而 <code>setInterval()</code> 則是會在間隔固定的時間不斷重複。</p>
+<p>由於在瀏覽器的環境宿主物件為 <code>window</code>，所以 <code>setTimeout()</code> 與 <code>setInterval()</code> 的完整語法自然就是我們所熟悉的 <code>window.setTimeout()</code> 與 <code>window.setInterval</code> 了。</p>
+<p>值得注意的是，雖然 <code>setTimeout()</code> 這些 timer 方法不在 ECMAScript 的規格內，而是屬於 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope" target="_blank" rel="noopener">wndow 物件</a>的一部份，不過多數瀏覽器與 <a href="https://github.com/nodejs/node/blob/master/lib/timers.js" target="_blank" rel="noopener">Node.js 也都有實作這些 timer 方法</a>，根據環境不同實作也多少有些差異，像是瀏覽器的 <code>setTimeout</code> / <code>setInterval</code> 回傳的是 Number，而 Node.js 回傳的是 Object。</p>
+<h2 id="如何取消-setTimeout-與-setInterval"><a href="#如何取消-setTimeout-與-setInterval" class="headerlink" title="如何取消 setTimeout() 與 setInterval()"></a>如何取消 <code>setTimeout()</code> 與 <code>setInterval()</code></h2><p>先說 <code>setInterval()</code>，根據前面的範例：</p>
+<pre><code class="javascript">var timeoutID = window.setInterval(( () =&gt; console.log(&quot;Hello!&quot;) ), 1000);
+</code></pre>
+<p><code>setInterval()</code> 一啟動之後就會在固定的間隔時間不斷執行，那麼如果想要停下來，該怎麼處理呢？</p>
+<p>這時候就需要用到 <code>clearInterval()</code> 來取消 <code>setInterval()</code>。</p>
+<p>上面說過，當我們呼叫 <code>setTimeout()</code> 與 <code>setInterval()</code> 的時候，它們會回傳一個獨立的 timer ID，
+這個 ID 就是當我們想要取消<code>setTimeout()</code> 與 <code>setInterval()</code> 的時候作為識別的數字：</p>
+<pre><code class="javascript">var timeoutID = window.setInterval(( () =&gt; console.log(&quot;Hello!&quot;) ), 1000);
+
+window.clearInterval(timeoutID);
+</code></pre>
+<p>當程式執行到 <code>clearInterval()</code> 就會取消 <code>setInterval()</code> 了。</p>
+<p>另外，與 <code>setTimeout()</code> 對應的就是 <code>clearTimeout()</code>，用法完全一樣：</p>
+<pre><code class="javascript">var timeoutID = window.setTimeout(( () =&gt; console.log(&quot;Hello!&quot;) ), 1000);
+
+window.clearTimeout(timeoutID);
+</code></pre>
+<p>兩者不同的是，因為 <code>setTimeout()</code> 只會執行一次，所以 <code>clearTimeout()</code> 只會在 <code>setTimeout()</code> 指定的時間未到時才會有效果，
+若 <code>setTimeout()</code> 的 callback function 已經被執行，那就等同是多餘的了。</p>
+<hr>
+<p>上面是多數人熟知的 <code>setTimeout()</code> 與 <code>setInterval()</code>。 </p>
+<p>可能有些人不知道 <code>setTimeout()</code> 的第一個參數是可以指定「字串」的，如：</p>
+<pre><code class="javascript">window.setTimeout(&#39;console.log(&quot;Hello!&quot;)&#39;, 1000);
+</code></pre>
+<p>上面這段程式的執行結果與前面的範例是一樣的，但由於內部隱含 <code>eval</code> 的轉換，所以執行上效能會比非字串的版本差一些。</p>
+<p>但要是不小心打成這樣：</p>
+<pre><code class="javascript">window.setTimeout(console.log(&quot;Hello!&quot;), 1000);
+</code></pre>
+<p>這時雖然 console 主控台仍會印出 2 ，但並不會等待 1000ms，而是會馬上執行。</p>
+<p>這是為什麼呢？</p>
+<p>因為 <code>setTimeout()</code> 會先判斷第一個參數是否為 「function」，如果不是，則會嘗試將它當作字串處理。 換句話說，會將 <code>console.log(&quot;Hello!&quot;)</code> 執行後的回傳值轉為字串，......欸，沒有回傳值，那就是 <code>undefined</code>，
+於是</p>
+<pre><code class="javascript">window.setTimeout(console.log(&quot;Hello!&quot;), 1000);
+</code></pre>
+<p>實際上是</p>
+<pre><code class="javascript">window.setTimeout(&quot;undefined&quot;, 1000);
+</code></pre>
+<p>於是 1000ms 到了就什麼事都沒發生。</p>
+<p>而 &quot;Hello&quot; 則是在呼叫 <code>console.log()</code> 的當下就會被印出。</p>
+<h2 id="當-setTimeout-遇到迴圈-IIFE"><a href="#當-setTimeout-遇到迴圈-IIFE" class="headerlink" title="當 setTimeout 遇到迴圈: IIFE"></a>當 setTimeout 遇到迴圈: IIFE</h2><p>通常談到 <code>setTimeout()</code> 的時候，就不可避免會提到這個經典的範例， 題目是這樣的：</p>
+<blockquote>
+<p>「假設想透過迴圈 + <code>setTimeout()</code> 來實作，在五秒鐘之內，每秒鐘依序透過 <code>console.log()</code> 印出： 0 1 2 3 4 。」</p>
+</blockquote>
+<p>很多 JavaScript 的初學者可能會很直覺地寫下這樣的程式碼：</p>
+<pre><code class="javascript">// 假設想透過迴圈 + setTimeout 來做到
+// 每秒鐘將 i 的值 console 出來
+
+for( var i = 0; i &lt; 5; i++ ) {
+  window.setTimeout(function() {
+    console.log(i);
+  }, 1000);
+}
+</code></pre>
+<p>但是上面這段 code 執行的結果是， <code>console.log()</code> 會在「一秒鐘之後」同時印出「五次 5」。</p>
+<p>這是為什麼呢？ 由於 JavaScript 切分變數有效範圍 (scope) 的最小單位為 function，所以當 1000ms 過去，
+變數 <code>i</code> 的值早已是 <code>for</code> 迴圈更新完畢的 <code>i</code> ，而不是迴圈內當下的那個 <code>i</code> 。</p>
+<p>所以我們會改用這樣的寫法來隔離變數作用域：</p>
+<pre><code class="javascript">for( var i = 0; i &lt; 5; i++ ) {
+
+  // 為了凸顯差異，我們將傳入後的參數改名為 x
+  // 當然由於 scope 的不同，要繼續在內部沿用 i 這個變數名也是可以的。
+  (function(x){
+    window.setTimeout(function() {
+      console.log(x);
+    }, 1000 * x);
+  })(i);
+}
+</code></pre>
+<p>像這樣的做法，通常稱它為 <strong>IIFE (Immediately Invoked Function Expression)</strong>， <del>一用就丟</del> 立刻被呼叫、執行的 function 表達式。</p>
+<p>或者，也可以改用 <code>let</code> 提供的 Block Scope 特性：</p>
+<pre><code class="javascript">for( let i = 0; i &lt; 5; i++ ) {
+  window.setTimeout(function() {
+    console.log(i);
+  }, 1000 * i);
+}
+</code></pre>
+<p>就可以避開這個問題。</p>
+<h2 id="從-setTimeout-看同步、非同步-與-Event-Loop"><a href="#從-setTimeout-看同步、非同步-與-Event-Loop" class="headerlink" title="從 setTimeout 看同步、非同步 與 Event Loop"></a>從 setTimeout 看同步、非同步 與 Event Loop</h2><p>大多數的朋友可能都知道，JavaScript 是單一執行緒的程式語言，這代表著 JavaScript 在同一個時間點只能做一件事。 
+這時你可能會有疑問，既然是單一執行緒，那為什麼又有「同步」(Synchronous) 與「非同步」 (Asynchronous) 之分呢？ 
+這兩者又有什麼區別？ 而 JavaScript 這門語言究竟是「同步」還是「非同步」呢？</p>
+<p>兩者容易搞混我覺得很大的原因出在 Synchronous 被翻譯成「同步」，光看字面上「同步」二字就可能把它想成是「所有動作同時進行」，但實際上卻<strong>剛好相反</strong>。</p>
+<p>不囉唆，先來個範例：</p>
+<pre><code class="javascript">console.log(&#39;start&#39;);
+
+(function () {
+  console.log(&#39;call function&#39;)
+
+  window.setTimeout(function () {
+    console.log(&#39;setTimeout&#39;);
+  }, 1000);
+})();
+
+console.log(&#39;end&#39;);
+</code></pre>
+<p>各位可以猜猜看，上面這段 code 執行的結果為何？</p>
+<p>相信聰明如你一定知道， console 主控台輸出的結果為：</p>
+<pre><code class="txt">start
+call function
+end
+
+setTimeout
+</code></pre>
+<p>先印出 <code>start</code> 、 <code>call function</code> 然後因為 <code>setTimeout()</code> 等待一秒的關係，所以印了 <code>end</code> 後，最後才是 <code>setTimeout</code>。</p>
+<p>那麼，如果我們將 <code>setTimeout()</code> 的時間參數設定為 <code>0</code> 是否就代表會立刻執行呢：</p>
+<pre><code class="javascript">console.log(&#39;start&#39;);
+
+(function () {
+  console.log(&#39;call function&#39;)
+
+  window.setTimeout(function () {
+    console.log(&#39;setTimeout&#39;);
+  }, 0);
+})();
+
+console.log(&#39;end&#39;);
+</code></pre>
+<p>.<br>
+.<br>
+.<br>
+.<br>
+.<br>
+.<br></p>
+<p>答案仍然是</p>
+<pre><code class="txt">start
+call function
+end
+
+setTimeout
+</code></pre>
+<p>這時候我想應該開始有人會感到疑惑了。 </p>
+<p>為什麼 <code>setTimeout()</code> 的時間參數明明已經設定為 <code>0</code>，卻還是最後才執行呢？ 
+這正是因為 JavaScript 是單一執行緒所帶來的特性造成。</p>
+<p>如果我們將程式要做的所有事情當作是一件一件的任務來看，那麼「一次只能做一件事」的單一執行緒就代表著<strong>任務與任務之間需要排隊</strong>，
+前一個任務完成才會接著執行下一個任務。 如果目前執行的動作需要很長一段時間，那麼勢必會卡住下一個任務的執行。</p>
+<p>另外，如果這門語言強烈遵守「一次只能做一件事」的原則，那麼在前面所提到的：</p>
+<pre><code class="javascript">console.log(&#39;start&#39;);
+
+(function () {
+  console.log(&#39;call function&#39;)
+
+  window.setTimeout(function () {
+    console.log(&#39;setTimeout&#39;);
+  }, 0);
+})();
+
+console.log(&#39;end&#39;);
+</code></pre>
+<p>裡頭的 <code>console.log(&#39;end&#39;)</code> 就應該要等待 <code>setTimeout()</code> 印出後才會執行，但是看結果顯然沒有。 而且，要是因為加上了 <code>setTimeout()</code> 就得延遲後面的所有任務， 在等待 timer 的過程中並沒有做任何事，也白白浪費了時間，這門程式語言的效率肯定極差無比。</p>
+<p>幸好當初 JavaScript 的設計者沒有這麼做，而是將所有等待被執行的任務分成了兩種：「同步」(Synchronous) 與「非同步」 (Asynchronous) 。</p>
+<p>主要執行緒指的是正在排隊等待要執行的任務，也就是圖中的 Stack：</p>
+<p><img src="https://developer.mozilla.org/files/4617/default.svg" alt="Stack, heap, queue">
+<a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/EventLoop" target="_blank" rel="noopener">圖片來源: MDN - Event Loop</a></p>
+<p>Stack 裡面的任務有同步、也有些非同步事件，像是本文不斷提到的 <code>setTimeout()</code> 或者 <code>Ajax</code> 等等非同步的事件。</p>
+<p>JavaScript 的執行緒會逐一執行 Stack 內的任務，當碰上了非同步事件時，為了不讓程式被這些需要等待的任務卡著，就會繼續執行後續的動作。 
+而當這些非同步事件的 callback function 被呼叫時，就會將 callback function 的任務丟到 Event Queue 當中，並等待目前 Stack 的任務都已經完成後，再繼續逐一執行 Event Queue 的任務。</p>
+<p>所以再次回到範例：</p>
+<pre><code class="javascript">console.log(&#39;start&#39;);
+
+(function () {
+  console.log(&#39;call function&#39;)
+
+  window.setTimeout(function () {
+    console.log(&#39;setTimeout&#39;);
+  }, 0);
+})();
+
+console.log(&#39;end&#39;);
+</code></pre>
+<p>即便我們在 <code>setTimeout()</code> 的等待時間設定為 <code>0</code>， 因為 JavaScript 會先將其擱置到 Queue 當中，
+等待 Stack 的任務完成後，再回來執行 <code>setTimeout()</code> 內的 callback function。 
+這也就是為什麼範例中 <code>setTimeout</code> 總是會比 <code>end</code> 還要晚印出的原因了。</p>
+<h2 id="不僅貌似忠良的男子不可相信，-setInterval-提供的時間也不可信"><a href="#不僅貌似忠良的男子不可相信，-setInterval-提供的時間也不可信" class="headerlink" title="不僅貌似忠良的男子不可相信， setInterval 提供的時間也不可信"></a>不僅貌似忠良的男子不可相信， setInterval 提供的時間也不可信</h2><p>跟著文章看到這裡，我想你應該已經知道用 <code>setTimeout()</code> 與 <code>setInterval()</code> 拿來計算時間會有什麼問題了。</p>
+<p>雖然 JavaScript 有著非同步事件的特色，但仍是依循單一執行緒的規則運作。 
+換句話說，當我們在主要執行緒內工作的時間太久，就勢必會延遲 Queue Callback 的執行。</p>
+<p>首先要建立一個概念，就是任何操作都會有時間成本：</p>
+<pre><code class="javascript">var startTime = new Date().getTime();
+
+window.setTimeout(function(){
+  var endTime = new Date().getTime();
+  console.log(&#39;Time elapsed: &#39; + (endTime - startTime) + &#39; ms&#39;); 
+}, 1000);
+</code></pre>
+<p>像上面這段程式，雖然 <code>setTimeout()</code> 被指定在 1000ms 後執行，但這段 code 的執行結果為</p>
+<pre><code class="txt">Time elapsed: 1005 ms  (依環境可能會有些微誤差)
+</code></pre>
+<p>實際執行可以發現仍然大約有 2 ~ 5 ms 的時間誤差，雖然人體感受不明顯。</p>
+<p>但如果中間再加上一些操作</p>
+<pre><code class="javascript">var startTime = new Date().getTime();
+var count = 0;
+
+// 用來模擬延遲 Queue 的動作
+window.setInterval(function(){
+  var i = 0;
+  while(i++ &lt; 999999) { };
+}, 0);
+
+window.setInterval(function(){
+  var endTime = new Date().getTime();
+  count++;
+  console.log(&#39;Time elapsed: &#39; + (endTime - (startTime + count * 1000)) + &#39; ms&#39;); 
+}, 1000);
+</code></pre>
+<p>實際執行的輸出為 (依執行環境有所不同) ：</p>
+<pre><code class="txt">&quot;Time elapsed: 108 ms&quot;
+&quot;Time elapsed: 198 ms&quot;
+&quot;Time elapsed: 123 ms&quot;
+&quot;Time elapsed: 145 ms&quot;
+&quot;Time elapsed: 179 ms&quot;
+&quot;Time elapsed: 121 ms&quot;
+&quot;Time elapsed: 160 ms&quot;
+
+(下略)
+</code></pre>
+<p>像上面這樣，即便每次執行都只有 100 ~ 200 ms 誤差，但久而久之 <code>setInterval()</code> 帶來的誤差就會漸漸擴大。</p>
+<h2 id="精準校時？"><a href="#精準校時？" class="headerlink" title="精準校時？"></a>精準校時？</h2><p>先說結論，別傻了孩子，不管你怎麼對 <code>setTimeout()</code> 或 <code>setInterval()</code> 做優化，誤差永遠都會存在。
+但好消息是我們可以透過一些手法來降低誤差，像是一開始就先計算 client 的時間與 server 端的時間差，並定期與 server 端做時間同步修正，使誤差維持在最小可接受範圍內等。</p>
+<p>如果是要執行動畫，則建議用 <a href="https://developer.mozilla.org/zh-TW/docs/Web/API/Window.requestAnimationFrame" target="_blank" rel="noopener">requestAnimationFrame</a> 來取代 <code>setTimeout()</code> 或 <code>setInterval()</code>。  比起傳統的 <code>setTimeout()</code> 或 <code>setInterval()</code> ， <code>requestAnimationFrame</code> 的執行效能會好上許多。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/" data-id="ckcc5xiny004du1pwxqsnjl14" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/javascript/">javascript</a><a href="/tags/重新認識-JavaScript/">重新認識 JavaScript</a><a href="/tags/setTimeout/">setTimeout</a></div><div class="post-nav"><a href="/posts/2019/07/31/談談前端框架/" class="pre">談談前端框架</a><a href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/" class="next">企業前端框架趨勢論壇之問與答遺珠</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/';
+var disqus_title = "談談 JavaScript 的 setTimeout 與 setInterval";
+var disqus_url = 'https://kuro.tw/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget widget-ad"><div class="widget-title"><i class="fa fa-hand-o-right"> 工商服務</i></div><a href="https://www.tenlong.com.tw/products/9789864344130" title="著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！" target="_blank"><img src="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg" width="210"><h4 class="ad-header">著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！</h4></a><a href="//book.vue.tw" title="重新認識 Vue.js" target="_blank"><img src="/static/vue-badge.png" width="210"><h4 class="ad-header">重新認識 Vue.js (連載中，不定時更新)</h4></a><a href="https://5xruby.tw/talks/javascript/" title="課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/javascript-c0d1850e.jpg" width="210"><h4 class="ad-header">課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班</h4></a><a href="https://5xruby.tw/talks/vue-js/" title="課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg" width="210"><h4 class="ad-header">課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班</h4></a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/void/" style="font-size: 15px;">void</a> <a href="/tags/重新認識-JavaScript/" style="font-size: 15px;">重新認識 JavaScript</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/vue-3-0/" style="font-size: 15px;">vue 3.0</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a> <a href="/tags/vue-js-3-0/" style="font-size: 15px;">vue.js 3.0</a> <a href="/tags/Function-based-API/" style="font-size: 15px;">Function-based API</a> <a href="/tags/TypeScript/" style="font-size: 15px;">TypeScript</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/前端開發/" style="font-size: 15px;">前端開發</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/setTimeout/" style="font-size: 15px;">setTimeout</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/前端框架/" style="font-size: 15px;">前端框架</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/08/如何在-Vue-3-0-使用-EventBus/">如何在 Vue 3.0 使用 EventBus</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/06/Vue-3-0-升級紀錄/">Vue 3.0 升級紀錄</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/06/09/從國師級的專案看開發者的過失/">從國師級的專案看開發者的過失</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/">初探 Vue 3.0 Function-based API</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/04/JS-冷知識-你所不知道的-void/">JS 冷知識: 你所不知道的 void</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/07/31/談談前端框架/">談談前端框架</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/">談談 JavaScript 的 setTimeout 與 setInterval</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Letzte Kommentare</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0191206001" async></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.css"><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0191206001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0191206001"></script><script type="text/javascript" src="/js/smartresize.js?v=0191206001"></script></div></body></html>

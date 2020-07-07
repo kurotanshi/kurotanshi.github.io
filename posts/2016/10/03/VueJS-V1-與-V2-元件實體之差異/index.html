@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2016/10/03/VueJS-V1-與-V2-元件實體之差異/index.html"><meta name="og:title" content="[VueJS] V1 與 V2 元件實體之差異"><meta name="og:description" content="&lt;p&gt;狂賀！ &lt;a href=&quot;https://github.com/vuejs/vue/releases/tag/v2.0.0&quot; title=&quot;Vue 2.0&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Vue 2.0&lt;/a&gt; 終於正式發佈！&lt;/p&gt;
+&lt;p&gt;關於 Vue 2.0 的新特性，作者也在官方 Blog - &lt;a href=&quot;https://medium.com/the-vue-point/vue-2-0-is-here-ef1f26acf4b8#.n0m3yjfmp&quot; title=&quot;Vue 2.0 is Here!&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Vue 2.0 is Here!&lt;/a&gt; (&lt;a href=&quot;http://jiongks.name/blog/vue-2-is-here/&quot; title=&quot;Vue 2.0 来了！&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;中文翻譯&lt;/a&gt;) 一文中敘述地相當詳細，這裡就不多說。&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>[VueJS] V1 與 V2 元件實體之差異 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">[VueJS] V1 與 V2 元件實體之差異</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">[VueJS] V1 與 V2 元件實體之差異</h1><div class="post-meta">2016-10-03 18:20<span> | </span><span class="category"><a href="/categories/vue-js/">vue.js</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2016/10/03/VueJS-V1-與-V2-元件實體之差異/" href="/posts/2016/10/03/VueJS-V1-與-V2-元件實體之差異/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>狂賀！ <a href="https://github.com/vuejs/vue/releases/tag/v2.0.0" title="Vue 2.0" target="_blank" rel="noopener">Vue 2.0</a> 終於正式發佈！</p>
+<p>關於 Vue 2.0 的新特性，作者也在官方 Blog - <a href="https://medium.com/the-vue-point/vue-2-0-is-here-ef1f26acf4b8#.n0m3yjfmp" title="Vue 2.0 is Here!" target="_blank" rel="noopener">Vue 2.0 is Here!</a> (<a href="http://jiongks.name/blog/vue-2-is-here/" title="Vue 2.0 来了！" target="_blank" rel="noopener">中文翻譯</a>) 一文中敘述地相當詳細，這裡就不多說。</p>
+<a id="more"></a>
+<p>如果你也與我一樣是從 V1 就開始接觸的開發者，一定都知道 VueJS 最核心的一部分是 Component，而 Component 是由實體 (Vue Instance) 來實作。
+在這篇文章，我們就來談談 Vue 1.x 與 2.x 元件實體的差異。</p>
+<hr>
+
+<h3 id="Vue-2-0-元件實體註冊"><a href="#Vue-2-0-元件實體註冊" class="headerlink" title="Vue 2.0 元件實體註冊"></a>Vue 2.0 元件實體註冊</h3><p><img alt="tree of components" src="/static/img/Vue-instance.png"></p>
+<p>像上面這樣的網站，我們可以將它抽象化為一棵「元件樹」，而每個元件樹都會有個根節點，或稱為根實體 (root Vue instance)。</p>
+<p>那麼，每個 Vue 元件樹的根實體其實是透過 <code>Vue</code> 這個建構函式所產生：</p>
+<pre><code class="javascript">var vm = new Vue({
+  // options
+});
+</code></pre>
+<p>將 Vue 元件與實體 DOM 結合的方式有兩種，一種是直接寫在 <code>el</code> option 內：</p>
+<pre><code class="javascript">var vm = new Vue({
+  el: &#39;#app&#39;
+});
+</code></pre>
+<p>而另一種方式則是透過 <code>$mount</code> 來指定節點：</p>
+<pre><code class="javascript">var vm = new Vue({
+  // options without &#39;el&#39;
+});
+
+vm.$mount(&#39;#app&#39;);
+</code></pre>
+<p>這部分跟 Vue 1.x 的註冊是完全一樣的，但是需要注意的是，在 vue 1.x 允許開發者以 <code>&lt;body&gt;</code> 或 <code>&lt;html&gt;</code> 作為根實體的掛載點，
+但<span style="color: #f00">到了 VueJS 2.0 後，只能透過 <strong>獨立的節點掛載</strong> </span>，如: div 等。 否則會產生錯誤，警告訊息如下：</p>
+<pre><code>“Do not mount Vue to &lt;html&gt; or &lt;body&gt; - mount to normal elements instead.“
+</code></pre><p>換成用獨立的 DOM 節點，如 <code>&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;</code>，就可以正常運作了。</p>
+<hr>
+
+<h3 id="Vue-2-0-元件實體的生命週期"><a href="#Vue-2-0-元件實體的生命週期" class="headerlink" title="Vue 2.0 元件實體的生命週期"></a>Vue 2.0 元件實體的生命週期</h3><p><img alt="Vue 2.0 Lifecycle Diagram" title="Vue 2.0 Lifecycle Diagram" src="/static/img/vue2-lifecycle.png" height="400">
+<span style="font-size: 12px;">圖片來源： <a href="http://vuejs.org/guide/instance.html#Instance-Lifecycle-Hooks" target="_blank" rel="noopener">Vue 2.0 Guide: Instance Lifecycle Hooks</a></span></p>
+<p>基本上 Vue 2.0 實體生命週期中，大部分的階段都與 Vue 1.x 是一樣的，最大的不同在於 lifecycle hook 名稱的改變，以及在元件被掛載 <code>mounted</code> 之後，還新增了 <code>beforeUpdate</code> 以及 <code>updated</code> 這兩組偵測更新的 hook。</p>
+<p>vue 1.x 的 <code>init</code> 變成 <code>beforeCreate</code> ， <code>beforeCompiled</code> 改為 <code>beforeMount</code>。 而原本的 <code>complied</code> 與 <code>ready</code> 則是統一收斂成 <code>mounted</code>。</p>
+<p>另外需要注意的是，<span style="color: #f00"><strong>若元件本身是透過 server-side rendering 的話，除了 <code>beforeCreate</code> 以及 <code>created</code> 以外的所有 hook 都不會被呼叫</strong></span>  <a href="https://vuejs.org/api/#Options-Lifecycle-Hooks" target="_blank" rel="noopener">(參考資料)</a>。</p>
+<p>有關元件 V-DOM 的重新渲染與更新後面再提，其他部分則與 Vue 1.x 大同小異。</p>
+<p><hr></p>
+<h3 id="Vue-2-0-元件與模板的編譯-Render-Function"><a href="#Vue-2-0-元件與模板的編譯-Render-Function" class="headerlink" title="Vue 2.0 元件與模板的編譯 - Render Function"></a>Vue 2.0 元件與模板的編譯 - Render Function</h3><p>在大部分情況下，透過元件的 <code>template</code> 屬性，或是直接寫在 HTML 中就已經足夠操作你的元件了。
+不過若是你想完全透過 JavaScript 來操作你的元件，那麼可以使用 render 這個 function 直接來寫底層的 virtual-DOM 來取代 <code>template</code> 屬性。
+VueJS 2.0 的 virtual DOM 機制，是採用 <a href="https://github.com/snabbdom/snabbdom" title="snabbdom" target="_blank" rel="noopener">snabbdom</a> 這個 virtual DOM 的 library 來實作的。</p>
+<p>可以使用 <code>createElement</code> 這個 function 來建立你的元件內容：</p>
+<pre><code class="javascript">// @returns {VNode}
+createElement(
+  // {String | Object | Function}
+  // An HTML tag name, component options, or function
+  // returning one of these. Required.
+  &#39;div&#39;,
+  // {Object}
+  // A data object corresponding to the attributes
+  // you would use in a template. Optional.
+  {
+    // (see details in the next section below)
+  },
+  // {String | Array}
+  // Children VNodes. Optional.
+  [
+    createElement(&#39;h1&#39;, &#39;hello world&#39;)
+    createElement(MyComponent, {
+      props: {
+        someProp: &#39;foo&#39;
+      }
+    }),
+    &#39;bar&#39;
+  ]
+)
+</code></pre>
+<p>官方也提供了一個完整的 render function 範例：</p>
+<pre><code class="javascript">var getChildrenTextContent = function (children) {
+  return children.map(function (node) {
+    return node.children
+      ? getChildrenTextContent(node.children)
+      : node.text
+  }).join(&#39;&#39;)
+}
+Vue.component(&#39;anchored-heading&#39;, {
+  render: function (createElement) {
+    // create kebabCase id
+    var headingId = getChildrenTextContent(this.$slots.default)
+      .toLowerCase()
+      .replace(/\W+/g, &#39;-&#39;)
+      .replace(/(^\-|\-$)/g, &#39;&#39;)
+
+    return createElement(
+      &#39;h&#39; + this.level,
+      [
+        createElement(&#39;a&#39;, {
+          attrs: {
+            name: headingId,
+            href: &#39;#&#39; + headingId
+          }
+        }, this.$slots.default)
+      ]
+    )
+  },
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+})
+</code></pre>
+<p>當然，你可能跟我一樣覺得一層又一層的 <code>createElement</code> 看了總是讓人厭煩，你也可以透過這個 Plugin: <a href="https://github.com/vuejs/babel-plugin-transform-vue-jsx" target="_blank" rel="noopener">babel-plugin-transform-vue-jsx</a>，來做 JSX 語法的轉換，如果你曾是 react 應用程式的開發者，應該對 JSX 語法不陌生。 寫起來會像這樣：</p>
+<pre><code class="javascript">import AnchoredHeading from &#39;./AnchoredHeading.vue&#39;
+
+new Vue({
+  el: &#39;#demo&#39;,
+  render (h) {
+    return (
+      &lt;AnchoredHeading level={1}&gt;
+        &lt;span&gt;Hello&lt;/span&gt; world!
+      &lt;/AnchoredHeading&gt;
+    )
+  }
+})
+</code></pre>
+<p>在預設情況中，VueJS 2.0 會將 <code>template</code> 內的 HTML 透過 parse 轉換成 AST，再自動轉換優化成 render function 去建立 virtual DOM。 在建立 virtual DOM 之後，透過 observe 機制與資料進行綁定，再 compile 成實體的 DOM 並渲染至網頁上：</p>
+<p><img src="/static/img/vue2-rendering-flow.png">
+<span style="font-size: 12px;">參考資料與圖片來源： <a href="https://speakerdeck.com/kazupon/next-vue-dot-js-2-dot-0" target="_blank" rel="noopener">Next Vue.js 2.0 by kazupon</a></span></p>
+<p>前面說過，VueJS 2.0 會將 <code>template</code> 內的 HTML 自動編譯成 render function，下面這是官方文件以 <code>Vue.compile</code> 提供的 demo：</p>
+<pre><code class="html">&lt;!-- template --&gt;
+&lt;div&gt;
+  &lt;h1&gt;I&#39;m a template!&lt;/h1&gt;
+  &lt;p v-if=&quot;message&quot;&gt;
+    {{ message }}
+  &lt;/p&gt;
+  &lt;p v-else&gt;
+    No message.
+  &lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="javascript">// render:
+function anonymous() {
+  with(this){return _h(&#39;div&#39;,[_m(0),(message)?_h(&#39;p&#39;,[_s(message)]):_h(&#39;p&#39;,[&quot;No message.&quot;])])}
+}
+</code></pre>
+<pre><code class="javascript">// staticRenderFns:
+_m(0): function anonymous() {
+  with(this){return _h(&#39;h1&#39;,[&quot;I&#39;m a template!&quot;])}
+}
+</code></pre>
+<p><hr></p>
+<h3 id="Vue-2-0-元件的追蹤變化"><a href="#Vue-2-0-元件的追蹤變化" class="headerlink" title="Vue 2.0 元件的追蹤變化"></a>Vue 2.0 元件的追蹤變化</h3><p>最後，我們來看看元件內狀態的追蹤變化。有寫過 VueJS 1.x 的朋友應該知道，元件實體內有個 option 叫 <code>data</code>，
+這個 <code>data</code> 物件就是用來存放元件內狀態/資料的地方。</p>
+<p>與 Vue 1.x 相同的地方是，<code>data</code> 物件透過 <code>Object.defineProperty()</code> 來為元件內各屬性設定 「getter」與「setter」。
+就在 data 屬性被存取修改時，會透過 getter/setter 來通知物件內屬性的變化，當先前設定好的 setter 被呼叫的時候，會去觸發 watcher 重新計算，也就會導致 DOM 的更新與重新渲染。</p>
+<p>與 Vue 1.x 不同的是，Vue 1.x 是透過 directive 來重新渲染 DOM 內容：</p>
+<p><img src="/static/img/vue1-watcher.png"></p>
+<p>而 Vue 2.0 在通知 watcher 更新時，會去呼叫前面介紹的 「render function」與更新後的 data 去做更新後再次渲染，概念與 1.x 大致相同。
+但更新 DOM 的手法不同，減少了不必要的比對，也因此大幅度提升了效能。</p>
+<p><img src="/static/img/vue2-watcher.png"></p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2016/10/03/VueJS-V1-與-V2-元件實體之差異/" data-id="ckcc5ximh000bu1pwyrzfpobz" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/vue-js/">vue.js</a></div><div class="post-nav"><a href="/posts/2016/10/05/VueJS-各種資料綁定-data-binding-的方式/" class="pre">VueJS 各種資料綁定 (data binding) 的方式</a><a href="/posts/2016/09/30/Vue-2-0-升級小幫手-Vue-migration-helper/" class="next">VueJS 2.0 升級小幫手: Vue migration helper</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2016/10/03/VueJS-V1-與-V2-元件實體之差異/';
+var disqus_title = "[VueJS] V1 與 V2 元件實體之差異";
+var disqus_url = 'https://kuro.tw/posts/2016/10/03/VueJS-V1-與-V2-元件實體之差異/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget widget-ad"><div class="widget-title"><i class="fa fa-hand-o-right"> 工商服務</i></div><a href="https://www.tenlong.com.tw/products/9789864344130" title="著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！" target="_blank"><img src="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg" width="210"><h4 class="ad-header">著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！</h4></a><a href="//book.vue.tw" title="重新認識 Vue.js" target="_blank"><img src="/static/vue-badge.png" width="210"><h4 class="ad-header">重新認識 Vue.js (連載中，不定時更新)</h4></a><a href="https://5xruby.tw/talks/javascript/" title="課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/javascript-c0d1850e.jpg" width="210"><h4 class="ad-header">課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班</h4></a><a href="https://5xruby.tw/talks/vue-js/" title="課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg" width="210"><h4 class="ad-header">課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班</h4></a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/void/" style="font-size: 15px;">void</a> <a href="/tags/重新認識-JavaScript/" style="font-size: 15px;">重新認識 JavaScript</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/vue-3-0/" style="font-size: 15px;">vue 3.0</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a> <a href="/tags/vue-js-3-0/" style="font-size: 15px;">vue.js 3.0</a> <a href="/tags/Function-based-API/" style="font-size: 15px;">Function-based API</a> <a href="/tags/TypeScript/" style="font-size: 15px;">TypeScript</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/前端開發/" style="font-size: 15px;">前端開發</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/setTimeout/" style="font-size: 15px;">setTimeout</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/前端框架/" style="font-size: 15px;">前端框架</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/08/如何在-Vue-3-0-使用-EventBus/">如何在 Vue 3.0 使用 EventBus</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/06/Vue-3-0-升級紀錄/">Vue 3.0 升級紀錄</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/06/09/從國師級的專案看開發者的過失/">從國師級的專案看開發者的過失</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/">初探 Vue 3.0 Function-based API</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/04/JS-冷知識-你所不知道的-void/">JS 冷知識: 你所不知道的 void</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/07/31/談談前端框架/">談談前端框架</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/">談談 JavaScript 的 setTimeout 與 setInterval</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Letzte Kommentare</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0191206001" async></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.css"><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0191206001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0191206001"></script><script type="text/javascript" src="/js/smartresize.js?v=0191206001"></script></div></body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/index.html"><meta name="og:title" content="企業前端框架趨勢論壇之問與答遺珠"><meta name="og:description" content="&lt;p&gt;先感謝 Will保哥 的邀請，舉辦了一場&lt;a href=&quot;https://www.accupass.com/event/1808150915324046311580&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;企業前端框架趨勢論壇&lt;/a&gt;的活動，來比較現代主流的三大前端框架 (Angular, Vue, React)，因為活動時間限制的關係，下半場讓會眾預先提問的問題，能夠回答的題目並不多 (&lt;a href=&quot;https://app2.sli.do/event/g8wlredu/questions&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;問券連結點此&lt;/a&gt;)。 其中有些我認為還不錯或是有趣的題目，這裡就以 &lt;strong&gt;VueJS 推廣者&lt;/strong&gt; 的角度來談談我對這些問題的看法。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/static/img/ent-f2e-trend2.jpg&quot;&gt;&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>企業前端框架趨勢論壇之問與答遺珠 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">企業前端框架趨勢論壇之問與答遺珠</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">企業前端框架趨勢論壇之問與答遺珠</h1><div class="post-meta">2018-09-16 01:10<span> | </span><span class="category"><a href="/categories/vue-js/">vue.js</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>先感謝 Will保哥 的邀請，舉辦了一場<a href="https://www.accupass.com/event/1808150915324046311580" target="_blank" rel="noopener">企業前端框架趨勢論壇</a>的活動，來比較現代主流的三大前端框架 (Angular, Vue, React)，因為活動時間限制的關係，下半場讓會眾預先提問的問題，能夠回答的題目並不多 (<a href="https://app2.sli.do/event/g8wlredu/questions" target="_blank" rel="noopener">問券連結點此</a>)。 其中有些我認為還不錯或是有趣的題目，這裡就以 <strong>VueJS 推廣者</strong> 的角度來談談我對這些問題的看法。</p>
+<p><img src="/static/img/ent-f2e-trend2.jpg"></p>
+<a id="more"></a>
+<hr>
+<blockquote>
+<p>Q: 常常看到 React、Angular、Vue 比較的文章，但是都是著重在技術本身，似乎很少比較應用面，我想知道什麼樣的技術比較適合開發什麼性質的網站，這樣比較容易了解適合導入哪種技術。</p>
+</blockquote>
+<p>答: 用什麼技術或是工具開發網站，我認為是其次，因為不管用什麼技術來開發，網站的本質都是一樣的，並不會因為某個網站用 VueJS 就寫得出來，用 React 或是 Angular 就寫不出來，當然反過來說也是。 程式是人寫出來的，技術選型首先考慮的是要不要使用框架，再來才是要使用什麼框架。</p>
+<p>專案有它本身的複雜度，當然工具以及其生態圈也是。 如果 jQuery 甚至原生的 JavaScript 就可以解決你的需求，那麼也許你並不需要前端框架。 如果硬要在對 Vue、React、Angular 都是零經驗的基礎下挑選，我認為你可以隨便挑一套，先從小型、無長期維護需求的活動專案或是自己的 side project 開始試著實作看看，總會試出一套適合自己的，如果要問我的意見，一定是建議先挑 Vue.js 來試試看囉。</p>
+<hr>
+<blockquote>
+<p>Q: 想請問前輩，如果遇到需要打掉重練（原：web layout刻板+jQ) 的問題，三種框架會怎麼引入或是怎麼解決呢（個人或顧問觀點）？ 如果帶新人，也是多以jQ為主的新人，要如何帶入框架的運用呢？（一口氣學完es6/TS，可能產能會降低一段時間 v.s. 如果有可能，一步步導入，……但如何操作呢？）</p>
+</blockquote>
+<p>答:
+這裡的問題我以 Vue.js 的角度來回答。 在舊專案 (假設原網站以 jQuery 開發) 的維護上，如果要轉換到 Vue.js 的話，首先可以採取以 <a href="https://vuejs.org/v2/guide/installation.html#CDN" target="_blank" rel="noopener">CDN 的方式</a> 來引進，用法完全與過去的 jQuery 一樣，把 Vue.js 引入 HTML 後 ，就可以直接在 <code>&lt;script&gt;</code> 區塊裡面寫 code 了。</p>
+<p>當然未來專案規模成長，就可以再進一步將 component 拆分出獨立的 <code>.vue</code> 檔案，會更好維護。 至於 ES6 與 TypeScript 方面，因為 Vue CLI v3 內建 babel，所以 ES6 可以無痛轉換，而 TypeScript 以目前的狀況來說，要在原有的舊專案引進 TypeScript 的轉換成本較高 (比起 ES5 -&gt; ES6 ，ES -&gt; TS 要重寫的部分會比較多) ，我會建議未來開新專案時再直接引進。</p>
+<hr>
+<blockquote>
+<p>Q: Vue背後沒有富爸爸。請問收掉的風險會不會比較大.</p>
+</blockquote>
+<p>答: 坦白說我滿意外這個問題有很多與會者關心。 雖說在 open source 的世界裡面沒有「收掉」這件事情，但確實有可能會「沒人繼續維護」，這點在 infoQ 最近對<a href="http://www.infoq.com/cn/news/2018/09/vue-v3-refactoring" target="_blank" rel="noopener">尤雨溪的專訪</a>中也有提及，像 Vue.js 這樣發展快速的年輕專案，相當依賴核心開發者是很正常的事，而 Vue.js 也漸漸朝向工程化的目標前進，就是<strong>期望未來可以減低這個專案對核心開發者的依賴</strong>，當有機會參與的人越多，這個開源的專案就有力量可以走得更長久。</p>
+<p>就目前的狀況，不管是 Vue.js 框架本身的<a href="https://vuejs.org/v2/guide/team.html" target="_blank" rel="noopener">開發者團隊</a>也好，甚至是<a href="https://www.vuemeetups.org/find/" target="_blank" rel="noopener">世界各地的聚會</a>組織， Vue.js 的生態圈都還在持續成長的狀態。 另外在短期幾年來看，Vue.js 的作者尤雨溪對 Vue.js 的維護應該會持續下去，而他本人也很享受目前身為獨立開發者的狀態。</p>
+<hr>
+<blockquote>
+<p>Q: 現職公司無使用三大框架但仍想接觸的人，該從什麼方向去練習專案開發</p>
+</blockquote>
+<p>答: 如同我前面所說，在三大框架都是零經驗的基礎下，開始可以隨便挑一套，先從小型、無長期維護需求的活動專案或是從自己的 side project 開始試著實作看看，覺得寫得下去就恭喜你，要是不合胃口就換一套。 總會試出一套適合自己的。</p>
+<hr>
+<blockquote>
+<p>Q: 無師自通那是頂尖高手在做的事情，但是對於時間有限的一般開發者來說，目前有哪些書籍、官方文件以外的學習資源。</p>
+</blockquote>
+<p>答: 以 Vue.js 來說，在台灣 Facebook 有 <a href="https://www.facebook.com/groups/vuejs.tw/" target="_blank" rel="noopener">Vue.js Taiwan 台灣</a> 社團，線上討論的熱度一直都有，歡迎加入。 書籍的部分，天瓏書局也有引進相當多 Vue.js 為主題的書 (<a href="https://www.tenlong.com.tw/categories/vuejs" target="_blank" rel="noopener">連結</a>) 可供參考。</p>
+<p>想要追最新資訊的話，這裡有 <a href="https://www.getrevue.co/profile/vuenewsletter" target="_blank" rel="noopener">Vue.js News</a> 可以訂閱。 如果沒有時間自己找資料的話，那麼挑選課程來學習也許是不錯的選擇。</p>
+<p>如果是線上課程，這裡我推薦六角學院的 <a href="https://www.hexschool.com/vue/" target="_blank" rel="noopener">Vue.js 課程</a>。</p>
+<p>當然如果你更偏好實體課程，覺得應該要面對面解決你的問題，那太好了，在台北的五倍紅寶石小弟我也有開設 <strong><a href="https://5xruby.tw/talks/vue-js/" target="_blank" rel="noopener">Vue.js 與 Vuex 前端開發實戰課程 - 假日班</a></strong>，<span style="color: #f00">最近一梯的開班日期就在九月下旬 (9/22) </span>喔。 (是業配廣告無誤，也是真心推薦)</p>
+<hr>
+<blockquote>
+<p>Q: 之前看過一篇文章，內容提到將來可能會有&quot;以web component作為中介，讓目前流行的三大前端框架技術在同一專案中的整合運用&quot;這樣的趨勢，例如在angular 中使用其他兩個技術所建立的web component。想請問講師們關於web component的使用趨勢、這種整合方式的優缺點之類的。謝謝講師們！</p>
+</blockquote>
+<p>答: 這個問題應該先回到 Web Component 的本質。 以網頁標準來說， Web Component 並不只是單一的規範，從 W3C 擬定的<a href="https://www.w3.org/standards/techs/components#w3c_all" target="_blank" rel="noopener">標準</a> 來看，可以知道 Web Component 至少有這四個部分：</p>
+<ul>
+<li>Custom Elements</li>
+<li>Shadow DOM</li>
+<li>HTML Templates</li>
+<li>HTML imports</li>
+</ul>
+<p>然而這四個規範的標準都是各自獨立的：像 Custom Elements 用來擴充 HTML 的語意，Shadow DOM 可以幫助我們封裝 DOM 與隔離元件之間的 CSS 樣式，HTML Templates 來達到 DOM 的動態生成，HTML imports 則是幫助我們引入外部的 HTML 內容。</p>
+<p>這些標準看起來似乎很美好，但我們面臨的最大挑戰是什麼？
+並不是「最新」的瀏覽器對標準的支援不足，而是我們需要「向下相容」的瀏覽器對這些標準的實作程度，所以我們需要前端框架。 像 React、Angular、Vue 這樣的主流前端框架就以「自己的方式」來實作 Web Component。</p>
+<p>讓我們回到問題。 就實作面來說，想以 Web Component 的標準作為中介整合各種前端工具，似乎還不可行。 但近期有個新的概念，叫「<a href="https://micro-frontends.org/" target="_blank" rel="noopener">Micro Frontends</a>, 微前端」，是從 Micro-services 的概念發展而來，並且應用至前端領域。</p>
+<p>當我們的網站服務應用大到一定程度的時候，這樣的架構可以幫助我們將各個功能模組獨立開發、運行、測試與部署。</p>
+<p>關於「微前端」的說明可以參考這兩篇文章：</p>
+<ul>
+<li><a href="https://blog.jimmylv.info/2017-12-24-tech-radar-microfrontends-extending-microservice-to-fed/" target="_blank" rel="noopener">技术雷达之「微前端」- 将微服务理念扩展到前端开发（上：理论篇）</a></li>
+<li><a href="https://blog.jimmylv.info/2017-12-24-tech-radar-microfrontends-extending-microservice-to-fed-next/" target="_blank" rel="noopener">技术雷达之「微前端」- 将微服务理念扩展到前端开发（下：实战篇）</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>Q: 怎麼樣才可以稱得上是資深前端工程師？是對瀏覽器的相容性很熟，還是對專案進展速度可以掌握？可以說說看你們認為的答案嗎</p>
+</blockquote>
+<p>答: 這個問題雖然與前端框架的關係不大，且每個人對「資深」的定義不盡相同。
+對我來說，至少要能做到獨力解決問題，並且能夠給團隊成員建議，以及對自我的要求，是資深工程師的基本要素。</p>
+<p>另外想推薦大家這篇，好友 jaceju 寫的 <a href="http://jaceju.net/2016-12-24-be-a-senior-engineer/" target="_blank" rel="noopener">如何才有資格稱為資深工程師</a> 一文。</p>
+<hr>
+<blockquote>
+<p>Q: Angular有雙向綁定，vue也以訂閱者/觀察者模式實踐雙向綁訂，需要理解背後的pattern再實做嗎？ **指新手盡量不要用到雙向綁定的做法？ ，還是框架設計出來用就對了，讓經驗慢慢理解…… 簡化問題，那種比較合適： “某天發現原來這是一個pattern” vs “先理解pattern才實做，否則盡量避免使用”</p>
+</blockquote>
+<p>答: 理解技術背後的實作細節絕對有助於專案的開發與除錯，但這並不是必備條件。 就好比我們學開車，沒必要非得理解引擎、輪胎是怎麼製造的之後才能學開車。</p>
+<p>以 Vue.js 來說，如果是新手學習，我的建議是先參照官方的 <a href="https://cn.vuejs.org/v2/guide/index.html" target="_blank" rel="noopener">教學文件</a> 以及 <a href="https://cn.vuejs.org/v2/style-guide/index.html" target="_blank" rel="noopener">Style Guide</a> 的幫助最大，至少在學習初期不會走偏。 熟悉了基礎知識後，再去慢慢理解 <a href="https://cn.vuejs.org/v2/guide/custom-directive.html" target="_blank" rel="noopener">Custom Directive</a>、以及 <a href="https://cn.vuejs.org/v2/guide/reactivity.html" target="_blank" rel="noopener">變化追蹤的原理</a> 甚至是 webpack 等外圍生態圈的相關知識，會是比較建議的學習路線。</p>
+<hr>
+<blockquote>
+<p>Q: Vue生態從早期是抽取angular某些功能（樣板語法/雙向綁定） ，到後期越來越往類似react的概念去構思核心 （redux-vuex,next.js-nuxt.js)，請問作為簡單上手的vue,如果往資深走的話，平時會選擇angular or react作為side project嗎？還是放手投入vue就好 😂</p>
+</blockquote>
+<p>答: 以技術選型的角度來看當然是多方嘗試更好，如果平時已經在用 Vue.js 作為主力開發，在 side project 可以改用 React、Angular 等其他前端框架來開發，這些工具之間雖然實作方式不同，但有不少概念是可以沿用的，在理解彼此的差異之後，對於未來做為技術選擇的參考會更有幫助。</p>
+<hr>
+<blockquote>
+<p>Q: 想要了解vue的原始碼以及架構模式，從何而學？</p>
+</blockquote>
+<p>答: 如果對 Vue.js 的原始碼有興趣的話，可以推薦 <a href="https://ustbhuangyi.github.io/vue-analysis/" target="_blank" rel="noopener">Vue.js 技术揭秘</a> 這個電子書，對於 Vue.js 的原始碼有相當詳細的解說。</p>
+<hr>
+<blockquote>
+<p>Q: 三套工具有幫助debug 的工具嗎</p>
+</blockquote>
+<p>答: Vue.js 有提供 <a href="https://github.com/vuejs/vue-devtools" target="_blank" rel="noopener">vue-devtools</a> 這個開發工具。</p>
+<hr>
+<blockquote>
+<p>Q: 遇到產品使不同框架的過渡期，會建議全部統一一個框架，還是繼續做維護就好？實務上有沒有可能一個產品同時使用不同的框架</p>
+</blockquote>
+<p>答: 原有的專案與新專案 (或是專案改版) 的技術選擇確實有可能會不一樣，以開發角度來說，如果前後端的職責拆分夠乾淨的話，不管使用什麼框架都不會影響到新舊專案之間的維護與開發。</p>
+<hr>
+<blockquote>
+<p>Q: 請問從 MPA 進展到 SPA （Angular/Vue/React）設計之下，GA(Google Analytics)/GTM(Google Tag Manager) 有哪些需要注意或改變的地方？</p>
+</blockquote>
+<p>答: MPA 與 SPA 在 Google Analytics 的用法基本上差異不大，比較需要特別注意的是，由於 SPA 的換頁其實是假的 (透過 HTML5 History API 操作)，所以在換頁的時候，需要注意 virtual pageviews 的追蹤。</p>
+<p>參考連結: <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications" target="_blank" rel="noopener">
+Single Page Application Tracking</a></p>
+<hr>
+<blockquote>
+<p>Q: 使用Vue的寫法與往常最大的差異在哪裡？</p>
+</blockquote>
+<p>答: Vue.js 與過去用 jQuery 這類工具最大的不同之處是在於對 DOM 操作思維的不同。
+過去用 jQuery 開發的時候，幾乎就是一行指令做一件事，雖然直覺，但是當專案規模慢慢變大，尤其像 SPA 的應用等，維護上是不容易的。</p>
+<p>而現代多數 MVVM 框架的開發模式，會把關注點放在資料/狀態的管理，畫面與資料的同步由工具來幫我們處理掉，開發者需要關注的是資料與狀態的部分。</p>
+<p>這裡可以參考我之前的投影片： <a href="https://speakerdeck.com/kurotanshi/jsdc2017-cong-vuejs-kan-qian-duan-sheng-tai-quan-de-fa-zhan-bian-hua" target="_blank" rel="noopener">[JSDC2017] 從 VueJS 看前端生態圈的發展變化</a>，以及 <a href="https://yami.io/jquery-to-vuejs/" target="_blank" rel="noopener">脫離資料分散的問題，從 jQuery 換到 Vue.js</a> 這篇文章。</p>
+<h2 id="最後再次工商服務"><a href="#最後再次工商服務" class="headerlink" title="最後再次工商服務"></a>最後再次工商服務</h2><p>這是我最近在五倍紅寶石開設的 VueJS 入門課程，時間在九月底。
+如果你對 VueJS 有興趣，卻總是不得其門而入，歡迎點此 <a href="https://5xruby.tw/talks/vue-js" target="_blank" rel="noopener">https://5xruby.tw/talks/vue-js</a> 報名參加，聽說目前有打折，而且折扣還不少喔。</p>
+<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F5xruby%2Fposts%2F890142061185403&width=500" width="500" height="440" style="border:none;overflow:hidden;max-width:100%;" scrolling="no" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+
+<hr>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>雖然前端框架這些年不斷推陳出新，但在面對這些百花繚亂的工具時，我認爲認清背後的本質是更重要的。
+<a href="https://blog.chunfuchao.com/?p=656&amp;variant=zh-tw" target="_blank" rel="noopener">一窩蜂</a>盲目地追求新技術，其實是沒有意義的。
+技術是為了解決問題而生，當我們在面對技術的時候，事實上我們應該要先面對問題本身。</p>
+<p>工具不會橫空出世，都是先有問題才有解決的方案。</p>
+<p>這個方案可能不夠完美，那個問題也許有很多種解法，那麼哪一種才是適合自己的呢？ 他們之間的優缺點以及各自的取捨又是什麼？ 回歸問題目的層面，先釐清目標是什麼，再回頭來看解決的手段。</p>
+<p><img src="/static/img/ent-f2e-trend.jpg"></p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/" data-id="ckcc5xini0031u1pwkagmry2s" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/vue-js/">vue.js</a><a href="/tags/react/">react</a><a href="/tags/angular/">angular</a><a href="/tags/企業前端框架趨勢論壇/">企業前端框架趨勢論壇</a></div><div class="post-nav"><a href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/" class="pre">談談 JavaScript 的 setTimeout 與 setInterval</a><a href="/posts/2018/09/07/Vue-js-與-CSS-Modules/" class="next">Vue.js 與 CSS Modules</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/';
+var disqus_title = "企業前端框架趨勢論壇之問與答遺珠";
+var disqus_url = 'https://kuro.tw/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget widget-ad"><div class="widget-title"><i class="fa fa-hand-o-right"> 工商服務</i></div><a href="https://www.tenlong.com.tw/products/9789864344130" title="著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！" target="_blank"><img src="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg" width="210"><h4 class="ad-header">著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！</h4></a><a href="//book.vue.tw" title="重新認識 Vue.js" target="_blank"><img src="/static/vue-badge.png" width="210"><h4 class="ad-header">重新認識 Vue.js (連載中，不定時更新)</h4></a><a href="https://5xruby.tw/talks/javascript/" title="課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/javascript-c0d1850e.jpg" width="210"><h4 class="ad-header">課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班</h4></a><a href="https://5xruby.tw/talks/vue-js/" title="課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg" width="210"><h4 class="ad-header">課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班</h4></a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/void/" style="font-size: 15px;">void</a> <a href="/tags/重新認識-JavaScript/" style="font-size: 15px;">重新認識 JavaScript</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/vue-3-0/" style="font-size: 15px;">vue 3.0</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a> <a href="/tags/vue-js-3-0/" style="font-size: 15px;">vue.js 3.0</a> <a href="/tags/Function-based-API/" style="font-size: 15px;">Function-based API</a> <a href="/tags/TypeScript/" style="font-size: 15px;">TypeScript</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/前端開發/" style="font-size: 15px;">前端開發</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/setTimeout/" style="font-size: 15px;">setTimeout</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/前端框架/" style="font-size: 15px;">前端框架</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/08/如何在-Vue-3-0-使用-EventBus/">如何在 Vue 3.0 使用 EventBus</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/06/Vue-3-0-升級紀錄/">Vue 3.0 升級紀錄</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/06/09/從國師級的專案看開發者的過失/">從國師級的專案看開發者的過失</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/">初探 Vue 3.0 Function-based API</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/04/JS-冷知識-你所不知道的-void/">JS 冷知識: 你所不知道的 void</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/07/31/談談前端框架/">談談前端框架</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/">談談 JavaScript 的 setTimeout 與 setInterval</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Letzte Kommentare</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0191206001" async></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.css"><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0191206001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0191206001"></script><script type="text/javascript" src="/js/smartresize.js?v=0191206001"></script></div></body></html>

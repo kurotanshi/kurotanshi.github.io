@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2018/09/07/Vue-js-與-CSS-Modules/index.html"><meta name="og:title" content="Vue.js 與 CSS Modules"><meta name="og:description" content="&lt;p&gt;去年我寫了一篇「&lt;a href=&quot;/posts/2017/07/26/%E5%BE%9EVue%E4%BE%86%E7%9C%8BCSS%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88%E7%9A%84%E7%99%BC%E5%B1%95/&quot;&gt;從 Vue 來看 CSS 管理方案的發展&lt;/a&gt;」來談現代主流前端框架對 CSS 的各種處理方案，相信對 Vue.js 已經熟悉的朋友，都知道 Vue file 裡面是透過「Scoped CSS」也就是 &lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt; 內的 &lt;code&gt;scoped&lt;/code&gt; 屬性來隔離 component 之間的樣式規則。&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>Vue.js 與 CSS Modules | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Vue.js 與 CSS Modules</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Vue.js 與 CSS Modules</h1><div class="post-meta">2018-09-07 14:19<span> | </span><span class="category"><a href="/categories/vue-js/">vue.js</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2018/09/07/Vue-js-與-CSS-Modules/" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>去年我寫了一篇「<a href="/posts/2017/07/26/%E5%BE%9EVue%E4%BE%86%E7%9C%8BCSS%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88%E7%9A%84%E7%99%BC%E5%B1%95/">從 Vue 來看 CSS 管理方案的發展</a>」來談現代主流前端框架對 CSS 的各種處理方案，相信對 Vue.js 已經熟悉的朋友，都知道 Vue file 裡面是透過「Scoped CSS」也就是 <code>&lt;style&gt;</code> 內的 <code>scoped</code> 屬性來隔離 component 之間的樣式規則。</p>
+<a id="more"></a>
+<p>即便如此，<a href="https://vue-loader.vuejs.org/guide/" target="_blank" rel="noopener">Vue-Loader</a> 在 v9.8.0 之後也內建了 CSS Modules 的整合，提供開發者另一種不同的 scoped CSS 替代方案。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CSS Modules 的概念，我想最早大約可以從 2013、14 年左右說起。</p>
+<p>當時前端領域可以說是進入了前所未見的爆炸發展，JavaScript 各種框架如雨後春筍般冒出，而 CSS 的管理卻沒有一個好的方式，很大的原因在於 CSS 的程式化與 JavaScript 比較其實是相對困難的，至少在命名管理以及 CSS 的有效範圍 Scope 一直是 web 開發者長年的夢靨。 工具方面，雖然有 LESS、SASS、Stylus 這類的預處理器 (preprocessor) 來幫助我們做到繼承、重用、複寫等功能，然而即便是這樣，global scoped CSS 的問題卻始終沒有一個好的解決辦法。</p>
+<p>當然，也有另一派人馬提倡的是，由 CSS 的命名學 / 架構論 來達到 CSS 模組的管理與複用，如 OOCSS、SMACSS、BEM 等。</p>
+<p>不過遺憾的是，人性天生就是懶，像 BEM <del>這麼囉唆</del>的命名方式天生就違反人性。 規範一旦沒有嚴格遵守，那就跟沒有一樣，更不用說手動處理還可能出錯。</p>
+<p>於是後來在 React 陣營就出現了 <a href="https://github.com/css-modules/css-modules" target="_blank" rel="noopener">CSS Modules</a> 這類的解決方案 [註]，透過工具來處理那些人工手動處理命名規範要做的事。 也就是說，由 webpack 做了 BEM 的事情，過去 BEM 是人工手動做，而 webpack 是交給工具自動化做，以類似 Javascript module 的方式來處理 CSS，簡化了人工流程，也減少了手動犯錯的機會。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>幸運的是，Vue-loader 在 v9.8.0 之後，CSS Modules 已經內建整合到我們的開發環境了。 所以當我們透過 vue-cli v3 執行 <code>vue create [專案名稱]</code> 建立專案後，完全無須多餘的設定，就可以直接來使用 CSS Modules。</p>
+<p>使用的方式很簡單，我們只要在 <code>&lt;style&gt;</code> 加上 <code>module</code> 屬性，如：</p>
+<pre><code class="html">&lt;style module&gt;
+.red {
+  color: red;
+}
+&lt;/style&gt;
+</code></pre>
+<p>然後，我們在 <code>template</code> 裡面這樣寫：</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;h1 :class=&quot;$style.red&quot;&gt;Hello Vue!&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<p><img src="/static/img/css-modules/css-modules-1.png"></p>
+<p>這時候，我們打開 console 來觀察，就會發現模板上的 <code>:class=&quot;$style.red&quot;</code> 會被 <a href="https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler#readme" target="_blank" rel="noopener">vue-template-compiler</a> 編譯成為 <code>App_red_DWJpy</code> 這個 class，並且在 <code>style</code> 也自動生成對應的樣式規則。</p>
+<p>但是這裡要特別注意的是，如果你在 css modules 裡面的取名有分隔線，如:</p>
+<pre><code class="html">&lt;style module&gt;
+.title-color {
+  color: red;
+}
+&lt;/style&gt;
+</code></pre>
+<p>在透過 <code>$style</code> 取用的時候，如果寫成 <code>$style.title-color</code> 這是一個不合法的 JS 變數名稱，而且也不能寫成 <code>$style.titleColor</code>，只能透過 <code>$style[&quot;title-color&quot;]</code> 的方式來取得。</p>
+<p>上面說的 <code>module</code> 屬性會經由 Vue-Loader 編譯後，在我們的 component 產生一個叫 <code>$style</code> 的隱藏 computed 屬性。
+換句話說，我們甚至可以在 <code>script</code> 裡面取得由 CSS Modules 生成的 class 名稱：</p>
+<pre><code class="html">&lt;script&gt;
+export default {
+  created () {
+    console.log(this.$style.red);  // App_red_DWJpy
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<p>反過來說，我們當然也可以利用這種特性，在 <code>template</code> 這樣寫：</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;p :class=&quot;{ [$style.blue]: isBlue }&quot;&gt;Am I blue?&lt;/p&gt;
+    &lt;p :class=&quot;[$style.red, $style.bold]&quot;&gt;Red and bold&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<pre><code class="html">&lt;script&gt;
+export default {
+  name: &#39;app&#39;,
+  data (){
+    return {
+      isBlue: true
+    }
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<pre><code class="html">&lt;style module&gt;
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+.bold {
+  font-weight: bold;
+}
+&lt;/style&gt;
+</code></pre>
+<p><img src="/static/img/css-modules/css-modules-2.png"></p>
+<p>如上圖，當 <code>data</code> 裡的 <code>isBlue</code> 屬性為 <code>true</code> 時，「Am I blue?」的字樣就會新增對應的 class 變成藍色。</p>
+<p>甚至透過 <code>props</code> 將 class 傳入子層元件也是可以的，像這樣：</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;img alt=&quot;Vue logo&quot; src=&quot;./assets/logo.png&quot;&gt;
+    &lt;HelloWorld
+      msg=&quot;Welcome to Your Vue.js App&quot;
+      :titleClass=&quot;$style.titleColor&quot;
+    /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<pre><code class="html">&lt;style module&gt;
+.titleColor{
+  color: #f00;
+}
+&lt;/style&gt;
+</code></pre>
+<p>子層元件 <code>HelloWorld.vue</code> ：</p>
+<pre><code class="html">&lt;script&gt;
+export default {
+  name: &#39;HelloWorld&#39;,
+  props: {
+    msg: String,
+    titleClass: String
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<pre><code class="html">&lt;template&gt;
+  &lt;div class=&quot;hello&quot;&gt;
+    &lt;h1 :class=&quot;titleClass&quot;&gt;{{ msg }}&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<p>像這樣，我們就可以在 <code>template</code> 用 vue 的 class binding 語法來處理樣式了。
+這也意味著我們在控制樣式的時候，可以更輕鬆地利用程式來組織。</p>
+<hr>
+
+<p>如果我們想要在 JavaScript 裡面將獨立的 css 檔案作為 CSS Modules 來載入的話，要記得在檔名加上 <code>.module.</code> 的前綴，如：</p>
+<pre><code class="js">import styles from &#39;./foo.module.css&#39;
+</code></pre>
+<p>當然透過像 less/sass/scss/stylus 等預處理器編譯的文件也是 (相關 loader 要另行安裝) ：</p>
+<pre><code class="js">// works for all supported pre-processors as well
+import sassStyles from &#39;./foo.module.scss&#39;
+</code></pre>
+<p>如果不想在檔名加入 <code>.module.</code> 的前綴，則可以在 <code>vue.config.js</code> 裡面的 <code>css.modules</code> 設定為 <code>true</code>：</p>
+<pre><code class="js">// vue.config.js
+module.exports = {
+  css: {
+    modules: true
+  }
+}
+</code></pre>
+<p>以上就是在 Vue 的開發流程中使用 CSS Modules 的簡單介紹，關於 CSS Modules 的更多特性，大家可以參考這份 <a href="https://github.com/css-modules/css-modules" target="_blank" rel="noopener">官方文件</a> 會有更多詳細的說明。</p>
+<h2 id="工商服務插播"><a href="#工商服務插播" class="headerlink" title="工商服務插播"></a>工商服務插播</h2><p>這是我最近在五倍紅寶石開設的 VueJS 入門課程，時間在九月底。
+如果你對 VueJS 有興趣，卻總是不得其門而入，歡迎點此 <a href="https://5xruby.tw/talks/vue-js" target="_blank" rel="noopener">https://5xruby.tw/talks/vue-js</a> 報名參加，聽說早鳥票有打折，而且折扣還不少。</p>
+<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F5xruby%2Fposts%2F890142061185403&width=500" width="500" height="440" style="border:none;overflow:hidden;max-width:100%;" scrolling="no" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>不管是 Scoped Style 或是 CSS Modules ，其實都可以發現它們在使用上相當簡單，也在某種程度上解決了同樣的問題。 就開發上來說，Scoped Style 可以帶來完全無痛的開發體驗，在 <code>&lt;style&gt;</code> 加個 <code>scoped</code> 就可以隔離 component 之間的樣式。</p>
+<p>但是當 css style 需要在多個 component 被 reuse 的時候，Scoped Style 在這方面反而顯得有些力不從心。 這時 CSS Modules 的出現，正好解決了這個問題，代價就是需要透過 <code>$style</code> 這個被生成的屬性來控制。 當然，適合的場景不同，彼此之間各有優缺點，端看當時專案的規模與需求來挑選使用就可以了。</p>
+<hr>
+
+<p>註： 有人整理了一份 CSS-in-JS 的各種方案比較： <a href="https://github.com/MicheleBertoli/css-in-js" target="_blank" rel="noopener">https://github.com/MicheleBertoli/css-in-js</a> ，<a href="https://github.com/css-modules/css-modules" target="_blank" rel="noopener">CSS Modules</a> 也是其中之一。 如果你對 CSS-in-JS 有興趣的話，這裏推薦閱讀這篇 <a href="https://hackernoon.com/all-you-need-to-know-about-css-in-js-984a72d48ebc" target="_blank" rel="noopener">All You Need To Know About CSS-in-JS</a> 非常徹底地解釋了各種關於 CSS-in-JS 的原理與想法。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2018/09/07/Vue-js-與-CSS-Modules/" data-id="ckcc5ximd000au1pwi2exb7i8" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/vue-js/">vue.js</a><a href="/tags/CSS-Modules/">CSS Modules</a></div><div class="post-nav"><a href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/" class="pre">企業前端框架趨勢論壇之問與答遺珠</a><a href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/" class="next">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2018/09/07/Vue-js-與-CSS-Modules/';
+var disqus_title = "Vue.js 與 CSS Modules";
+var disqus_url = 'https://kuro.tw/posts/2018/09/07/Vue-js-與-CSS-Modules/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget widget-ad"><div class="widget-title"><i class="fa fa-hand-o-right"> 工商服務</i></div><a href="https://www.tenlong.com.tw/products/9789864344130" title="著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！" target="_blank"><img src="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg" width="210"><h4 class="ad-header">著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！</h4></a><a href="//book.vue.tw" title="重新認識 Vue.js" target="_blank"><img src="/static/vue-badge.png" width="210"><h4 class="ad-header">重新認識 Vue.js (連載中，不定時更新)</h4></a><a href="https://5xruby.tw/talks/javascript/" title="課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/javascript-c0d1850e.jpg" width="210"><h4 class="ad-header">課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班</h4></a><a href="https://5xruby.tw/talks/vue-js/" title="課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg" width="210"><h4 class="ad-header">課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班</h4></a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/void/" style="font-size: 15px;">void</a> <a href="/tags/重新認識-JavaScript/" style="font-size: 15px;">重新認識 JavaScript</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/vue-3-0/" style="font-size: 15px;">vue 3.0</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a> <a href="/tags/vue-js-3-0/" style="font-size: 15px;">vue.js 3.0</a> <a href="/tags/Function-based-API/" style="font-size: 15px;">Function-based API</a> <a href="/tags/TypeScript/" style="font-size: 15px;">TypeScript</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/前端開發/" style="font-size: 15px;">前端開發</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/setTimeout/" style="font-size: 15px;">setTimeout</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/前端框架/" style="font-size: 15px;">前端框架</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/08/如何在-Vue-3-0-使用-EventBus/">如何在 Vue 3.0 使用 EventBus</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/06/Vue-3-0-升級紀錄/">Vue 3.0 升級紀錄</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/06/09/從國師級的專案看開發者的過失/">從國師級的專案看開發者的過失</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/">初探 Vue 3.0 Function-based API</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/04/JS-冷知識-你所不知道的-void/">JS 冷知識: 你所不知道的 void</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/07/31/談談前端框架/">談談前端框架</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/">談談 JavaScript 的 setTimeout 與 setInterval</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Letzte Kommentare</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0191206001" async></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.css"><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0191206001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0191206001"></script><script type="text/javascript" src="/js/smartresize.js?v=0191206001"></script></div></body></html>

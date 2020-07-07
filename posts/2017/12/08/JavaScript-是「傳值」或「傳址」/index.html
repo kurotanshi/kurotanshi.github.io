@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2017/12/08/JavaScript-是「傳值」或「傳址」/index.html"><meta name="og:title" content="JavaScript 是「傳值」或「傳址」"><meta name="og:description" content="&lt;p&gt;JavaScript 基本型別 (Primitives) 內的資料，會是以&lt;strong&gt;純值&lt;/strong&gt;的形式存在 ( &lt;code&gt;String&lt;/code&gt;、&lt;code&gt;Number&lt;/code&gt;、&lt;code&gt;Boolean&lt;/code&gt;、&lt;code&gt;Null&lt;/code&gt; 以及 &lt;code&gt;Undefined&lt;/code&gt; )，而物件型別 (Object) 指的是可能由零或多種不同型別 (包括純值與物件) 所組合成的物件。&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>JavaScript 是「傳值」或「傳址」 | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">JavaScript 是「傳值」或「傳址」</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">JavaScript 是「傳值」或「傳址」</h1><div class="post-meta">2017-12-08 19:29<span> | </span><span class="category"><a href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2017/12/08/JavaScript-是「傳值」或「傳址」/" href="/posts/2017/12/08/JavaScript-是「傳值」或「傳址」/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>JavaScript 基本型別 (Primitives) 內的資料，會是以<strong>純值</strong>的形式存在 ( <code>String</code>、<code>Number</code>、<code>Boolean</code>、<code>Null</code> 以及 <code>Undefined</code> )，而物件型別 (Object) 指的是可能由零或多種不同型別 (包括純值與物件) 所組合成的物件。</p>
+<a id="more"></a>
+<h2 id="基本型別"><a href="#基本型別" class="headerlink" title="基本型別"></a>基本型別</h2><p>當我們今天要給變數資料的時候，假設我們給兩個變數分別設定為 <code>10</code>：</p>
+<pre><code class="javascript">var a = 10;
+var b = 10;
+
+// 在 JavaScript 判斷是否「相等」用 === 
+console.log( a === b );      // true
+</code></pre>
+<p>在基本型別的時候，會認為這兩個變數的「值」是相等的。 這應該不難理解，因為兩個變數的數值都是 <code>10</code>。
+同樣地，在字串的情況下也是：</p>
+<pre><code class="javascript">var a = &#39;Kuro&#39;;
+var b = &#39;Kuro&#39;;
+var c = &#39;Jack&#39;;
+
+console.log( a === b );      // true
+console.log( a === c );      // false
+</code></pre>
+<p>所以在基本型別，當我們判斷這兩個變數是否相等，看的是裡面的內容，也就是「值」。</p>
+<h2 id="物件型別"><a href="#物件型別" class="headerlink" title="物件型別"></a>物件型別</h2><p>在物件型別的狀況下就不同了。
+這裡我們分別宣告兩個物件，也都有個 <code>value</code> 的屬性。</p>
+<pre><code class="javascript">var obj1 = { value: 10 };
+var obj2 = { value: 10 };
+</code></pre>
+<p>猜猜看， <code>obj1 === obj2</code> 的結果會是？</p>
+<p>. <br>
+. <br>
+. <br>
+. <br>
+. <br>
+. <br></p>
+<p>答案會是 <code>false</code> 。  <del>想當然如果是 true 我就不用另外寫這篇了</del>
+剛接觸 JavaScript 的朋友可能無法理解這點，沒關係，我們繼續往下看。</p>
+<p>在 JavaScript 的物件，我們可以把它看作是一個「實體 (instance)」，什麼意思呢，這裡我舉個例子。</p>
+<p>假設我口袋裡有十塊錢，你口袋裡也有十塊錢。 <del>這樣我們就有二十塊錢（不是</del> </p>
+<p>那麼在正常情況下，我們各自的十塊錢 <strong>可以買到的東西應該是一樣多的</strong> 對吧？ 這個時候，我可以說我們各自的十塊錢是「<strong>等值</strong>」的。 用程式碼來說，就像這樣：</p>
+<pre><code class="javascript">var a = 10;
+var b = 10;
+
+console.log( a === b );      // true
+</code></pre>
+<p>那麼在「物件」的情況下呢？
+剛剛說 JavaScript 的物件都應該看作是一個「<strong>實體</strong>」。</p>
+<p>以「實體」的前提下，假設我在我口袋裡的十塊錢用麥克筆上面打個 <code>X</code>，<del>除非我是劉謙</del>，此時你口袋的十塊錢應該是不可能有 <code>X</code> 的記號對吧？</p>
+<pre><code class="javascript">// 兩個 coin 的價值都是 10，但 coin1 與 coin2 卻不是同一個實體。
+var coin1 = { value: 10 };
+var coin2 = { value: 10 };
+
+console.log( coin1 === coin2 );      // false
+
+// 我在 coin1 畫了一個 X
+coin1.cross = true;
+
+// coin2.cross 當然不可能會有東西
+console.log( coin2.cross );          // undefined
+</code></pre>
+<p>當然 JavaScript 的物件沒這麼單純，這裡暫時用極簡化的例子幫助各位理解。</p>
+<h2 id="變數的更新與傳遞"><a href="#變數的更新與傳遞" class="headerlink" title="變數的更新與傳遞"></a>變數的更新與傳遞</h2><p>既然大家都知道，「變數」裡面的內容是可以被變動，那麼在理解了「基本型別」與「物件型別」在比較時的不同後，接著就來聊聊變數的更新與傳遞，這部分我們一樣分成「基本型別」與「物件型別」兩種來看。</p>
+<h3 id="基本型別的更新與傳遞"><a href="#基本型別的更新與傳遞" class="headerlink" title="基本型別的更新與傳遞"></a>基本型別的更新與傳遞</h3><p>還記得十塊錢的範例嗎，如同稍早所說，在基本型別的變數中，我們看的是變數裡頭的「值」。 換言之，我們在複製變數的時候，複製的也是那個變數的「值」：</p>
+<pre><code class="javascript">var a = 10;
+var b = a;
+
+console.log( a );   // 10
+console.log( b );   // 10
+</code></pre>
+<p>可以看到，變數 <code>b</code> 的值是透過複製變數 <code>a</code> 的值而來。</p>
+<p>但並不代表當變數 <code>a</code> 更新之後，會去影響變數 <code>b</code> 的數值：</p>
+<pre><code class="javascript">a = 100;
+
+// 變數 b 依然是 10，而變數 a 變成了 100
+console.log( a );   // 100
+console.log( b );   // 10
+</code></pre>
+<p>簡單來說， <code>var b = a;</code> 表面上看起來變數 <code>b</code> 的內容是透過複製變數 <code>a</code> 而來，但此時若變數 <code>a</code> 的內容為基本型別時，實際上變數 <code>b</code> 是去建立了一個新的值，然後將變數 <code>a</code> 的內容複製了一份過來。</p>
+<p>這時候 <code>a</code> 與 <code>b</code> 各自是獨立的。</p>
+<p>所以當變數 <code>a</code> 的內容後來經過更新變成 <code>100</code> 之後，變數 <code>b</code> 的內容依舊保持原來的 <code>10</code> 而不受影響。</p>
+<p>像這種情況，我們通常會稱作「<strong>傳值</strong>」 (<strong>pass by value</strong>)。</p>
+<h3 id="物件型別的更新與傳遞"><a href="#物件型別的更新與傳遞" class="headerlink" title="物件型別的更新與傳遞"></a>物件型別的更新與傳遞</h3><p>那麼換成了物件型別呢？
+讓我們回到剛剛 coin 的例子，並且稍微修改一下：</p>
+<pre><code class="javascript">var coin1 = { value: 10 };
+var coin2 = coin1;
+
+console.log( coin1.value );       // 10
+console.log( coin2.value );       // 10
+</code></pre>
+<p>乍看之下與前面基本型別 (純值) 的情況沒什麼不同，但是：</p>
+<pre><code class="javascript">coin1.value = 100;
+
+console.log( coin1.value );       // 100
+console.log( coin2.value );       // 100
+</code></pre>
+<p>當 <code>coin1.value</code> 的內容被更新了之後，連帶著 <code>coin2.value</code> 卻也跟著更新了。</p>
+<p>而且此時，你透過 <code>===</code> 去檢查兩者實體時，會發現 <code>coin1</code> 與 <code>coin2</code> 實際上是同一個實體！</p>
+<pre><code class="javascript">console.log( coin1 === coin2 );    // true
+</code></pre>
+<p>聰明的你應該已經猜到，其實「物件」這類資料型態，在 JavaScript 中是透過「引用」的方式傳遞資料的。</p>
+<p>什麼意思？ 這裡我用兩張圖來表示：</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20171208/200655041RlwNOp0RU.png" alt="JavaScript Object 示意圖 - 1"></p>
+<pre><code class="javascript">var coin1 = { value: 10 };
+</code></pre>
+<p>首先我們建立起一個新的物件的時候，JavaScript 會在記憶體的某處建立起一個物件 (圖右側)，然後再將這個 <code>coin1</code> 變數指向新生成的物件。</p>
+<p><img src="https://ithelp.ithome.com.tw/upload/images/20171208/200655046SEcyZbNfA.png" alt="JavaScript Object 示意圖 - 2"></p>
+<pre><code class="javascript">var coin2 = coin1;
+</code></pre>
+<p>接著，當我們宣告了第二個變數 <code>coin2</code> 之後，並且透過 <code>=</code> 將 <code>coin2</code> 指向 <code>coin1</code> 的位置。 於是我們更新了 <code>coin1.value</code> 的內容後， <code>coin2.value</code> 的內容也理所當然地被更新了。</p>
+<pre><code class="javascript">coin1.value = 100;
+
+console.log( coin1.value );       // 100
+console.log( coin2.value );       // 100
+</code></pre>
+<p>所以實際上可以看出，<code>coin1</code> 與 <code>coin2</code> 這兩個變數是指向同一個實體的。</p>
+<p>像這種透過引用的方式來傳遞資料，接收的其實是引用的「參考」而不是值的副本時，
+我們通常會稱作「<strong>傳址</strong>」 (<strong>pass by reference</strong>)。</p>
+<h2 id="JavaScript-是「傳值」或「傳址」？"><a href="#JavaScript-是「傳值」或「傳址」？" class="headerlink" title="JavaScript 是「傳值」或「傳址」？"></a>JavaScript 是「傳值」或「傳址」？</h2><p>回到主題，所以我說那個 JavaScript 是「傳值」或「傳址」呢？</p>
+<p>在大多數的情況下，基本型別是「傳值」，而物件型別會是「傳址」的方式，但<strong>凡事都有例外</strong>。</p>
+<p>我們來看看下面這個例子：</p>
+<pre><code class="javascript">var coin1 = { value: 10 };
+
+function changeValue(obj) {
+  obj = { value: 123 };
+}
+
+changeValue(coin1);
+console.log(coin1);   // ？
+</code></pre>
+<p>猜猜看，經過 <code>changeValue(coin1)</code> 操作後的 <code>coin1</code> 會是什麼？</p>
+<p>答案仍是 <code>{ value: 10 }</code> 。</p>
+<p>剛剛說過，物件型別會是「傳址」的方式來更新資料，那應該會是 <code>{ value: 123 }</code> 才對，為什麼依然不變？</p>
+<p>事實上，JavaScript 不屬於單純的傳值或傳址。
+更準確一點來說，JavaScript 應該屬於透過 <strong>pass by sharing</strong> (還沒找到合適的中文翻譯) 來傳遞資料。</p>
+<p>「傳值」或「傳址」對大多數的開發者來說應該都不陌生，那麼「<strong>pass by sharing</strong>」又是什麼呢？</p>
+<h2 id="Pass-by-sharing"><a href="#Pass-by-sharing" class="headerlink" title="Pass by sharing"></a>Pass by sharing</h2><p>「Pass by sharing」的特點在於，當 <code>function</code> 的參數，如 <code>function changeValue(obj){ ... }</code> 中的 <code>obj</code> 被重新賦值的時候，外部變數的內容是不會被影響的。</p>
+<pre><code class="javascript">var coin1 = { value: 10 };
+
+function changeValue(obj) {
+  obj = { value: 123 };
+}
+
+changeValue(coin1);
+console.log(coin1);   // 此時 coin1 仍是 { value: 10 }
+</code></pre>
+<p>如果不是重新賦值的情況，則又會回到大家所熟悉的狀況：</p>
+<pre><code class="javascript">var coin1 = { value: 10 };
+
+function changeValue(obj) {
+  // 僅更新 obj.value，並未重新賦值
+  obj.value = 123;
+}
+
+changeValue(coin1);
+console.log(coin1);   // 此時 coin1 則會變成 { value: 123 }
+</code></pre>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>所以 JavaScript 到底屬於何種策略？ 我認為 JavaScript 應該更屬於 <strong>Pass by sharing</strong> 的形式。</p>
+<p>參考 <a href="http://dmitrysoshnikov.com/ecmascript/chapter-8-evaluation-strategy/" target="_blank" rel="noopener">ECMA-262-3 in detail. Chapter 8. Evaluation strategy</a> 所說：</p>
+<blockquote>
+<p>Regardless of usage concept of reference in this case, this strategy should not be confused with the “call by reference” discussed above. <strong>The value of the argument is not a direct alias, but the copy of the address.</strong></p>
+</blockquote>
+<p>由於在 JavaScript 的物件類型是可變的 (mutable)，當物件更新時，會影響到所有引用這個物件的變數與其副本，修改時會變動到原本的參考，但當賦與新值時，會產生新的實體參考。</p>
+<p>而基本型別則是不可變的 (immutable)，當你更新了某個基本型別的值時，與那個值的副本完全無關：</p>
+<pre><code>var a = 10;
+var b = a;
+
+a = 100;
+
+console.log(a);     // 100
+console.log(b);     // 10
+</code></pre><p>這個時候在基本型別的操作下，以 Pass by sharing 的行為來說，與 Pass by value 的結果是完全一樣的，修改時永遠只能賦與新值。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2017/12/08/JavaScript-是「傳值」或「傳址」/" data-id="ckcc5xim80005u1pwp594fom1" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/javascript/">javascript</a><a href="/tags/重新認識-JavaScript/">重新認識 JavaScript</a></div><div class="post-nav"><a href="/posts/2018/01/02/寫在-IT-鐵人完賽之後/" class="pre">寫在 IT 鐵人完賽之後</a><a href="/posts/2017/10/20/What-is-THIS-in-JavaScript-下/" class="next">What's THIS in JavaScript ? [下]</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2017/12/08/JavaScript-是「傳值」或「傳址」/';
+var disqus_title = "JavaScript 是「傳值」或「傳址」";
+var disqus_url = 'https://kuro.tw/posts/2017/12/08/JavaScript-是「傳值」或「傳址」/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget widget-ad"><div class="widget-title"><i class="fa fa-hand-o-right"> 工商服務</i></div><a href="https://www.tenlong.com.tw/products/9789864344130" title="著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！" target="_blank"><img src="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg" width="210"><h4 class="ad-header">著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！</h4></a><a href="//book.vue.tw" title="重新認識 Vue.js" target="_blank"><img src="/static/vue-badge.png" width="210"><h4 class="ad-header">重新認識 Vue.js (連載中，不定時更新)</h4></a><a href="https://5xruby.tw/talks/javascript/" title="課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/javascript-c0d1850e.jpg" width="210"><h4 class="ad-header">課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班</h4></a><a href="https://5xruby.tw/talks/vue-js/" title="課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg" width="210"><h4 class="ad-header">課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班</h4></a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/void/" style="font-size: 15px;">void</a> <a href="/tags/重新認識-JavaScript/" style="font-size: 15px;">重新認識 JavaScript</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/vue-3-0/" style="font-size: 15px;">vue 3.0</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a> <a href="/tags/vue-js-3-0/" style="font-size: 15px;">vue.js 3.0</a> <a href="/tags/Function-based-API/" style="font-size: 15px;">Function-based API</a> <a href="/tags/TypeScript/" style="font-size: 15px;">TypeScript</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/前端開發/" style="font-size: 15px;">前端開發</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/setTimeout/" style="font-size: 15px;">setTimeout</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/前端框架/" style="font-size: 15px;">前端框架</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/08/如何在-Vue-3-0-使用-EventBus/">如何在 Vue 3.0 使用 EventBus</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/06/Vue-3-0-升級紀錄/">Vue 3.0 升級紀錄</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/06/09/從國師級的專案看開發者的過失/">從國師級的專案看開發者的過失</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/">初探 Vue 3.0 Function-based API</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/04/JS-冷知識-你所不知道的-void/">JS 冷知識: 你所不知道的 void</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/07/31/談談前端框架/">談談前端框架</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/">談談 JavaScript 的 setTimeout 與 setInterval</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Letzte Kommentare</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0191206001" async></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.css"><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0191206001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0191206001"></script><script type="text/javascript" src="/js/smartresize.js?v=0191206001"></script></div></body></html>

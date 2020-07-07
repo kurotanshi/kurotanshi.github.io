@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="zh-tw"><head><meta name="generator" content="Hexo 3.9.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="author" content="Kuro Hsu"><meta name="description" content="Kuro's Blog 隨手寫寫，就是個人的筆記。"><meta name="google-site-verification" content="msMMdpsoBYL6QNQFfgoKGAWGxd5aUWmVElYZKJzPWCw"><meta name="og:url" content="https://kuro.tw/posts/2017/09/21/JSDC-全台最大-JS-研討會前直播上線啦！/index.html"><meta name="og:title" content="[JSDC] 全台最大 JS 研討會前直播上線啦！"><meta name="og:description" content="&lt;p&gt;先感謝 JSDC 團隊邀請，這次的直播企劃真的是超快閃，週一晚上接到邀請，週二花了一個小時喬 rundown，然後週三晚上就直接上了，幾乎是沒什麼準備的機會，超刺激。還好直播中沒有什麼太大的意外，也謝謝來自各方的觀眾願意來聽我這個大叔練肖威。&lt;/p&gt;"><meta name="og:type" content="website"><meta name="og:image" content="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg?0191206001"><title>[JSDC] 全台最大 JS 研討會前直播上線啦！ | Kuro's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0191206001"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css"><link rel="stylesheet" href="//highlightjs.org/static/demo/styles/mono-blue.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create','UA-27126624-1','auto');ga('send','pageview');
+</script><script>$(document).ready(function(){
+    var trim_indent = true;
+    var line_number = true;
+    // enable highlight
+    $('pre code').each(function(i, block) {
+      if( $(block).hasClass('shell') ) return;
+
+      var texts = $(this).text().split('\n');
+       // trim indent
+       if (trim_indent){
+        var tab = texts[0].match(/^\s{0,}/);
+        if (tab) {
+          var arr = [];
+          texts.forEach(function(temp) { arr.push(temp.replace(tab, '')); });
+          $(this).text(arr.join('\n'));
+        }
+      }
+
+      // add line number
+      if (line_number) {
+        var lines = texts.length - 1;
+        var $numbering = $('<ul/>').addClass('pre-numbering');
+        $(this).addClass('has-numbering').parent().append($numbering);
+        for (i = 1; i <= lines; i++) {
+          $numbering.append($('<li/>').text(i));
+        }
+      }
+      // hightlight
+      hljs.configure({languages: []});
+      hljs.highlightBlock(block);
+    });
+});</script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">[JSDC] 全台最大 JS 研討會前直播上線啦！</h1><a id="logo" href="/.">Kuro's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">[JSDC] 全台最大 JS 研討會前直播上線啦！</h1><div class="post-meta">2017-09-21 01:57<span> | </span><span class="category"><a href="/categories/JSDC/">JSDC</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="posts/2017/09/21/JSDC-全台最大-JS-研討會前直播上線啦！/" href="/posts/2017/09/21/JSDC-全台最大-JS-研討會前直播上線啦！/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>先感謝 JSDC 團隊邀請，這次的直播企劃真的是超快閃，週一晚上接到邀請，週二花了一個小時喬 rundown，然後週三晚上就直接上了，幾乎是沒什麼準備的機會，超刺激。還好直播中沒有什麼太大的意外，也謝謝來自各方的觀眾願意來聽我這個大叔練肖威。</p>
+<a id="more"></a>
+<p>這次直播主要就是做個簡單的訪談，跟大家聊聊出社會這些年來是怎麼踏入前端領域的過程。
+<del>順便宣傳一下我今年在 JSDC 分享的議程主題這樣。</del></p>
+<p>JSDC 報名傳送門： <a href="https://jsdc-tw.kktix.cc/events/jsdc2017" target="_blank" rel="noopener">https://jsdc-tw.kktix.cc/events/jsdc2017</a></p>
+<p>可能中間有些胡言亂語的部分，就請大家多包涵。
+這裏就透過這篇文章簡單做個紀錄，也補充在直播沒提到的東西。</p>
+<p><img src="/static/img/jsdc-live01.png"></p>
+<h3 id="一整個鬧到不行的宣傳圖"><a href="#一整個鬧到不行的宣傳圖" class="headerlink" title="一整個鬧到不行的宣傳圖"></a>一整個鬧到不行的宣傳圖</h3><h3 id="那些在直播裡面「加油好嗎」的屁話我就不在這邊紀錄了-XD"><a href="#那些在直播裡面「加油好嗎」的屁話我就不在這邊紀錄了-XD" class="headerlink" title="那些在直播裡面「加油好嗎」的屁話我就不在這邊紀錄了 XD"></a>那些在直播裡面「加油好嗎」的屁話我就不在這邊紀錄了 XD</h3><p>直播實錄</p>
+<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FJSDC.TW%2Fvideos%2F1229118017193709%2F&show_text=0&width=560" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true"></iframe>
+
+<hr>
+<blockquote>
+<p>什麼樣的契機讓你開始寫程式</p>
+</blockquote>
+<p>我其實從小學還在 Dos 時代就開始接觸電腦了，早期其實也不知道程式什麼的，都是為了打電動，頂多就是改改 autoexec.bat / config.sys 之類的設定檔，一直到五、六年級的 windows 95 時期才首次接觸網頁。 印象中那個時候很流行「烘培雞」 (HomePage) 什麼的，老師都喜歡教你 <code>&lt;h1&gt;</code> 就是標題， <code>&lt;center&gt;</code> 就是置中，還有一大堆的 <code>&lt;font&gt;</code> 標籤，以及從「網頁建置百寶箱」裡面的各種神秘代碼貼來的特效。</p>
+<p>那個時期別說 CSS，連 JavaScript 是什麼都沒聽過。 XD</p>
+<p>真正開始寫程式的時候，反而是高中時期參加電研社才首次接觸 C 語言、 VB 之類的。
+印象很深刻的是當時還用 Turbo C 寫了一個貪食蛇的小遊戲，現在都忘光了其實 XD</p>
+<p>到了高二，雖然讀的是文組，仍因緣際會加入了某個神秘組織「<a href="https://www.ptt.cc/man/CKSHCNCA/M.1281545012.A.D0A.html" target="_blank" rel="noopener">成功高中校園網路策進會</a>」 (CKSHCNCA)，一直沒脫離電資領域。 那時幾乎天天中午都在玩 FreeBSD (打混的時候其實都在玩 BBS XD)，也是從那個時候開始接觸了 windows 以外的作業系統，來到另一個世界。</p>
+<p>真正開始寫網頁系統，反而是在大學時期學 PHP、ASP.NET C# WebForm 等等，也靠寫網頁賺了一點錢，當然畢業後也就繼續相關的工作。</p>
+<hr>
+<blockquote>
+<p>一直以來都是做前端工作的嗎</p>
+</blockquote>
+<p>在我剛畢業出來工作的時候，那時業界根本沒有像現在這樣分什麼前端後端的，工作對外都是戲稱「寫網頁的」。
+在成為專職的前端工程師以前，早期都是以 ASP、PHP 等後端語言為我工作上的主要技能。</p>
+<p>第一份工作是網站開發，當年任職的是人數不多的小公司，沒有細分前後端的編制，所以所有東西都得一條龍自己硬上。
+那時候所謂的網頁開發，也就只是寫 HTML 標籤，CSS 還不太會，反正 table 排版無敵，要改顏色、字型就加 font 屬性...
+JavaScript ? 喔，那是拿來寫表單驗証、浮動廣告的，網路上範例抄一下頂多加個 alert 就很迷人了。</p>
+<p>什麼 JavaScript 啊，CSS 的也是從出來工作之後才自己惡補，也差不多是從那時候才開始接觸 jQuery、Dojo 這樣的前端函式庫工具，距離現在應該也快十年了。</p>
+<p>真正知道「前端工程」這個詞，其實是在 2010 年的事了。</p>
+<p>時間來到了 2010 年的 OSDC 前夕。</p>
+<p>得知 Douglas Crockford (JavaScript: The Good Parts 作者，JSON 的老爸) 受邀來台演講，透過關係知道他在 Yahoo 有內部分享，於是就很厚臉皮地當了一日訪客進去聽演講，順便參觀當時還在古亭的 Yahoo 奇摩。 坦白說，當天印象讓我最深刻的其實不是 Douglas 的演講內容。</p>
+<p>除了整場分享以全英語交談，能聽懂的部分有限是原因之一以外，讓我最驚訝的是，原來在網頁開發中，前端工程的領域比我原先的認知還要來得複雜許多。而當時 Yahoo 奇摩甚至有數十位工程師專門負責前端的部分。 當下聽著他們的熱烈討論，除了顛覆我原本對網頁開發的錯誤觀念外，更引爆了我潛藏已久的前端魂，原來網頁前端技術是如此深奧且迷人，然後就此展開了我的大前端之路... XD</p>
+<p>不愧人家說天下武功出少林，天下前端出雅虎。同時也差不多是從那開始才積極參加社群，技能點開始往前端的方向走去。</p>
+<hr>
+<blockquote>
+<p>工作職涯方向</p>
+</blockquote>
+<p>工程師的職涯方向可以有很多不同的發展，不管是走管理的、往技術繼續鑽研的都可以是目標，甚至有技術背景的 PM 也都會是很搶手的選項。
+隨著工作經驗的成長，看技術的眼光也會有所不同。 從早期只要完成交辦工作為主要目標，到幾年後，你也許會經歷到需要在各種技術中做選擇，這時候你會有開始有權力可以挑選你想要的工具、技術了，但記得權力伴隨著責任，挑選技術的時候，你要考慮到產品與技術是否適合的場景、學習的成本、維護的成本等等。 甚至是產品的整體系統架構，你所選擇的技術棧 (technology stack) 是不是可以再優化，然後增加產品的轉換率等等的。</p>
+<p>這些其實對工程師來說都是很棒的挑戰，也是未來可以思考的方向。</p>
+<hr>
+<blockquote>
+<p>有沒有想要跟後輩說什麼，讓他們少走一些冤枉路</p>
+</blockquote>
+<p>看到這個問題，如果是年輕一輩的朋友，其實我認為沒有冤枉路，反而很贊成多繞點路，未來的選擇更多。
+很多人其實不知道自己適合什麼，也許他看到前端產業好像很夯，就一窩蜂想進入這個行業，但搞不好更適合後端也不一定。
+從另一個角度來看，有了後端經驗的前端工程師，比起設計轉職的前端，更能明白後端的困境，以及相同的溝通水準，不會有各說各話的感覺。</p>
+<p>我認為保持開放的心，有時候多繞一下對人生職涯來說，也許還反而是件好事。</p>
+<p>但如果有心往前端領域走的話，好好把 HTML / CSS / JavaScript 的基本功練好不會吃虧的。
+即使是 oo.js / xx.js 它的本質也還是 JavaScript 啊，把基本功練好，未來遇到新技術新工具的時候，至少你不會慌。</p>
+<hr>
+<blockquote>
+<p>避免惰性的好方法</p>
+</blockquote>
+<h3 id="TDD-Talk-Driven-Development"><a href="#TDD-Talk-Driven-Development" class="headerlink" title="TDD: Talk-Driven Development"></a>TDD: Talk-Driven Development</h3><p>我認為人都有惰性，我也有 XD</p>
+<p>今天當你剛學會一門新技術，想辦法練到可以去跟別人分享甚至協助解決他人的問題的程度時候，你就可以算是掌握了這門技術。
+最好的方式就是去投稿吧，去分享吧，屢試不爽。 而且有了時間的死線之後，你就會開始逼自己去整理，去內化這些資訊，好處多多。</p>
+<p>而且不要怕講錯，講錯頂多被人糾正，但你卻因此得到了正確的資訊，學到東西就是你的。</p>
+<hr>
+<blockquote>
+<p>對於畢業新鮮人/轉換跑道有沒有什麼建議</p>
+</blockquote>
+<p>履歷的累積最重要，剛畢業的時候你還能靠學歷，但過幾年之後根本不會有人在意你是哪個學校畢業的。
+去找個你覺得可以學到東西的地方，或是有機會碰到新技術的地方，然後好好累積工作經歷。</p>
+<p>有個自我檢視的重點是，當你今天在這份工作無法為你的履歷多寫些什麼的時候，就是可以考慮轉職的時候了。
+當你繼續在某個地方工作，改變的只是工作的年份，而不是寫下你參與了某某專案，或是導入了什麼技術、為了公司完成了什麼任務的時候，再繼續待下去都是浪費人生。 因為這份工作的經歷無法為你的未來加分，只會繼續消耗人生，這很現實。</p>
+<hr>
+<blockquote>
+<p>跟 JSDC 之間淵源</p>
+</blockquote>
+<p>一切都是為了「搶票」。 XD
+印象還很清楚，當年 2012 首屆 JSDC 票價還很便宜的時候，那時候的研討會幾乎是一開放報名就會秒殺的程度。
+主辦單位為了鼓勵大家投稿，就說「投稿者無論有無選上，都有優先購票權」</p>
+<p>然後我就投稿了。然後我就上了。
+不僅不用搶票，連買票都可以省下來。</p>
+<p>怎麼都想不到人生中的第一場上台分享就在中研院，2012 年。 緊張到靠北。</p>
+<p>但也因此認識了很多社群前輩，以及 TDD (Talk-Driven Development) 學習法，可以說是利大於弊，哈。</p>
+<hr>
+<blockquote>
+<p>為什麼想要講今年這個主題</p>
+</blockquote>
+<p>終於回到 JSDC 2017 主題本身了，經過上面的訪談其實可以知道，在這短短幾年內，前端技術領域的發展可以說是一日千里，
+而我最近持續在推廣的 VueJS 在這一兩年也有著持續地成長。</p>
+<p>凡是存在必有它的意義。 從早期的 jQuery 到後來 Backbone、Angular JS (ng1)、React、 ng2 到我將為各位分享的 VueJS 等工具，其實可以發現某個語言、工具為什麼會受歡迎，很大的原因是它在那個時間點，解決了大多數人遇到的問題，或是在這個領域帶來了什麼新的概念，新的觀點，讓更多人得到啟發。</p>
+<p>回到主題。 VueJS 從早期發展至今，也經歷多許多變革與更新。這次我在 JSDC 的分享，主要會由 VueJS 出發，除了針對 VueJS 新特性的介紹外，也簡單分析現代前端框架與前端開發生態圈的變化與演進。 :)</p>
+<p><img src="/static/img/jsdc-live02.png"></p>
+<p>最後再次感謝 JSDC 團隊邀請，讓我有機會擔任一日 <del>seafood</del> 網紅，感謝今天活動主持人 Ali，果然有正妹加持就是收視保證，也感謝只有聲音沒有人影的藏鏡人 Caesar 協助。</p>
+<p>最後，也歡迎對 JavaScript 領域的朋友可以持續關注 JSDC 的各項活動，沒報名的朋友現在還來得及報名歐 XD</p>
+<p>傳送門： <a href="https://jsdc-tw.kktix.cc/events/jsdc2017" target="_blank" rel="noopener">https://jsdc-tw.kktix.cc/events/jsdc2017</a></p>
+<p>期待今年的 JSDC 可以與各位朋友、前輩有交流的機會囉，我們 JSDC 見 :)</p>
+</div><script type="text/javascript" src="/js/share.js?v=0191206001" async></script><a data-url="https://kuro.tw/posts/2017/09/21/JSDC-全台最大-JS-研討會前直播上線啦！/" data-id="ckcc5xim30002u1pwl1cm453y" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/JSDC/">JSDC</a><a href="/tags/前端/">前端</a><a href="/tags/直播/">直播</a></div><div class="post-nav"><a href="/posts/2017/09/21/VueJS-元件載入模板-template-的幾種方式/" class="pre">VueJS 元件載入模板 (template) 的幾種方式</a><a href="/posts/2017/08/03/在-Vue-Cli-取得-jsonp-的方式/" class="next">在 Vue 取得 jsonp 的方式</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'kurotw';
+var disqus_identifier = 'posts/2017/09/21/JSDC-全台最大-JS-研討會前直播上線啦！/';
+var disqus_title = "[JSDC] 全台最大 JS 研討會前直播上線啦！";
+var disqus_url = 'https://kuro.tw/posts/2017/09/21/JSDC-全台最大-JS-研討會前直播上線啦！/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/favicon.ico',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//kurotw.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget widget-ad"><div class="widget-title"><i class="fa fa-hand-o-right"> 工商服務</i></div><a href="https://www.tenlong.com.tw/products/9789864344130" title="著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！" target="_blank"><img src="https://cf-assets2.tenlong.com.tw/products/images/000/139/636/original/MP21913.jpg" width="210"><h4 class="ad-header">著作: 0 陷阱！0 誤解！8 天重新認識 JavaScript！</h4></a><a href="//book.vue.tw" title="重新認識 Vue.js" target="_blank"><img src="/static/vue-badge.png" width="210"><h4 class="ad-header">重新認識 Vue.js (連載中，不定時更新)</h4></a><a href="https://5xruby.tw/talks/javascript/" title="課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/javascript-c0d1850e.jpg" width="210"><h4 class="ad-header">課程: JavaScript / jQuery 前端開發入門實戰課程 - 假日班</h4></a><a href="https://5xruby.tw/talks/vue-js/" title="課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班" target="_blank"><img src="https://5xruby.tw/assets/images/talks/cover/vue-js-61eaa1c7.jpg" width="210"><h4 class="ad-header">課程: Vue.js 與 Vuex 前端開發實戰課程 - 假日班</h4></a></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/D3-js/">D3.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ECMAScript/">ECMAScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GIS/">GIS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GeoJSON/">GeoJSON</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Google-Map/">Google Map</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTML/">HTML</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JSDC/">JSDC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ModernWebConf/">ModernWebConf</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenData/">OpenData</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vue-js/">vue.js</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/個人喇賽/">個人喇賽</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/名為-JavaScript-的黑魔法/">名為 JavaScript 的黑魔法</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/void/" style="font-size: 15px;">void</a> <a href="/tags/重新認識-JavaScript/" style="font-size: 15px;">重新認識 JavaScript</a> <a href="/tags/JSDC/" style="font-size: 15px;">JSDC</a> <a href="/tags/前端/" style="font-size: 15px;">前端</a> <a href="/tags/直播/" style="font-size: 15px;">直播</a> <a href="/tags/vue-js/" style="font-size: 15px;">vue.js</a> <a href="/tags/vue-3-0/" style="font-size: 15px;">vue 3.0</a> <a href="/tags/CSS-Modules/" style="font-size: 15px;">CSS Modules</a> <a href="/tags/this/" style="font-size: 15px;">this</a> <a href="/tags/google-map/" style="font-size: 15px;">google map</a> <a href="/tags/Heatmap/" style="font-size: 15px;">Heatmap</a> <a href="/tags/d3-js/" style="font-size: 15px;">d3.js</a> <a href="/tags/Geocoder/" style="font-size: 15px;">Geocoder</a> <a href="/tags/ecmascript/" style="font-size: 15px;">ecmascript</a> <a href="/tags/infoWindow/" style="font-size: 15px;">infoWindow</a> <a href="/tags/twd97/" style="font-size: 15px;">twd97</a> <a href="/tags/gis/" style="font-size: 15px;">gis</a> <a href="/tags/opendata/" style="font-size: 15px;">opendata</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/mobile/" style="font-size: 15px;">mobile</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/html5/" style="font-size: 15px;">html5</a> <a href="/tags/canvas/" style="font-size: 15px;">canvas</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/D3-js/" style="font-size: 15px;">D3.js</a> <a href="/tags/donut-chart/" style="font-size: 15px;">donut chart</a> <a href="/tags/GeoJSON/" style="font-size: 15px;">GeoJSON</a> <a href="/tags/rwd/" style="font-size: 15px;">rwd</a> <a href="/tags/Fusion-Table/" style="font-size: 15px;">Fusion Table</a> <a href="/tags/httpVueLoader/" style="font-size: 15px;">httpVueLoader</a> <a href="/tags/react/" style="font-size: 15px;">react</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/企業前端框架趨勢論壇/" style="font-size: 15px;">企業前端框架趨勢論壇</a> <a href="/tags/vue-js-3-0/" style="font-size: 15px;">vue.js 3.0</a> <a href="/tags/Function-based-API/" style="font-size: 15px;">Function-based API</a> <a href="/tags/TypeScript/" style="font-size: 15px;">TypeScript</a> <a href="/tags/yarn/" style="font-size: 15px;">yarn</a> <a href="/tags/Google-Sheet-API/" style="font-size: 15px;">Google Sheet API</a> <a href="/tags/jsonp/" style="font-size: 15px;">jsonp</a> <a href="/tags/IT鐵人賽/" style="font-size: 15px;">IT鐵人賽</a> <a href="/tags/前端開發/" style="font-size: 15px;">前端開發</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/street-map-api/" style="font-size: 15px;">street map api</a> <a href="/tags/events/" style="font-size: 15px;">events</a> <a href="/tags/setTimeout/" style="font-size: 15px;">setTimeout</a> <a href="/tags/jquery/" style="font-size: 15px;">jquery</a> <a href="/tags/前端框架/" style="font-size: 15px;">前端框架</a> <a href="/tags/vue-cli/" style="font-size: 15px;">vue-cli</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/devtools/" style="font-size: 15px;">devtools</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/08/如何在-Vue-3-0-使用-EventBus/">如何在 Vue 3.0 使用 EventBus</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/07/06/Vue-3-0-升級紀錄/">Vue 3.0 升級紀錄</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2020/06/09/從國師級的專案看開發者的過失/">從國師級的專案看開發者的過失</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/06/初探-Vue-3-0-Function-based-API/">初探 Vue 3.0 Function-based API</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/08/04/JS-冷知識-你所不知道的-void/">JS 冷知識: 你所不知道的 void</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/07/31/談談前端框架/">談談前端框架</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2019/02/23/談談-JavaScript-的-setTimeout-與-setInterval/">談談 JavaScript 的 setTimeout 與 setInterval</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/16/企業前端框架趨勢論壇之問與答遺珠/">企業前端框架趨勢論壇之問與答遺珠</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/09/07/Vue-js-與-CSS-Modules/">Vue.js 與 CSS Modules</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/2018/08/27/利用-Google-試算表-Google-Sheet-作為外部資料來源/">利用 Google 試算表 (Google Sheet) 作為外部資料來源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> Letzte Kommentare</i></div><script type="text/javascript" src="//kurotw.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">Kuro's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0191206001" async></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.css"><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.6/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0191206001" async></script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0191206001"></script><script type="text/javascript" src="/js/smartresize.js?v=0191206001"></script></div></body></html>
